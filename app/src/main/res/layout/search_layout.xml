@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/activity_horizontal_margin"
+              android:descendantFocusability="blocksDescendants">
+
+
+    <com.doxa360.android.betacaller.helpers.MLRoundedImageView
+              android:layout_width="@dimen/com_facebook_profilepictureview_preset_size_small"
+              android:layout_height="@dimen/com_facebook_profilepictureview_preset_size_small"
+              android:id="@+id/profile_photo"
+              android:src="@drawable/wil_profile"
+              android:layout_alignParentTop="true"
+              android:layout_alignParentStart="true"
+              android:scaleType="centerCrop"
+              android:adjustViewBounds="true" />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/user_full_name"
+              tools:text="Yemi Gabriel (yemigabriel)"
+              android:padding="8dp"
+              android:layout_toEndOf="@+id/profile_photo"
+              android:layout_alignParentTop="true"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/phone"
+              tools:text="08037046543"
+              android:padding="8dp"
+              android:layout_below="@+id/user_full_name"
+              android:layout_alignStart="@+id/user_full_name"/>
+
+
+</RelativeLayout>

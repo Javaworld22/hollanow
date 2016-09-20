@@ -1,0 +1,233 @@
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.doxa360.android.betacaller.ProfileFragment">
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/relative_layout"
+                    android:paddingTop="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_card"
+            app:cardCornerRadius="4dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp">
+
+            <RelativeLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical"
+                          android:padding="16dp">
+                <!-- 192.168.57.101:5555 -->
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/profile_name"
+                          tools:text="Yemi Gabriel"
+                          style="?android:attr/textAppearanceMedium"
+                          android:textStyle="bold"
+                          android:layout_margin="8dp"/>
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/user_name"
+                          tools:text="yemigabriel"
+                          style="?android:attr/textAppearanceMedium"
+                          android:layout_margin="8dp"
+                          android:layout_below="@+id/profile_name"/>
+
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/phone"
+                          tools:text="08037046543"
+                          style="?android:attr/textAppearanceMedium"
+                          android:layout_margin="8dp"
+                          android:layout_below="@+id/user_name"/>
+
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:id="@+id/action_label"
+                              android:layout_below="@+id/phone"
+                              android:layout_marginTop="8dp"
+                              android:layout_marginStart="8dp"
+                              android:layout_marginEnd="8dp"
+                              android:paddingTop="8dp"
+                              android:background="@drawable/top_divider"
+                              android:weightSum="9">
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:id="@+id/call_label"
+                              android:text="CALL"
+                              android:gravity="center"
+                              style="?android:attr/textAppearanceMedium"
+                              android:textColor="@color/accent"
+                              android:layout_weight="3"/>
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:id="@+id/message_label"
+                              android:text="MESSAGE"
+                              android:gravity="center"
+                              style="?android:attr/textAppearanceMedium"
+                              android:textColor="@color/accent"
+                              android:layout_weight="3"/>
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:id="@+id/email_label"
+                              android:text="EMAIL"
+                              android:gravity="center"
+                              style="?android:attr/textAppearanceMedium"
+                              android:textColor="@color/accent"
+                              android:layout_weight="3"/>
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:id="@+id/change_number_label"
+                              android:visibility="invisible"
+                              style="?android:attr/textAppearanceMedium"
+                              android:textColor="@color/accent"/>
+
+
+                </LinearLayout>
+
+                <com.digits.sdk.android.DigitsAuthButton
+                    android:id="@+id/auth_button"
+                    android:layout_below="@+id/action_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"  />
+
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/shareLayout"
+                      android:orientation="vertical"
+                      android:layout_below="@+id/profile_card"
+                      android:layout_marginTop="16dp"
+                      android:visibility="invisible"
+                      android:gravity="center"
+                      android:padding="8dp" >
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/shareTitle"
+                      style="?android:attr/textAppearanceLarge"
+                      android:padding="8dp"
+                      android:text="Go Pro!"/>
+
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/shareDesc"
+                      android:gravity="center"
+                      android:padding="8dp"
+                      android:text="@string/pro_share_description"/>
+
+            <com.facebook.share.widget.ShareButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/facebook_share_button"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/pro_card"
+            android:layout_alignParentStart="true"
+            app:cardCornerRadius="4dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp"
+            android:layout_below="@+id/profile_card"
+            android:layout_marginTop="16dp">
+
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                          android:padding="16dp" >
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/pro_occupation_label"
+                          android:text="Occupation"
+                          style="?android:attr/textAppearanceMedium"
+                          android:paddingBottom="4dp"
+                    />
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/pro_occupation"
+                          android:text="-"
+                          android:background="@drawable/divider"
+                          android:paddingBottom="8dp"
+                          android:layout_marginBottom="8dp"
+                          android:layout_below="@+id/pro_occupation_label"
+                    />
+
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/pro_about_label"
+                          android:text="About"
+                          style="?android:attr/textAppearanceMedium"
+                          android:paddingBottom="4dp"
+                android:layout_below="@+id/pro_occupation"
+                    />
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/pro_about"
+                          android:text="-"
+                          android:background="@drawable/divider"
+                          android:paddingBottom="8dp"
+                          android:layout_marginBottom="8dp"
+                          android:layout_below="@+id/pro_about_label"
+                    />
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/pro_address_label"
+                          android:text="Address"
+                          style="?android:attr/textAppearanceMedium"
+                          android:paddingBottom="4dp"
+                          android:layout_below="@+id/pro_about"
+                    />
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/pro_address"
+                          android:text="-"
+                          android:paddingBottom="8dp"
+                          android:layout_marginBottom="8dp"
+                          android:layout_below="@+id/pro_address_label"
+                    />
+
+
+
+
+            </RelativeLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+
+    </RelativeLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.doxa360.android.betacaller.ContactDetailActivity"
+    tools:showIn="@layout/activity_contact_detail">
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="@dimen/text_margin"-->
+        <!--android:text="@string/large_text"/>-->
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="16dp">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/contact_primary_detail"
+            app:cardCornerRadius="4dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp">
+
+            <LinearLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                          android:orientation="vertical"
+                            android:padding="16dp">
+                <!-- 192.168.57.101:5555 -->
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/contact_name"
+                          tools:text="Yemi Gabriel"
+                          style="?android:attr/textAppearanceMedium"
+                          android:layout_marginBottom="16dp"/>
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/contact_phone"
+                          tools:text="08037046543"
+                          style="?android:attr/textAppearanceMedium"
+                          android:layout_marginBottom="16dp"/>
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/contact_secondary_detail"
+            app:cardCornerRadius="4dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="4dp"
+            android:layout_below="@+id/contact_primary_detail">
+
+            <Button android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/hollanow_invite"
+                    android:text="Invite To HollaNow"
+                    android:layout_margin="16dp"
+                    android:visibility="invisible" android:background="@color/accent" />
+
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/hollanow_layout"
+                          android:orientation="vertical"
+                          android:padding="16dp">
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/hollanow_username"
+                          tools:text="yemigabriel"
+                          style="?android:attr/textAppearanceMedium"
+                          android:layout_marginBottom="8dp"/>
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/hollanow_occupation"
+                          tools:text="yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel  yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel "
+                          android:layout_marginBottom="8dp"/>
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/hollanow_bio"
+                          tools:text="Tags: plumber, trader"
+                          android:layout_marginBottom="8dp"/>
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/hollanow_address"
+                          tools:text="Tags: plumber, trader"
+                          android:layout_marginBottom="8dp"/>
+
+
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+    </RelativeLayout>
+
+
+</android.support.v4.widget.NestedScrollView>
