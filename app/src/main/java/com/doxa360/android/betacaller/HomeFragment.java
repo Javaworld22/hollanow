@@ -282,7 +282,7 @@ public class HomeFragment extends Fragment implements
 //                            Log.e(TAG, "cache 08036428999 is among");
                         }
                         if (phoneNumber.startsWith("0")) {
-//                            phoneNumber = phoneNumber.replaceFirst("[0]", "+234");
+                            phoneNumber = phoneNumber.replaceFirst("[0]", "+234");
 //                            Log.e(TAG, "Cache Replacing: "+phoneNumber + "-"+phoneNumber.replace(" ", ""));
                         }
                         contact.setPhoneNumber(phoneNumber.replace(" ", ""));
@@ -582,6 +582,7 @@ public class HomeFragment extends Fragment implements
 
             handleNewLocation(mCurrentLocation);
         }
+
     }
     @Override
     public void onStart() {
@@ -617,37 +618,41 @@ public class HomeFragment extends Fragment implements
         //Log.d(TAG, location.toString());
         mCurrentLocation = location;
         mParseGeoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-//        ParseGeoPoint parseGeoPoint = new ParseGeoPoint(location.getLatitude(),location.getLongitude());
-        Log.e(TAG, mParseGeoPoint.toString() + " - " + location.toString() + " -- " + location.getProvider());
-        Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
-        String lastSeenAddress = null;
-        try {
-            List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            List<Address> addressList2 = geocoder.getFromLocation(6.5767137,3.3568001, 1);
-            lastSeenAddress = addressList.get(0).getFeatureName() + ", "+ addressList.get(0).getSubLocality() + ", " + addressList.get(0).getLocality()+ ", "+ addressList.get(0).getAdminArea() + ", "+ addressList.get(0).getCountryName();
-            String lastSeenAddress2 = "Feature name: "+addressList2.get(0).getFeatureName()+ ", Sublocality name:" +
-                    addressList2.get(0).getSubLocality() + ", AdminArea name:" + addressList2.get(0).getAdminArea()+
-                    ", Locality name:" +  addressList2.get(0).getLocality()+ addressList2.get(0);
-            Log.e(TAG+" last seen",lastSeenAddress + " --- " + lastSeenAddress2);
+        if (mParseGeoPoint!=null) {
+    //        ParseGeoPoint parseGeoPoint = new ParseGeoPoint(location.getLatitude(),location.getLongitude());
+            Log.e(TAG, mParseGeoPoint.toString() + " - " + location.toString() + " -- " + location.getProvider());
+            Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
+            String lastSeenAddress = null;
+            try {
+                List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                List<Address> addressList2 = geocoder.getFromLocation(6.5767137,3.3568001, 1);
+                lastSeenAddress = addressList.get(0).getFeatureName() + ", "+ addressList.get(0).getSubLocality() + ", " + addressList.get(0).getLocality()+ ", "+ addressList.get(0).getAdminArea() + ", "+ addressList.get(0).getCountryName();
+                String lastSeenAddress2 = "Feature name: "+addressList2.get(0).getFeatureName()+ ", Sublocality name:" +
+                        addressList2.get(0).getSubLocality() + ", AdminArea name:" + addressList2.get(0).getAdminArea()+
+                        ", Locality name:" +  addressList2.get(0).getLocality()+ addressList2.get(0);
+                Log.e(TAG+" last seen",lastSeenAddress + " --- " + lastSeenAddress2);
 
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-        ParseUser.getCurrentUser().put("lastSeen", mParseGeoPoint);
-        ParseUser.getCurrentUser().put("lastSeenAddress", lastSeenAddress != null ? lastSeenAddress.toLowerCase() : null);
-        ParseUser.getCurrentUser().saveEventually(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e==null) {
-                    Log.e(TAG, "location saved");
-                } else {
-                    Log.e(TAG, e.getMessage());
-                }
+            } catch(IOException e) {
+                e.printStackTrace();
             }
-        });
+            ParseUser.getCurrentUser().put("lastSeen", mParseGeoPoint);
+            ParseUser.getCurrentUser().put("lastSeenAddress", lastSeenAddress != null ? lastSeenAddress.toLowerCase() : null);
+            ParseUser.getCurrentUser().saveEventually(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e == null) {
+                        Log.e(TAG, "location saved");
+                    } else {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            });
 
-        mSharedPref.setLattitude(location.getLatitude());
-        mSharedPref.setLongtitude(location.getLongitude());
+
+            mSharedPref.setLattitude(location.getLatitude());
+            mSharedPref.setLongtitude(location.getLongitude());
+
+        }
 
 
     }

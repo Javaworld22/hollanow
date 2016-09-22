@@ -145,9 +145,12 @@ public class CallDiaryFragment extends Fragment {
 
             dbHelper.clearCallLogs();
             while(c.moveToNext()) {
-                if (c.getPosition() < 50) {
+                if (c.getPosition() < 200) {
 //                String logId = c.getString(c.getColumnIndex(CallLog.Calls.CACHED_PHOTO_ID));// for  id
                     String logNumber = c.getString(logNumberIndex).replace(" ","");// for  number
+                    if (logNumber.startsWith("0")) {
+                        logNumber = logNumber.replaceFirst("[0]", "+234");
+                    }
                     String logName = c.getString(logNameIndex);// for name
 //                String logThumb = c.getString(c.getColumnIndex(CallLog.Calls.CACHED_PHOTO_URI));// for  photo
                     String logDuration = c.getString(logDurationIndex);// for duration
@@ -168,6 +171,9 @@ public class CallDiaryFragment extends Fragment {
     }
 
     public static long getContactIDFromNumber(String contactNumber, Context context) {
+        if (contactNumber.startsWith("+234")) {
+            contactNumber = contactNumber.replaceFirst("[+234]", "0");
+        }
         String UriContactNumber = Uri.encode(contactNumber);
         long phoneContactID = new Random().nextInt();
         Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, UriContactNumber),

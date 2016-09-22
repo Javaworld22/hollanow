@@ -346,9 +346,13 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
     }
 
     private void handleNewLocation(Location location) {
-        mSharedPref.setLattitude(location.getLatitude());
-        mSharedPref.setLongtitude(location.getLongitude());
-        findNearbyUsers();
+        if (location!=null) {
+            mSharedPref.setLattitude(location.getLatitude());
+            mSharedPref.setLongtitude(location.getLongitude());
+            findNearbyUsers();
+        } else {
+            startUpdates();
+        }
     }
 
 

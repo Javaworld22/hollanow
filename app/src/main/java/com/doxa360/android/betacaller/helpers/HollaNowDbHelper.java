@@ -184,7 +184,7 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
                 HollaNowDbHelper.COLUMN_NULLABLE,
                 values);
 
-        db.close();
+//        db.close();//TODO Check all db.closes commented later
 //        Log.e("CACHE CONTACT NEW:", newRowId+"");
         return newRowId;
     }
@@ -280,7 +280,7 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
                 HollaNowDbHelper.COLUMN_NULLABLE,
                 values);
 
-        db.close();
+//        db.close();
 //        Log.e("CACHE CALLDIARY NEW:", newRowId+"");
         return newRowId;
     }
@@ -455,9 +455,49 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
 
         db.execSQL("UPDATE "+ TABLE_CONTACTS +" SET "+ COLUMN_CONTACT_LAT + " ='"+latitude+"', " + COLUMN_CONTACT_LONG + " ='"+longitude+"' WHERE "+COLUMN_CONTACT_ID+" ='"+id+"'");
 
-        db.close();
+//        db.close();
 //        Log.e("Update location:", "done");
 
+    }
+
+    public List<PhoneCallLog> allLogsByPhoneNumber(String phoneNumber) {
+        String searchQuery = phoneNumber.replace("*","");
+        searchQuery = phoneNumber.replace(" ","");
+        String query = searchQuery.replace("+234", "");
+        query = query.replace("+", "");
+        if (query.startsWith("0")) {
+            query = query.replaceFirst("[0]","");
+        }
+
+        ArrayList<PhoneCallLog> callLogs = new ArrayList<PhoneCallLog>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor mCursor =  db.query(TABLE_CALLDIARY,
+                new String[] { COLUMN_CALLDIARY_ID, COLUMN_CONTACT_NAME, COLUMN_CONTACT_PHONE,
+                        COLUMN_CALL_DURATION, COLUMN_CONTACT_THUMBNAIL, COLUMN_CALL_DATE, COLUMN_CALL_TYPE },
+                COLUMN_CONTACT_PHONE+" like"+"'%"+query+"%' ",
+                null, null, null, null);
+
+        if (mCursor.moveToFirst()){
+            do {
+                PhoneCallLog callLog = new PhoneCallLog();
+                callLog.setId(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CALLDIARY_ID)));
+                callLog.setDisplayName(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_NAME)));
+                callLog.setPhoneNumber(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_PHONE)));
+                callLog.setDuration(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CALL_DURATION)));
+                if (mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_THUMBNAIL))!=null)
+                {
+                    callLog.setThumbnailUrl(Uri.parse(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_THUMBNAIL))));
+                }
+                callLog.setDate((long) mCursor.getInt((mCursor.getColumnIndexOrThrow(COLUMN_CALL_DATE))));
+                callLog.setType(mCursor.getInt((mCursor.getColumnIndexOrThrow(COLUMN_CALL_TYPE))));
+
+                callLogs.add(callLog);
+            } while (mCursor.moveToNext());
+        }
+        mCursor.close();
+        return callLogs;
     }
 
 //    db.execSQL("UPDATE DB_TABLE SET YOUR_COLUMN='newValue' WHERE id=6 ");

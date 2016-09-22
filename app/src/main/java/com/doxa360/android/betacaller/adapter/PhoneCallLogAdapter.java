@@ -1,6 +1,7 @@
 package com.doxa360.android.betacaller.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.provider.CallLog;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.doxa360.android.betacaller.BetaCaller;
+import com.doxa360.android.betacaller.ContactDetailActivity;
 import com.doxa360.android.betacaller.R;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
 import com.doxa360.android.betacaller.model.PhoneCallLog;
@@ -28,11 +31,20 @@ public class PhoneCallLogAdapter extends RecyclerView.Adapter<PhoneCallLogAdapte
     ContactViewHolder mHolder;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
+    private boolean isFragment;
 
     public PhoneCallLogAdapter(List<PhoneCallLog> callLogList, Context context) {
         mCallLogList = callLogList;
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
+        this.isFragment = true;
+    }
+
+    public PhoneCallLogAdapter(List<PhoneCallLog> callLogList, Context context, boolean isFragment) {
+        mCallLogList = callLogList;
+        mContext = context;
+        mLayoutInflater = LayoutInflater.from(context);
+        this.isFragment = isFragment;
     }
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -51,6 +63,20 @@ public class PhoneCallLogAdapter extends RecyclerView.Adapter<PhoneCallLogAdapte
             mContactName = (TextView) itemView.findViewById(R.id.contact_name);
             mCallDuration = (TextView) itemView.findViewById(R.id.call_duration);
             mCallDate = (TextView) itemView.findViewById(R.id.call_date);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (isFragment) {
+                        Intent intent = new Intent(mContext, ContactDetailActivity.class);
+                        intent.putExtra(BetaCaller.CONTACT_ID, mCallLogList.get(getPosition()).getId());
+                        intent.putExtra(BetaCaller.CONTACT_NAME, mCallLogList.get(getPosition()).getDisplayName());
+                        intent.putExtra(BetaCaller.CONTACT_PHONE, mCallLogList.get(getPosition()).getPhoneNumber());
+                        intent.putExtra(BetaCaller.CONTACT_PHOTO, mCallLogList.get(getPosition()).getThumbnailUrl());
+                        mContext.startActivity(intent);
+                    }
+                }
+            });
         }
     }
 

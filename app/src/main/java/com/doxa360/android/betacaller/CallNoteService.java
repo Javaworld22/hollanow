@@ -228,7 +228,7 @@ public class CallNoteService extends Service {
         }
         mCallerName.setText(callerName+"");
 
-        if (callNote.isEmpty()) {
+        if (callNote == null) {
             mCallNote.setText(R.string.default_callnote);
         }
         else {

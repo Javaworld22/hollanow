@@ -1,15 +1,24 @@
 package com.doxa360.android.betacaller;
 
 import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CallLog;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
@@ -20,9 +29,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.doxa360.android.betacaller.adapter.PhoneCallLogAdapter;
 import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
 import com.doxa360.android.betacaller.model.Contact;
+import com.doxa360.android.betacaller.model.PhoneCallLog;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -35,15 +46,18 @@ import java.util.List;
 public class ContactDetailActivity extends AppCompatActivity {
 
     private final String TAG = this.getClass().getSimpleName();
-    private TextView mContactName, mContactPhone, mHollanowUsername, mHollanowBio, mHollanowOccupation, mHollanowAddress;
+    private TextView mContactName, mContactPhone, mHollanowUsername, mHollanowBio, mHollanowOccupation, mHollanowAddress, mEmptyText;
     private Button mHollanowInvite;
     private LinearLayout mHollanowLayout;
     private FloatingActionButton fab;
     private ImageView mContactPhoto;
+    private RecyclerView mCallHistoryRecyclerView;
     String contactId;
     String contactName;
     String contactPhone;
     String contactThumbnail;
+    HollaNowDbHelper mDbHelper;
+    private PhoneCallLogAdapter mAdapter;
 
 
     @Override
@@ -70,6 +84,8 @@ public class ContactDetailActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mDbHelper = new HollaNowDbHelper(this);
+
         contactId = getIntent().getStringExtra(BetaCaller.CONTACT_ID);
         contactName = getIntent().getStringExtra(BetaCaller.CONTACT_NAME);
         contactPhone = getIntent().getStringExtra(BetaCaller.CONTACT_PHONE);
@@ -85,6 +101,12 @@ public class ContactDetailActivity extends AppCompatActivity {
         mHollanowAddress= (TextView) findViewById(R.id.hollanow_address);
         mHollanowInvite = (Button) findViewById(R.id.hollanow_invite);
         mHollanowLayout = (LinearLayout) findViewById(R.id.hollanow_layout);
+        mEmptyText = (TextView) findViewById(R.id.empty_text);
+        mCallHistoryRecyclerView = (RecyclerView) findViewById(R.id.call_history_recyclerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setAutoMeasureEnabled(true);
+        mCallHistoryRecyclerView.setLayoutManager(layoutManager);
+
 
         toolbar.setTitle(contactName);
         getSupportActionBar().setTitle(contactName);
@@ -103,6 +125,16 @@ public class ContactDetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setCallHistoryUI() {
+        List<PhoneCallLog> callLogs = mDbHelper.allLogsByPhoneNumber(contactPhone);
+        if (callLogs!=null && callLogs.size()!=0) {
+            mEmptyText.setText("");
+            mAdapter = new PhoneCallLogAdapter(callLogs, this, false);
+            mCallHistoryRecyclerView.setAdapter(mAdapter);
+        } else {
+        }
     }
 
     private void updateUI() {
@@ -128,18 +160,41 @@ public class ContactDetailActivity extends AppCompatActivity {
             mHollanowInvite.setVisibility(View.INVISIBLE);
         }
 
+        setCallHistoryUI();
+
     }
 
-    private void getContactDetails(String contactPhone) {
+    private void getContactDetails(final String contactPhone) {
         HollaNowDbHelper dbHelper = new HollaNowDbHelper(this);
         Contact contact = dbHelper.getContactByPhone(contactPhone);
-        contactId = contact.getId();
-        contactName = contact.getDisplayName();
-        Log.e(TAG+" getcontact details", contactName);
-        contactThumbnail = contact.getThumbnailUrl();
+        if (contact!=null) {
+            contactId = contact.getId();
+            contactName = contact.getDisplayName();
+            Log.e(TAG + " getcontact details", contactName);
+            contactThumbnail = contact.getThumbnailUrl();
+        } else {
+//            contactId = "";
+            contactName = "Save Contact";
+            mContactName.setTextColor(getResources().getColor(R.color.accent));
+            mContactName.setTypeface(null, Typeface.BOLD);
+            mContactName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveContactToPhone(contactPhone);
+                }
+            });
+        }
 
         updateUI();
 
+    }
+
+    private void saveContactToPhone(String contactPhone) {
+        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE, contactPhone);
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE_ISPRIMARY, true);
+        startActivity(intent);
     }
 
     private boolean getHollanowDetails(String contactPhone) {
