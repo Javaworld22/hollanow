@@ -149,12 +149,6 @@ public class HomeFragment extends Fragment implements
 
 //        fetchPhoneContacts();
 
-        dbHelper = new HollaNowDbHelper(mContext);
-        allContacts = dbHelper.allContacts();
-        mProgressBar.setVisibility(View.INVISIBLE);
-        adapter = new ContactAdapter(allContacts, mContext);
-        mRecyclerView.setAdapter(adapter);
-        new syncDb("sync contact").execute("yes");
 
 //        Log.e(TAG, "size "+fetchPhoneContacts());
 //        if (allContacts.size() != mSharedPref.getContactCount() || allContacts.size() == 0) {
@@ -597,6 +591,13 @@ public class HomeFragment extends Fragment implements
             mGoogleApiClient.connect();
         }
 
+        dbHelper = new HollaNowDbHelper(mContext);
+        allContacts = dbHelper.allContacts();
+        mProgressBar.setVisibility(View.INVISIBLE);
+        adapter = new ContactAdapter(allContacts, mContext);
+        mRecyclerView.setAdapter(adapter);
+        new syncDb("sync contact").execute("yes");
+
     }
 
     @Override
@@ -616,9 +617,10 @@ public class HomeFragment extends Fragment implements
 
     private void handleNewLocation(Location location) {
         //Log.d(TAG, location.toString());
-        mCurrentLocation = location;
-        mParseGeoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-        if (mParseGeoPoint!=null) {
+
+        if (location!=null) {
+            mCurrentLocation = location;
+            mParseGeoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
     //        ParseGeoPoint parseGeoPoint = new ParseGeoPoint(location.getLatitude(),location.getLongitude());
             Log.e(TAG, mParseGeoPoint.toString() + " - " + location.toString() + " -- " + location.getProvider());
             Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());

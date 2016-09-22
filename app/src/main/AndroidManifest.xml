@@ -30,7 +30,8 @@
         android:icon="@drawable/bclogo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:largeHeap="true">
         <provider
             android:name=".MySuggestionProvider"
             android:authorities="com.doxa360.android.betacaller.MySuggestionProvider"/>

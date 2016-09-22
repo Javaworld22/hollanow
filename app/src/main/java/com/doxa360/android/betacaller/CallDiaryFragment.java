@@ -73,13 +73,6 @@ public class CallDiaryFragment extends Fragment {
             mCallLogRecyclerview.setLayoutManager(layoutManager);
         }
 
-        dbHelper = new HollaNowDbHelper(mContext);
-        allCallLogs = dbHelper.allPhoneLogs();
-        mProgressBar.setVisibility(View.INVISIBLE);
-        mAdapter = new PhoneCallLogAdapter(allCallLogs, mContext);
-        mCallLogRecyclerview.setAdapter(mAdapter);
-
-        new syncDb("sync call logs").execute("yes");
 
         return rootView;
     }
@@ -255,5 +248,17 @@ public class CallDiaryFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        dbHelper = new HollaNowDbHelper(mContext);
+        allCallLogs = dbHelper.allPhoneLogs();
+        mProgressBar.setVisibility(View.INVISIBLE);
+        mAdapter = new PhoneCallLogAdapter(allCallLogs, mContext);
+        mCallLogRecyclerview.setAdapter(mAdapter);
+
+        new syncDb("sync call logs").execute("yes");
     }
 }
