@@ -303,9 +303,11 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
                 // TODO: Consider calling
                 return;
             }
-            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-            Toast.makeText(mContext, "Something went wrong with your device\'s location services", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "Something went wrong with your device\'s location services");
+            if (mGoogleApiClient.isConnected()) {
+                LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+                Toast.makeText(mContext, "Something went wrong with your device\'s location services", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Something went wrong with your device\'s location services");
+            }
         }
         else {
             mCurrentLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
