@@ -19,6 +19,7 @@ import com.doxa360.android.betacaller.CallNoteBottomSheet;
 import com.doxa360.android.betacaller.ContactDetailActivity;
 import com.doxa360.android.betacaller.HomeActivity;
 import com.doxa360.android.betacaller.R;
+import com.doxa360.android.betacaller.helpers.BubbleTextGetter;
 import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
@@ -30,7 +31,7 @@ import java.util.List;
 /**
  * Created by Apple on 09/01/16.
  */
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> implements BubbleTextGetter {
 
     private static final String TAG = ContactAdapter.class.getSimpleName();
     private List<Contact> mContactList;
@@ -163,6 +164,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             return mContactList.size();
         else
             return 0;
+    }
+
+    @Override
+    public String getTextToShowInBubble(final int pos) {
+        return Character.toString(mContactList.get(pos).getDisplayName().charAt(0));
     }
 
     private double getDistanceApartKm(double lat1, double lon1, double lat2, double lon2) {

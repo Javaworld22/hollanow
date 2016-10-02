@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -254,7 +255,11 @@ public class CallDiaryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         dbHelper = new HollaNowDbHelper(mContext);
-        allCallLogs = dbHelper.allPhoneLogs();
+        try {
+            allCallLogs = dbHelper.allPhoneLogs();
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.e(TAG, e.getMessage());
+        }
         mProgressBar.setVisibility(View.INVISIBLE);
         mAdapter = new PhoneCallLogAdapter(allCallLogs, mContext);
         mCallLogRecyclerview.setAdapter(mAdapter);

@@ -16,9 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.MLRoundedImageView;
+import com.doxa360.android.betacaller.helpers.MyToolBox;
 import com.facebook.FacebookSdk;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
@@ -28,6 +31,8 @@ import com.parse.ParseInstallation;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
+
+import it.sephiroth.android.library.tooltip.Tooltip;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -46,12 +51,14 @@ public class HomeActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    HollaNowSharedPref mSharedPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this);
         setContentView(R.layout.activity_home);
+        mSharedPref = new HollaNowSharedPref(this);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -139,8 +146,12 @@ public class HomeActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-                startActivity(intent);
+//                if (ParseUser.getCurrentUser().getParseFile("photo")!=null) {
+                    Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+//                } else {
+//                    MyToolBox.AlertMessage(HomeActivity.this, "Network error. Please check your connection.");
+//                }
             }
         });
         return super.onPrepareOptionsMenu(menu);
@@ -228,6 +239,7 @@ public class HomeActivity extends AppCompatActivity {
                     break;
                 case 2:
                     fragment = new CallDiaryFragment();
+//                    tabToolTip(2, "Welcome. Access your phone contacts here");
                     break;
 //                case 3:
 //                    fragment = new ProfileFragment();

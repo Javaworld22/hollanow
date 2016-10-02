@@ -70,6 +70,28 @@ public class HollaNowSharedPref {
         return mSharedPreferences.getBoolean("tutorial", false);
     }
 
+    public void setTutorial2(boolean value) {
+        mSharedPreferences
+                .edit()
+                .putBoolean("tutorial2", value)
+                .apply();
+    }
+
+    public boolean isTutorial2() {
+        return mSharedPreferences.getBoolean("tutorial2", false);
+    }
+
+    public void setTutorial3(boolean value) {
+        mSharedPreferences
+                .edit()
+                .putBoolean("tutorial3", value)
+                .apply();
+    }
+
+    public boolean isTutorial3() {
+        return mSharedPreferences.getBoolean("tutorial3", false);
+    }
+
     public String getSentiment(){
         return mSharedPreferences.getString("sentiment", "Update your driving status" );
     }

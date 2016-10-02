@@ -60,6 +60,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import it.sephiroth.android.library.tooltip.Tooltip;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -329,6 +331,10 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
             mGoogleApiClient.connect();
         }
         checkLocationSettings();
+//        if (!mSharedPref.isTutorial2()) {
+//            tabToolTip(1, "Search easily for people and businesses");
+//            mSharedPref.setTutorial2(false);
+//        }
 
     }
 
@@ -341,6 +347,24 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
         }
     }
 
+    private void tabToolTip(int position, String msg) {
+
+
+        Tooltip.make(
+                mContext,
+                new Tooltip.Builder(101+position)
+                        .anchor(mSearchLayout, Tooltip.Gravity.BOTTOM)
+                        .closePolicy(Tooltip.ClosePolicy.TOUCH_ANYWHERE_NO_CONSUME, 3000)
+                        .text(msg)
+                        .fadeDuration(200)
+                        .fitToScreen(false)
+                        .maxWidth(400)
+                        .showDelay(400)
+                        .toggleArrow(true)
+//                        .withArrow(true)
+                        .build()
+        ).show();
+    }
     @Override
     public void onLocationChanged(Location location) {
         Log.e(TAG, "Location services requested. ");

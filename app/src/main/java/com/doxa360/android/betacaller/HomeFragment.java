@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
@@ -19,6 +20,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.doxa360.android.betacaller.adapter.ContactAdapter;
+import com.doxa360.android.betacaller.helpers.FastScroller;
 import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
@@ -62,6 +65,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import it.sephiroth.android.library.tooltip.Tooltip;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,6 +96,7 @@ public class HomeFragment extends Fragment implements
     private LocationSettingsRequest mLocationSettingsRequest;
     private Location mCurrentLocation;
     private ParseGeoPoint mParseGeoPoint;
+    private FastScroller fastScroller;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -145,6 +151,8 @@ public class HomeFragment extends Fragment implements
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(layoutManager);
+        fastScroller=(FastScroller) rootView.findViewById(R.id.fastscroller);
+        fastScroller.setRecyclerView(mRecyclerView);
 
 
 //        fetchPhoneContacts();
@@ -198,6 +206,25 @@ public class HomeFragment extends Fragment implements
         }
     }
 
+
+    private void tabToolTip(int position, String msg) {
+
+
+        Tooltip.make(
+                mContext,
+                new Tooltip.Builder(101+position)
+                        .anchor(mRecyclerView, Tooltip.Gravity.BOTTOM)
+                        .closePolicy(Tooltip.ClosePolicy.TOUCH_ANYWHERE_NO_CONSUME, 3000)
+                        .text(msg)
+                        .fadeDuration(200)
+                        .fitToScreen(false)
+                        .maxWidth(400)
+                        .showDelay(400)
+//                        .toggleArrow(true)
+                        .withArrow(true)
+                        .build()
+        ).show();
+    }
     private List<Contact> fetchPhoneContactsDb() {
 //        dbHelper = new HollaNowDbHelper(mContext);
 //        dbHelper.clearAndRecreateDb();
@@ -592,10 +619,18 @@ public class HomeFragment extends Fragment implements
         }
 
         dbHelper = new HollaNowDbHelper(mContext);
-        allContacts = dbHelper.allContacts();
+        try {
+            allContacts = dbHelper.allContacts();
+        } catch (SQLiteDatabaseLockedException e) {
+            Log.e(TAG, e.getMessage());
+        }
         mProgressBar.setVisibility(View.INVISIBLE);
         adapter = new ContactAdapter(allContacts, mContext);
         mRecyclerView.setAdapter(adapter);
+//        if(!mSharedPref.isTutorial()) {
+//            tabToolTip(3, "Welcome. Access your phone contacts here");
+//            mSharedPref.setTutorial(false);
+//        }
         new syncDb("sync contact").execute("yes");
 
     }

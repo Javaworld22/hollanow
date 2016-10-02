@@ -132,7 +132,7 @@
     <string name="title_activity_category">Category</string>
     <string name="note_description">Add a short note to go with this phone call</string>
     <string name="title_activity_call_note">Call Note</string>
-    <string name="search_query_hint">Search phone numbers, names</string>
+    <string name="search_query_hint">Search phone numbers, names, and businesses</string>
     <string name="action_location">Search By Location</string>
     <string name="sign_up_email">Sign up with email</string>
     <string name="facebook_app_id">1726216680966670</string>
