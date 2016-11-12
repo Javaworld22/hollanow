@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.doxa360.android.betacaller.adapter.PhoneCallLogAdapter;
 import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
@@ -28,6 +29,8 @@ import com.doxa360.android.betacaller.model.PhoneCallLog;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import it.sephiroth.android.library.tooltip.Tooltip;
 
 
 /**
@@ -50,6 +53,7 @@ public class CallDiaryFragment extends Fragment {
 
     private HollaNowDbHelper dbHelper;
     private HollaNowSharedPref mSharedPref;
+    private TextView mTooltipAnchor;
 
     public CallDiaryFragment() {
         // Required empty public constructor
@@ -66,6 +70,7 @@ public class CallDiaryFragment extends Fragment {
 
         allCallLogs = new ArrayList<PhoneCallLog>();
 
+//        mTooltipAnchor = (TextView) rootView.findViewById(R.id.tooltip_anchor);
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         mCallLogRecyclerview = (RecyclerView) rootView.findViewById(R.id.callLog_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
@@ -73,6 +78,7 @@ public class CallDiaryFragment extends Fragment {
             mCallLogRecyclerview.setHasFixedSize(true);
             mCallLogRecyclerview.setLayoutManager(layoutManager);
         }
+
 
 
         return rootView;
@@ -264,6 +270,15 @@ public class CallDiaryFragment extends Fragment {
         mAdapter = new PhoneCallLogAdapter(allCallLogs, mContext);
         mCallLogRecyclerview.setAdapter(mAdapter);
 
+
         new syncDb("sync call logs").execute("yes");
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+
+        }
     }
 }

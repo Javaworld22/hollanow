@@ -144,9 +144,9 @@ public class ProfileFragment extends Fragment {
         mSharedPref = new HollaNowSharedPref(mContext);
 
         ShareLinkContent sharedContent = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse("http://hollanow.com"))
+                .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.doxa360.android.betacaller"))
                 .setContentDescription("Hello friends, I now use the HollaNow app. So whenever you want to talk to me, just holla @"+ParseUser.getCurrentUser().getUsername()+ ". It\'s cooler.")
-                .setImageUrl(Uri.parse("http://hollanow.com/facebook_share.png"))
+//                .setImageUrl(Uri.parse("http://hollanow.com/facebook_share.png"))
                 .build();
 
 

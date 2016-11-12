@@ -22,8 +22,8 @@ android {
         applicationId "com.doxa360.android.betacaller"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 19
-        versionName "0.330"
+        versionCode 21
+        versionName "0.350"
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
 

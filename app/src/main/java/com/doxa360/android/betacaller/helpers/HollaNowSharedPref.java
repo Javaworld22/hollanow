@@ -3,6 +3,7 @@ package com.doxa360.android.betacaller.helpers;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 /**
  * Created by Apple on 23/06/15.
@@ -67,6 +68,7 @@ public class HollaNowSharedPref {
     }
 
     public boolean isTutorial() {
+        Log.e("shared", mSharedPreferences.getBoolean("tutorial", false)+"");
         return mSharedPreferences.getBoolean("tutorial", false);
     }
 
@@ -78,6 +80,7 @@ public class HollaNowSharedPref {
     }
 
     public boolean isTutorial2() {
+        Log.e("shared2", mSharedPreferences.getBoolean("tutorial", false)+"");
         return mSharedPreferences.getBoolean("tutorial2", false);
     }
 
@@ -89,6 +92,7 @@ public class HollaNowSharedPref {
     }
 
     public boolean isTutorial3() {
+        Log.e("shared3", mSharedPreferences.getBoolean("tutorial", false)+"");
         return mSharedPreferences.getBoolean("tutorial3", false);
     }
 

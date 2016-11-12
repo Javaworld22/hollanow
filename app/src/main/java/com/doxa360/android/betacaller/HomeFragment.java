@@ -30,6 +30,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.doxa360.android.betacaller.adapter.ContactAdapter;
@@ -97,6 +98,7 @@ public class HomeFragment extends Fragment implements
     private Location mCurrentLocation;
     private ParseGeoPoint mParseGeoPoint;
     private FastScroller fastScroller;
+    private TextView mTooltipAnchor;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -146,6 +148,7 @@ public class HomeFragment extends Fragment implements
         resolver = mContext.getContentResolver();
 //        mCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 
+        mTooltipAnchor = (TextView) rootView.findViewById(R.id.tooltip_anchor);
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.contacts_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
@@ -207,24 +210,6 @@ public class HomeFragment extends Fragment implements
     }
 
 
-    private void tabToolTip(int position, String msg) {
-
-
-        Tooltip.make(
-                mContext,
-                new Tooltip.Builder(101+position)
-                        .anchor(mRecyclerView, Tooltip.Gravity.BOTTOM)
-                        .closePolicy(Tooltip.ClosePolicy.TOUCH_ANYWHERE_NO_CONSUME, 3000)
-                        .text(msg)
-                        .fadeDuration(200)
-                        .fitToScreen(false)
-                        .maxWidth(400)
-                        .showDelay(400)
-//                        .toggleArrow(true)
-                        .withArrow(true)
-                        .build()
-        ).show();
-    }
     private List<Contact> fetchPhoneContactsDb() {
 //        dbHelper = new HollaNowDbHelper(mContext);
 //        dbHelper.clearAndRecreateDb();
@@ -611,6 +596,42 @@ public class HomeFragment extends Fragment implements
         mGoogleApiClient.connect();
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            if (isResumed()) {
+
+            }
+        }
+    }
+
+    private void showNextToolTip() {
+            /**
+             Tool tip here...
+             **/
+            Tooltip.make(mContext,
+                    new Tooltip.Builder(103)
+                            .anchor(mTooltipAnchor, Tooltip.Gravity.TOP)
+//                        .closePolicy(new Tooltip.ClosePolicy()
+//                                .insidePolicy(true, true)
+//                                .outsidePolicy(true, false), 0)
+                            .closePolicy(Tooltip.ClosePolicy.TOUCH_INSIDE_CONSUME,0)
+//                        .activateDelay(800)
+//                        .showDelay(300)
+                            .text(getString(R.string.tooltip_three))
+                            .maxWidth(500)
+                            .withArrow(false)
+                            .withOverlay(false)
+//                        .typeface(mYourCustomFont)
+                            .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
+                            .build()
+            ).show();
+//            mSharedPref.setTutorial3(false);
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -627,11 +648,60 @@ public class HomeFragment extends Fragment implements
         mProgressBar.setVisibility(View.INVISIBLE);
         adapter = new ContactAdapter(allContacts, mContext);
         mRecyclerView.setAdapter(adapter);
-//        if(!mSharedPref.isTutorial()) {
-//            tabToolTip(3, "Welcome. Access your phone contacts here");
-//            mSharedPref.setTutorial(false);
-//        }
+
+        if (getUserVisibleHint()) {
+            if (mSharedPref == null) {
+                mSharedPref = new HollaNowSharedPref(mContext);
+            }
+            if (!mSharedPref.isTutorial()) {
+                /**
+                 Tool tip here...
+                 **/
+                Tooltip.make(mContext,
+                        new Tooltip.Builder(101)
+                                .anchor(mTooltipAnchor, Tooltip.Gravity.TOP)
+                                //                        .closePolicy(new Tooltip.ClosePolicy()
+                                //                                .insidePolicy(true, true)
+                                //                                .outsidePolicy(true, false), 0)
+                                .closePolicy(Tooltip.ClosePolicy.TOUCH_INSIDE_CONSUME, 0)
+                                .withCallback(new Tooltip.Callback() {
+                                    @Override
+                                    public void onTooltipClose(Tooltip.TooltipView tooltipView, boolean b, boolean b1) {
+                                        showNextToolTip();
+                                    }
+
+                                    @Override
+                                    public void onTooltipFailed(Tooltip.TooltipView tooltipView) {
+
+                                    }
+
+                                    @Override
+                                    public void onTooltipShown(Tooltip.TooltipView tooltipView) {
+
+                                    }
+
+                                    @Override
+                                    public void onTooltipHidden(Tooltip.TooltipView tooltipView) {
+
+                                    }
+                                })
+                                //                        .activateDelay(800)
+                                //                        .showDelay(300)
+                                .text(getString(R.string.tooltip_one))
+                                .maxWidth(500)
+                                .withArrow(false)
+                                .withOverlay(false)
+                                //                        .typeface(mYourCustomFont)
+                                .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
+                                .build()
+                ).show();
+                mSharedPref.setTutorial(true);
+            }
+        }
+
         new syncDb("sync contact").execute("yes");
+
+
 
     }
 

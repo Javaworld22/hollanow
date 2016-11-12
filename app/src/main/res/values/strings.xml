@@ -214,5 +214,8 @@
     <string name="pref_backup_contacts_key">pref_backup_contacts</string>
     <string name="pref_sync_contacts_key">pref_sync_contacts</string>
     <string name="pref_delete_contacts_key">pref_delete_account</string>
+    <string name="tooltip_two">You can find your friends contacts by searching for their usernames on HollaNow</string>
+    <string name="tooltip_three">HollaNow call-notes are exclusive to HollaNow users. Invite friends to enjoy</string>
+    <string name="tooltip_one">Invite close friends to HollaNow to know their location when you need them</string>
 
 </resources>

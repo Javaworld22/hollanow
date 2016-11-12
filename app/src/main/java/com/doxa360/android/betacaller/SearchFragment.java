@@ -166,6 +166,7 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
 
         getCategories();
 
+
         return rootView;
     }
 
@@ -331,10 +332,36 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
             mGoogleApiClient.connect();
         }
         checkLocationSettings();
-//        if (!mSharedPref.isTutorial2()) {
-//            tabToolTip(1, "Search easily for people and businesses");
-//            mSharedPref.setTutorial2(false);
-//        }
+        if (getUserVisibleHint()) {
+            if (mSharedPref == null) {
+                mSharedPref = new HollaNowSharedPref(mContext);
+            }
+            if (!mSharedPref.isTutorial2()) {
+                /**
+                 Tool tip here...
+                 **/
+                Tooltip.make(mContext,
+                        new Tooltip.Builder(102)
+                                .anchor(mSearchLayout, Tooltip.Gravity.BOTTOM)
+//                        .closePolicy(new Tooltip.ClosePolicy()
+//                                .insidePolicy(true, true)
+//                                .outsidePolicy(true, false), 0)
+                                .closePolicy(Tooltip.ClosePolicy.TOUCH_INSIDE_CONSUME, 0)
+//                        .activateDelay(800)
+//                        .showDelay(300)
+                                .text(getString(R.string.tooltip_two))
+                                .maxWidth(500)
+                                .withArrow(true)
+                                .withOverlay(true)
+//                        .typeface(mYourCustomFont)
+                                .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
+                                .build()
+                ).show();
+
+                mSharedPref.setTutorial2(true);
+            }
+
+        }
 
     }
 
@@ -347,24 +374,14 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
         }
     }
 
-    private void tabToolTip(int position, String msg) {
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
 
-
-        Tooltip.make(
-                mContext,
-                new Tooltip.Builder(101+position)
-                        .anchor(mSearchLayout, Tooltip.Gravity.BOTTOM)
-                        .closePolicy(Tooltip.ClosePolicy.TOUCH_ANYWHERE_NO_CONSUME, 3000)
-                        .text(msg)
-                        .fadeDuration(200)
-                        .fitToScreen(false)
-                        .maxWidth(400)
-                        .showDelay(400)
-                        .toggleArrow(true)
-//                        .withArrow(true)
-                        .build()
-        ).show();
+        }
     }
+
     @Override
     public void onLocationChanged(Location location) {
         Log.e(TAG, "Location services requested. ");
