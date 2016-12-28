@@ -216,7 +216,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 realQuery.whereContains("username", charSequence.toString().toLowerCase());
                 realQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
                 realQuery.whereNotEqualTo("searchVisible", false);
-
+//
                 ParseQuery<ParseUser> occupationQuery = ParseUser.getQuery();
                 occupationQuery.whereContains("occupation", charSequence.toString().toLowerCase());
                 occupationQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
