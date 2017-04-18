@@ -202,7 +202,7 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="about">version 0.310 \n &#169; 2016. HollaNow</string>
+    <string name="about">version 0.400 \n &#169; 2016-2017. HollaNow</string>
     <string name="pref_title_location">Location</string>
     <string name="pref_summary_location">Turn On/Off</string>
     <string name="pref_title_privacy">Visibile In Search</string>
@@ -215,7 +215,11 @@
     <string name="pref_sync_contacts_key">pref_sync_contacts</string>
     <string name="pref_delete_contacts_key">pref_delete_account</string>
     <string name="tooltip_two">You can find your friends contacts by searching for their usernames on HollaNow</string>
-    <string name="tooltip_three">HollaNow call-notes are exclusive to HollaNow users. Invite friends to enjoy</string>
+    <string name="tooltip_three">HollaNow call-notes are exclusive to HollaNow users. They allow you send a short note with your phone call. Invite friends to enjoy</string>
     <string name="tooltip_one">Invite close friends to HollaNow to know their location when you need them</string>
+    <string name="tooltip_four">Add information on your occupation to help users find you when they need your service</string>
+
+    <string name="dgts__login_digits_text">Verify Phone</string>
+    <string name="password_reset"><a href="http://www.hollanow.com/password/reset">Forgot password?</a></string>
 
 </resources>

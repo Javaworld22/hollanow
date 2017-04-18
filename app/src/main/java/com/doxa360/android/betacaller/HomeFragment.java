@@ -16,13 +16,14 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -39,6 +40,8 @@ import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
 import com.doxa360.android.betacaller.model.Contact;
+import com.doxa360.android.betacaller.model.Parse_Contact;
+import com.doxa360.android.betacaller.model.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -50,23 +53,18 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseGeoPoint;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
 import it.sephiroth.android.library.tooltip.Tooltip;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 
 
 /**
@@ -81,13 +79,14 @@ public class HomeFragment extends Fragment implements
     private static final int REQUEST_LOCATION = 1;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123450;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1044;
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1090;
     private final String TAG = this.getClass().getSimpleName();
     private Context mContext;
     private ProgressBar mProgressBar;
     RecyclerView mRecyclerView;
     ContactAdapter adapter;
-    List<Contact> allContacts;
+    List<Parse_Contact> allContacts;
     private ContentResolver resolver;
     private Cursor mCursor;
     private HollaNowDbHelper dbHelper;
@@ -96,9 +95,9 @@ public class HomeFragment extends Fragment implements
     private LocationRequest mLocationRequest;
     private LocationSettingsRequest mLocationSettingsRequest;
     private Location mCurrentLocation;
-    private ParseGeoPoint mParseGeoPoint;
     private FastScroller fastScroller;
     private TextView mTooltipAnchor;
+    private HollaNowApiInterface hollaNowApiInterface;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -108,6 +107,7 @@ public class HomeFragment extends Fragment implements
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSharedPref = new HollaNowSharedPref(mContext);
+        hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
         mGoogleApiClient = new GoogleApiClient.Builder(mContext)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -130,7 +130,7 @@ public class HomeFragment extends Fragment implements
          * 2. If GPS not turned, ask permission
          * 3. If permission given or already on...
          *  a. save current user's location
-         *  b. checkLocation();
+         *  b. //heckLocation() now findNearbyUsersByContactList();
          * 4. If permission not given, ignore location features
          */
     }
@@ -144,7 +144,9 @@ public class HomeFragment extends Fragment implements
 
         Log.e(TAG + "Shared Pref:", mSharedPref.getLongtitude() + " : " + mSharedPref.getLattitude());
 
-        allContacts = new ArrayList<Contact>();
+        Log.e(TAG + "Shared Pref user:", mSharedPref.getToken() + " : " + mSharedPref.getCurrentUser().getName()+ " : " + mSharedPref.getCurrentUser().toString());
+
+        allContacts = new ArrayList<Parse_Contact>();
         resolver = mContext.getContentResolver();
 //        mCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 
@@ -183,9 +185,33 @@ public class HomeFragment extends Fragment implements
 
         @Override
         protected Void doInBackground(String... string) {
-            fetchPhoneContacts();
+
+            //request permission for android 6 +
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                    ContextCompat.checkSelfPermission(mContext,
+                    Manifest.permission.READ_CONTACTS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.READ_CONTACTS)) {
+
+
+                } else {
+
+                    // No explanation needed, we can request the permission.
+                    requestPermissions(
+                            new String[]{Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_CONTACTS},
+                            MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                }
+            } else {
+                fetchPhoneContacts();
+            }
             return null;
         }
+
 
         @Override
         protected void onPostExecute(Void bytes) {
@@ -204,13 +230,42 @@ public class HomeFragment extends Fragment implements
             adapter.notifyDataSetChanged();
             Log.e(TAG, "Adapter updated "+ allContacts.size());
             if (MyToolBox.isNetworkAvailable(mContext)) {
-                checkLocation();
+//                checkLocation();
+                findNearbyUsersByContactList();
             }
         }
     }
 
 
-    private List<Contact> fetchPhoneContactsDb() {
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    fetchPhoneContacts();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+
+    private List<Parse_Contact> fetchPhoneContactsDb() {
 //        dbHelper = new HollaNowDbHelper(mContext);
 //        dbHelper.clearAndRecreateDb();
         allContacts = dbHelper.allContacts();
@@ -240,7 +295,7 @@ public class HomeFragment extends Fragment implements
         Long timer = System.currentTimeMillis();
 
         mCursor = mContext.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-        List<Contact> contactList = new ArrayList<Contact>();
+        List<Parse_Contact> contactList = new ArrayList<Parse_Contact>();
         if (mCursor != null) {
             try {
                 final int idIndex = mCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
@@ -281,7 +336,7 @@ public class HomeFragment extends Fragment implements
                     accountType = mCursor.getString(accountTypeIndex);
 
                     if (phoneNumber!=null && !phoneNumber.isEmpty()) {
-                        Contact contact = new Contact();
+                        Parse_Contact contact = new Parse_Contact();
                         contact.setId(id);
                         contact.setDisplayName(name);
                         if (phoneNumber.equalsIgnoreCase("08036428999")) {
@@ -452,81 +507,139 @@ public class HomeFragment extends Fragment implements
         }
         return sb.toString();
     }
-    public void checkLocation() {
+//    public void checkLocation() {
+//        Log.e(TAG, "checking location");
+//        List<String> phoneNumbers = new ArrayList<String>();
+//        List<Parse_Contact>dbContacts = dbHelper.allContacts();
+//        for (Parse_Contact c:dbHelper.allContacts()) {
+//            String contactPhone = c.getPhoneNumber();
+//            Log.e(TAG, "CONTACT charset - "+ contactPhone.length());
+////            String ss="";
+////            try {
+////                ss = URLEncoder.encode(c.getPhoneNumber(), "UTF8");
+////            } catch (UnsupportedEncodingException e) {
+////                e.printStackTrace();
+////            }
+////            if (ss.equals("+2348036428999")) {
+////                Log.e(TAG, "CONTACT found - "+ contactPhone);
+////            }
+//
+//            if (contactPhone.startsWith("%2B234")) {
+//                contactPhone = contactPhone.replace("%2B234", "+234");
+//                Log.e(TAG, "new contact - " + contactPhone);
+//            }
+//            if (contactPhone.startsWith("+234")) {
+//                contactPhone = contactPhone.replace("%2B234", "+234");
+//                Log.e(TAG, "new contact+ - " + contactPhone);
+//            }
+//            if (contactPhone.startsWith("0")) {
+//                contactPhone = contactPhone.replaceFirst("[0]", "+234");
+//                Log.e(TAG, "new contact - " + contactPhone);
+//            }
+//
+//            phoneNumbers.add(contactPhone);//.replaceAll("\\P{Print}",""));
+//
+//        }
+////        phoneNumbers.add("+2348036428999");
+//        Log.e(TAG, " phoneNumbers "+ phoneNumbers.size() + " - "+MyToolBox.listToString(phoneNumbers));
+//        ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
+//        String phoneN = MyToolBox.listToString(phoneNumbers);
+////        query.whereContainedIn("phoneNumber", phoneNumbers);
+//        query.findInBackground(new FindCallback<ParseUser>() {
+//            @Override
+//            public void done(List<ParseUser> objects, ParseException e) {
+//                if (e == null) {
+//                    Log.e(TAG, "successfull objects - "+ objects.size() );
+//                    for (int i=0;i<objects.size();i++) {
+//                        ParseUser user = objects.get(i);
+//                        ParseGeoPoint geoPoint = user.getParseGeoPoint("lastSeen");
+//                        Log.e(TAG, user.getEmail() + " - " + geoPoint + "" + "phone - "+ user.getString("phoneNumber")+ " - +2348036428999");
+//                        String remotePhone = user.getString("phoneNumber").trim();
+////                        if (remotePhone.startsWith("+234")) {
+////                            remotePhone = remotePhone.replaceFirst("[+234]", "0");
+////                        }
+//                        if (geoPoint!=null) {
+//                            Parse_Contact contact = dbHelper.searchContactByPhoneNumber(remotePhone);//("+2348036428999\u202C");
+//                            if (contact!=null) {
+//                                Log.e(TAG, "non null contact "+ contact.getId()+ " - " + contact.getPhoneNumber());
+//                                String contactId = contact.getId();
+//                                dbHelper.updateLocation(contactId, geoPoint.getLatitude(), geoPoint.getLongitude());
+//                                Log.e(TAG, "updated location");
+//                                allContacts.clear();
+//                                allContacts.addAll(dbHelper.allContacts());
+//                                adapter.notifyDataSetChanged();
+//                            } else {
+//                                Log.e(TAG, "no contact");
+//                            }
+//                        } else {
+//
+//                        }
+//
+//                    }
+//                    Log.e(TAG, "null locations");
+//                } else {
+//                    Log.e(TAG, "something wrong: " + e.getMessage());
+//                }
+//            }
+//        });
+//    }
+
+    private void findNearbyUsersByContactList() {
         Log.e(TAG, "checking location");
         List<String> phoneNumbers = new ArrayList<String>();
-        List<Contact>dbContacts = dbHelper.allContacts();
-        for (Contact c:dbHelper.allContacts()) {
-            String contactPhone = c.getPhoneNumber();
-            Log.e(TAG, "CONTACT charset - "+ contactPhone.length());
-//            String ss="";
-//            try {
-//                ss = URLEncoder.encode(c.getPhoneNumber(), "UTF8");
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
+        List<Parse_Contact>dbContacts = dbHelper.allContacts();
+
+        for (Parse_Contact contact:dbContacts) {
+            String phone = contact.getPhoneNumber();
+            if (contact.getPhoneNumber().startsWith("+234")) {
+                phone = contact.getPhoneNumber().replace("+234", "");
+            }
+//            if (contact.getPhoneNumber().startsWith("+234")) {
+//                phone = contact.getPhoneNumber().replace("+234", "");
 //            }
-//            if (ss.equals("+2348036428999")) {
-//                Log.e(TAG, "CONTACT found - "+ contactPhone);
-//            }
-
-            if (contactPhone.startsWith("%2B234")) {
-                contactPhone = contactPhone.replace("%2B234", "+234");
-                Log.e(TAG, "new contact - " + contactPhone);
-            }
-            if (contactPhone.startsWith("+234")) {
-                contactPhone = contactPhone.replace("%2B234", "+234");
-                Log.e(TAG, "new contact+ - " + contactPhone);
-            }
-            if (contactPhone.startsWith("0")) {
-                contactPhone = contactPhone.replaceFirst("[0]", "+234");
-                Log.e(TAG, "new contact - " + contactPhone);
-            }
-
-            phoneNumbers.add(contactPhone);//.replaceAll("\\P{Print}",""));
-
+            phoneNumbers.add(phone);
         }
-//        phoneNumbers.add("+2348036428999");
-        Log.e(TAG, " phoneNumbers "+ phoneNumbers.size() + " - "+MyToolBox.listToString(phoneNumbers));
-        ParseQuery<ParseUser> query = ParseQuery.getQuery("_User");
-        String phoneN = MyToolBox.listToString(phoneNumbers);
-//        query.whereContainedIn("phoneNumber", phoneNumbers);
-        query.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (e == null) {
-                    Log.e(TAG, "successfull objects - "+ objects.size() );
-                    for (int i=0;i<objects.size();i++) {
-                        ParseUser user = objects.get(i);
-                        ParseGeoPoint geoPoint = user.getParseGeoPoint("lastSeen");
-                        Log.e(TAG, user.getEmail() + " - " + geoPoint + "" + "phone - "+ user.getString("phoneNumber")+ " - +2348036428999");
-                        String remotePhone = user.getString("phoneNumber").trim();
-//                        if (remotePhone.startsWith("+234")) {
-//                            remotePhone = remotePhone.replaceFirst("[+234]", "0");
-//                        }
-                        if (geoPoint!=null) {
-                            Contact contact = dbHelper.searchContactByPhoneNumber(remotePhone);//("+2348036428999\u202C");
-                            if (contact!=null) {
-                                Log.e(TAG, "non null contact "+ contact.getId()+ " - " + contact.getPhoneNumber());
-                                String contactId = contact.getId();
-                                dbHelper.updateLocation(contactId, geoPoint.getLatitude(), geoPoint.getLongitude());
-                                Log.e(TAG, "updated location");
-                                allContacts.clear();
-                                allContacts.addAll(dbHelper.allContacts());
-                                adapter.notifyDataSetChanged();
-                            } else {
-                                Log.e(TAG, "no contact");
-                            }
-                        } else {
+        Log.e(TAG, "contacts size: "+phoneNumbers.size());
+        if (MyToolBox.isNetworkAvailable(mContext)) {
+            Log.e(TAG, "list of contacts in json" + new GsonBuilder().create().toJson(phoneNumbers));
+            Call<List<User>> call = hollaNowApiInterface.getUsersByContactList(new GsonBuilder().create().toJson(phoneNumbers), mSharedPref.getToken());
+            call.enqueue(new Callback<List<User>>() {
+                @Override
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    if (response.code() == 200) {
+                        //TODO: check location thingy
+                        response.body();// users on hollanow
+                        for (User user:response.body()) {
+                            if (user.getLat() != 0 && user.getLng() != 0) {
+                                Parse_Contact contact = dbHelper.searchContactByPhoneNumber(user.getPhone());//("+2348036428999\u202C");
+                                if (contact!=null) {
+                                    Log.e(TAG, "non null contact "+ contact.getId()+ " - " + contact.getPhoneNumber());
+                                    String contactId = contact.getId();
+                                    dbHelper.updateLocation(contactId, user.getLat(), user.getLng());
+                                    Log.e(TAG, "updated location");
+                                    allContacts.clear();
+                                    allContacts.addAll(dbHelper.allContacts());
+                                    adapter.notifyDataSetChanged();
+                                } else {
+                                    Log.e(TAG, "no contacts with lat and lng");
+                                }
 
+                            }
                         }
 
+                    } else {
+                        Log.e(TAG, "user by contact error");
                     }
-                    Log.e(TAG, "null locations");
-                } else {
-                    Log.e(TAG, "something wrong: " + e.getMessage());
                 }
-            }
-        });
+
+                @Override
+                public void onFailure(Call<List<User>> call, Throwable t) {
+//                    Log.e(TAG, "user by contact error "+ t.getMessage());
+                }
+            });
+
+
+        }
     }
 
     @Override
@@ -620,6 +733,27 @@ public class HomeFragment extends Fragment implements
                             .closePolicy(Tooltip.ClosePolicy.TOUCH_INSIDE_CONSUME,0)
 //                        .activateDelay(800)
 //                        .showDelay(300)
+                            .withCallback(new Tooltip.Callback() {
+                                @Override
+                                public void onTooltipClose(Tooltip.TooltipView tooltipView, boolean b, boolean b1) {
+//                                    showNewToolTip();
+                                }
+
+                                @Override
+                                public void onTooltipFailed(Tooltip.TooltipView tooltipView) {
+
+                                }
+
+                                @Override
+                                public void onTooltipShown(Tooltip.TooltipView tooltipView) {
+
+                                }
+
+                                @Override
+                                public void onTooltipHidden(Tooltip.TooltipView tooltipView) {
+
+                                }
+                            })
                             .text(getString(R.string.tooltip_three))
                             .maxWidth(500)
                             .withArrow(false)
@@ -628,6 +762,22 @@ public class HomeFragment extends Fragment implements
                             .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
                             .build()
             ).show();
+//            mSharedPref.setTutorial3(false);
+
+    }
+
+    private void showNewToolTip() {
+        Tooltip.make(mContext,
+                new Tooltip.Builder(104)
+                        .anchor(mTooltipAnchor, Tooltip.Gravity.TOP)
+                        .closePolicy(Tooltip.ClosePolicy.TOUCH_INSIDE_CONSUME,0)
+                        .text(getString(R.string.tooltip_four))
+                        .maxWidth(500)
+                        .withArrow(false)
+                        .withOverlay(false)
+                        .floatingAnimation(Tooltip.AnimationBuilder.DEFAULT)
+                        .build()
+        ).show();
 //            mSharedPref.setTutorial3(false);
 
     }
@@ -725,9 +875,6 @@ public class HomeFragment extends Fragment implements
 
         if (location!=null) {
             mCurrentLocation = location;
-            mParseGeoPoint = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-    //        ParseGeoPoint parseGeoPoint = new ParseGeoPoint(location.getLatitude(),location.getLongitude());
-            Log.e(TAG, mParseGeoPoint.toString() + " - " + location.toString() + " -- " + location.getProvider());
             Geocoder geocoder = new Geocoder(mContext, Locale.getDefault());
             String lastSeenAddress = null;
             try {
@@ -742,25 +889,43 @@ public class HomeFragment extends Fragment implements
             } catch(IOException e) {
                 e.printStackTrace();
             }
-            ParseUser.getCurrentUser().put("lastSeen", mParseGeoPoint);
-            ParseUser.getCurrentUser().put("lastSeenAddress", lastSeenAddress != null ? lastSeenAddress.toLowerCase() : null);
-            ParseUser.getCurrentUser().saveEventually(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if (e == null) {
-                        Log.e(TAG, "location saved");
-                    } else {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            });
 
 
-            mSharedPref.setLattitude(location.getLatitude());
-            mSharedPref.setLongtitude(location.getLongitude());
+            User currentUser = mSharedPref.getCurrentUser();
+            mSharedPref.setLattitude((float) location.getLatitude());
+            mSharedPref.setLongtitude((float) location.getLongitude());
+            currentUser.setLat((float) location.getLatitude());
+            currentUser.setLng((float) location.getLongitude());
+            currentUser.setLastSeen(lastSeenAddress);
+            //update current user in shared pref
+            mSharedPref.setCurrentUser(currentUser.toString());
+
+            Log.e("LOCATION",  mSharedPref.getCurrentUser().getLastSeen() +" : "+mSharedPref.getCurrentUser().getLat()+ mSharedPref.getCurrentUser().getLng()+":location-location,mCurrentlo,sharedLoc:" + location.getLatitude() + mCurrentLocation.getLatitude() + mSharedPref.getLattitude());
+            updateUser();
 
         }
 
+
+    }
+
+    private void updateUser() {
+        User currentUser = mSharedPref.getCurrentUser();
+        Call<User> call = hollaNowApiInterface.editUserProfile(currentUser, mSharedPref.getToken());
+        Log.e("EDITED_USER=> ", currentUser.toString());
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.code() == 200) {
+                    Log.e(TAG, "user and location updated "+ response.body().toString());
+                } else {
+                    Log.e(TAG, "location update error: " + response.code() + response.message());
+                }
+            }
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+//                Log.e(TAG, "location update failed: "+t.getMessage());
+            }
+        });
 
     }
 
@@ -826,6 +991,7 @@ public class HomeFragment extends Fragment implements
                 .setFastestInterval(5 * 1000); // 1 second, in milliseconds
     }
 
+    //TODO: search hollanow db by list of contact phone numbers... and get their users...
 
 
 

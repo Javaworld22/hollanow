@@ -5,26 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
-import com.doxa360.android.betacaller.helpers.MyToolBox;
-import com.doxa360.android.betacaller.model.CallNote;
-import com.doxa360.android.betacaller.model.Contact;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.parse.GetCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
+import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
+import com.doxa360.android.betacaller.model.oldCallNote;
+import com.doxa360.android.betacaller.model.Parse_Contact;
 import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
@@ -61,7 +48,9 @@ public class MainActivity extends AppCompatActivity {
 //        };
 //
 //        handler.postDelayed(runnable, 1000);
-        if (ParseUser.getCurrentUser() != null) {
+
+        HollaNowSharedPref sharedPref = new HollaNowSharedPref(this);
+        if (sharedPref.getCurrentUser() != null) {
             goToActivity(HomeActivity.class);
         }else{
             goToActivity(SlideIntro.class);
@@ -81,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver mPhoneReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            phoneNumber = intent.getStringExtra(Contact.PHONE_NUMBER);
+            phoneNumber = intent.getStringExtra(Parse_Contact.PHONE_NUMBER);
             getCallNote(phoneNumber);
         }
     };
@@ -96,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getCallNote(final String phoneNumber) {
         final Intent intent = new Intent(getApplicationContext(), CallNoteService.class);
-        intent.putExtra(CallNote.CALLER_NUMBER, phoneNumber);
+        intent.putExtra(oldCallNote.CALLER_NUMBER, phoneNumber);
         Log.e(TAG, "mainactivity call note: " + phoneNumber);
         startService(intent);
 //        if (MyToolBox.isNetworkAvailable(MainActivity.this)) {

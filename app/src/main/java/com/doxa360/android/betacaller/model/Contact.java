@@ -3,8 +3,6 @@ package com.doxa360.android.betacaller.model;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-import com.parse.ParseObject;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

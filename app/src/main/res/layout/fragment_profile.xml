@@ -45,13 +45,23 @@
                           android:layout_below="@+id/profile_name"/>
 
 
-                <TextView android:layout_width="match_parent"
+                <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
                           android:id="@+id/phone"
                           tools:text="08037046543"
                           style="?android:attr/textAppearanceMedium"
                           android:layout_margin="8dp"
-                          android:layout_below="@+id/user_name"/>
+                          android:layout_below="@+id/user_name" />
+
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/change_number_label"
+                          android:text="Change Number"
+                          android:textColor="@color/accent"
+                          android:layout_alignTop="@+id/phone"
+                          android:layout_alignParentEnd="true"/>
+
 
                 <LinearLayout android:layout_width="match_parent"
                               android:layout_height="wrap_content"
@@ -91,22 +101,8 @@
                               android:textColor="@color/accent"
                               android:layout_weight="3"/>
 
-                    <TextView android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/change_number_label"
-                              android:visibility="invisible"
-                              style="?android:attr/textAppearanceMedium"
-                              android:textColor="@color/accent"/>
-
 
                 </LinearLayout>
-
-                <com.digits.sdk.android.DigitsAuthButton
-                    android:id="@+id/auth_button"
-                    android:layout_below="@+id/action_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="invisible"  />
 
 
             </RelativeLayout>
@@ -114,7 +110,7 @@
         </android.support.v7.widget.CardView>
 
         <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
+                      android:layout_height="16dp"
                       android:id="@+id/shareLayout"
                       android:orientation="vertical"
                       android:layout_below="@+id/profile_card"
@@ -123,25 +119,25 @@
                       android:gravity="center"
                       android:padding="8dp" >
 
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:id="@+id/shareTitle"
-                      style="?android:attr/textAppearanceLarge"
-                      android:padding="8dp"
-                      android:text="Go Pro!"/>
+            <!--<TextView android:layout_width="wrap_content"-->
+                      <!--android:layout_height="wrap_content"-->
+                      <!--android:id="@+id/shareTitle"-->
+                      <!--style="?android:attr/textAppearanceLarge"-->
+                      <!--android:padding="8dp"-->
+                      <!--android:text="Go Pro!"/>-->
 
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:id="@+id/shareDesc"
-                      android:gravity="center"
-                      android:padding="8dp"
-                      android:text="@string/pro_share_description"/>
+            <!--<TextView android:layout_width="wrap_content"-->
+                      <!--android:layout_height="wrap_content"-->
+                      <!--android:id="@+id/shareDesc"-->
+                      <!--android:gravity="center"-->
+                      <!--android:padding="8dp"-->
+                      <!--android:text="@string/pro_share_description"/>-->
 
-            <com.facebook.share.widget.ShareButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/facebook_share_button"
-                android:layout_marginTop="8dp" />
+            <!--<com.facebook.share.widget.ShareButton-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/facebook_share_button"-->
+                <!--android:layout_marginTop="8dp" />-->
 
         </LinearLayout>
 
@@ -164,21 +160,20 @@
 
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-                          android:id="@+id/pro_occupation_label"
-                          android:text="Occupation"
+                          android:id="@+id/pro_address_label"
+                          android:text="Address"
                           style="?android:attr/textAppearanceMedium"
                           android:paddingBottom="4dp"
-                    />
+                />
 
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-                          android:id="@+id/pro_occupation"
+                          android:id="@+id/pro_address"
                           android:text="-"
-                          android:background="@drawable/divider"
                           android:paddingBottom="8dp"
                           android:layout_marginBottom="8dp"
-                          android:layout_below="@+id/pro_occupation_label"
-                    />
+                          android:layout_below="@+id/pro_address_label"
+                />
 
 
                 <TextView android:layout_width="match_parent"
@@ -187,7 +182,7 @@
                           android:text="About"
                           style="?android:attr/textAppearanceMedium"
                           android:paddingBottom="4dp"
-                android:layout_below="@+id/pro_occupation"
+                          android:layout_below="@+id/pro_address"
                     />
 
                 <TextView android:layout_width="match_parent"
@@ -202,21 +197,41 @@
 
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-                          android:id="@+id/pro_address_label"
-                          android:text="Address"
+                          android:id="@+id/pro_occupation_label"
+                          android:text="Occupation"
                           style="?android:attr/textAppearanceMedium"
                           android:paddingBottom="4dp"
                           android:layout_below="@+id/pro_about"
-                    />
+                />
 
                 <TextView android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-                          android:id="@+id/pro_address"
+                          android:id="@+id/pro_occupation"
+                          android:text="-"
+                          android:background="@drawable/divider"
+                          android:paddingBottom="8dp"
+                          android:layout_marginBottom="8dp"
+                          android:layout_below="@+id/pro_occupation_label"
+                />
+
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/pro_industry_label"
+                          android:text="Industry"
+                          style="?android:attr/textAppearanceMedium"
+                          android:paddingBottom="4dp"
+                          android:layout_below="@+id/pro_occupation"
+                />
+
+                <TextView android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/pro_industry"
                           android:text="-"
                           android:paddingBottom="8dp"
                           android:layout_marginBottom="8dp"
-                          android:layout_below="@+id/pro_address_label"
-                    />
+                          android:layout_below="@+id/pro_industry_label"
+                />
 
 
 

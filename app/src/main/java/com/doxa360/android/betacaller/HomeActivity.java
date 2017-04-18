@@ -19,9 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.digits.sdk.android.Digits;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.MLRoundedImageView;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
+import com.doxa360.android.betacaller.model.User;
 import com.facebook.FacebookSdk;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.share.widget.AppInviteDialog;
@@ -33,10 +35,16 @@ import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
 import it.sephiroth.android.library.tooltip.Tooltip;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = "HomeActivity";
+    private static final String SHOWCASE_ID = "123456789";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -73,89 +81,121 @@ public class HomeActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-
-//        tabLayout.addTab(tabLayout.newTab().setText("Home"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Me"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Search"));
-//        tabLayout.addTab(tabLayout.newTab().setText("Settings"));
-//        tabLayout.getTabAt(0).setIcon(R.drawable.ic_);
-//        tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_circle_white_24dp);
-//        tabLayout.getTabAt(2).setIcon(R.drawable.ic_search_white_24dp);
-//        tabLayout.getTabAt(3).setIcon(R.drawable.ic_search_white_24dp);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
-
-        //associate parse installation with current user
-        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-        installation.put("user", ParseUser.getCurrentUser());
-        installation.put("user_id", ParseUser.getCurrentUser().getObjectId());
-        installation.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.e(TAG, "User saved to installation");
-                } else {
-                    Log.e(TAG, e.getMessage());
-                }
-            }
-        });
-
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.action_profile);
-
-
-
-        MLRoundedImageView imageView = new MLRoundedImageView(HomeActivity.this);
-
-        if (ParseUser.getCurrentUser().getParseFile("photo")!=null){
-            Picasso.with(this)
-                    .load(ParseUser.getCurrentUser().getParseFile("photo").getUrl())
-                    .placeholder(R.drawable.ic_account_circle_black_24dp)
-                    .error(R.drawable.ic_account_circle_black_24dp)
-                    .centerCrop()
-                    .resize(18, 18)
-                    .into(imageView);
-        } else {
-            Picasso.with(this)
-                    .load(R.drawable.wil_profile)
-                    .placeholder(R.drawable.ic_account_circle_black_24dp)
-                    .error(R.drawable.ic_account_circle_black_24dp)
-                    .centerCrop()
-                    .resize(18, 18)
-                    .into(imageView);
-            imageView.setMaxHeight(18);
-            imageView.setMaxWidth(18);
+        if(mSharedPref.getDeviceId().isEmpty()) {
+            Log.e(TAG, "device id empty");
+            sendDeviceIdToServer();
         }
 
-        imageView.setBackground(getResources().getDrawable(R.drawable.circle));
+        mSharedPref.setTutorial(false);
 
-        menuItem.setActionView(imageView);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                if (ParseUser.getCurrentUser().getParseFile("photo")!=null) {
-                    Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
-                    startActivity(intent);
-//                } else {
-//                    MyToolBox.AlertMessage(HomeActivity.this, "Network error. Please check your connection.");
-//                }
+        View tab1,tab2,tab3;
+        tab1 = ( (ViewGroup) tabLayout.getChildAt(0)).getChildAt(0);
+        tab2 = ( (ViewGroup) tabLayout.getChildAt(0)).getChildAt(1);
+        tab3 = ( (ViewGroup) tabLayout.getChildAt(0)).getChildAt(2);
+
+        if (tab1 != null && tab2 != null && tab3 != null) {
+            if (!mSharedPref.isTutorial()) {
+                startTutorialSequence(tab1, tab2, tab3);
             }
-        });
-        return super.onPrepareOptionsMenu(menu);
+        }
     }
+
+    private void startTutorialSequence(View tab1, View tab2, View tab3) {
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500); // half second between each showcase view
+        MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this, SHOWCASE_ID);
+        sequence.setConfig(config);
+        sequence.addSequenceItem(tab1,
+                getString(R.string.tooltip_one), "GOT IT");
+        sequence.addSequenceItem(tab2,
+                getString(R.string.tooltip_two), "GOT IT");
+        sequence.addSequenceItem(tab3,
+                getString(R.string.tooltip_four), "GOT IT");
+        sequence.start();
+
+        mSharedPref.setTutorial(true);
+
+    }
+
+    private void sendDeviceIdToServer() {
+        User currentUser = mSharedPref.getCurrentUser();
+        if (MyToolBox.isNetworkAvailable(getApplicationContext())) {
+            currentUser.setDeviceId(mSharedPref.getDeviceId());
+            mSharedPref.setCurrentUser(currentUser.toString());
+            HollaNowApiInterface hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
+            Call<User> call = hollaNowApiInterface.editUserProfile(mSharedPref.getCurrentUser(), mSharedPref.getToken());
+            call.enqueue(new Callback<User>() {
+                @Override
+                public void onResponse(Call<User> call, Response<User> response) {
+                    if (response.code() == 200) {
+                        Log.e(TAG, "success " + response.body().getDeviceId()+"");
+//                        Toast.makeText(getApplicationContext(), "Device id successfully updated", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Log.e(TAG, "error: " + "error updating device id");
+                        Toast.makeText(getApplicationContext(), "Error updating Device id", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<User> call, Throwable t) {
+//                    Log.e(TAG, "Device id update failed: " + t.getMessage());
+//                    Toast.makeText(getApplicationContext(), "Network error. Try again", Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+        }
+    }
+
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//        MenuItem menuItem = menu.findItem(R.id.action_profile);
+//
+//
+//
+//        MLRoundedImageView imageView = new MLRoundedImageView(HomeActivity.this);
+//
+//        if (ParseUser.getCurrentUser().getParseFile("photo")!=null){
+//            Picasso.with(this)
+//                    .load(ParseUser.getCurrentUser().getParseFile("photo").getUrl())
+//                    .placeholder(R.drawable.ic_account_circle_black_24dp)
+//                    .error(R.drawable.ic_account_circle_black_24dp)
+//                    .centerCrop()
+//                    .resize(18, 18)
+//                    .into(imageView);
+//        } else {
+//            Picasso.with(this)
+//                    .load(R.drawable.wil_profile)
+//                    .placeholder(R.drawable.ic_account_circle_black_24dp)
+//                    .error(R.drawable.ic_account_circle_black_24dp)
+//                    .centerCrop()
+//                    .resize(18, 18)
+//                    .into(imageView);
+//            imageView.setMaxHeight(18);
+//            imageView.setMaxWidth(18);
+//        }
+//
+//        imageView.setBackground(getResources().getDrawable(R.drawable.circle));
+//
+//        menuItem.setActionView(imageView);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                if (ParseUser.getCurrentUser().getParseFile("photo")!=null) {
+//                    Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+//                    startActivity(intent);
+////                } else {
+////                    MyToolBox.AlertMessage(HomeActivity.this, "Network error. Please check your connection.");
+////                }
+//            }
+//        });
+//        return super.onPrepareOptionsMenu(menu);
+//    }
+//
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -176,7 +216,8 @@ public class HomeActivity extends AppCompatActivity {
 //            startActivity(intent);
 //        }
         if (id == R.id.action_profile) {
-
+            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+            startActivity(intent);
         }
 
         if (id == R.id.action_settings) {
@@ -202,15 +243,14 @@ public class HomeActivity extends AppCompatActivity {
         }
         
         if (id == R.id.action_logout) {
-            ParseUser.logOutInBackground(new LogOutCallback() {
-                @Override
-                public void done(ParseException e) {
-                    Intent intent = new Intent(HomeActivity.this,MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                }
-            });
+            HollaNowSharedPref sharedPref = new HollaNowSharedPref(HomeActivity.this);
+            if (sharedPref.clearCurrentUser()) {
+                Intent intent = new Intent(HomeActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                Digits.clearActiveSession();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -283,4 +323,6 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this, "Suggestion: "+ uri, Toast.LENGTH_SHORT).show();
         }
     }
+
+
 }

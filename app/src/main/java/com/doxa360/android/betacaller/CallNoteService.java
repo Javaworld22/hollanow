@@ -1,13 +1,9 @@
 package com.doxa360.android.betacaller;
 
-import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
-import android.net.Uri;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,12 +16,11 @@ import android.widget.TextView;
 
 import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
-import com.doxa360.android.betacaller.model.CallNote;
-import com.doxa360.android.betacaller.model.Contact;
+import com.doxa360.android.betacaller.model.oldCallNote;
+import com.doxa360.android.betacaller.model.Parse_Contact;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
-import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -94,7 +89,7 @@ public class CallNoteService extends Service {
 
 
         if (intent != null) {
-            phoneNumber = intent.getStringExtra(CallNote.CALLER_NUMBER);
+            phoneNumber = intent.getStringExtra(oldCallNote.CALLER_NUMBER);
         }
         Log.e(TAG, "Service started: "+phoneNumber);
 
@@ -107,7 +102,7 @@ public class CallNoteService extends Service {
 
 
         if (mDbHelper.getContactByPhone(phoneNumber)!=null) {
-            Contact contact = mDbHelper.getContactByPhone(phoneNumber);
+            Parse_Contact contact = mDbHelper.getContactByPhone(phoneNumber);
             callerName = contact.getDisplayName();
             callerPhoto = contact.getThumbnailUrl();
         } else {
@@ -169,11 +164,11 @@ public class CallNoteService extends Service {
     private boolean isCallNote() {
         final boolean[] isCallNote = {false};
         if (MyToolBox.isNetworkAvailable(getApplicationContext())) {
-            ParseQuery<CallNote> query = CallNote.getQuery();
+            ParseQuery<oldCallNote> query = oldCallNote.getQuery();
             query.whereEqualTo("callerNumber", phoneNumber);
-            query.getFirstInBackground(new GetCallback<CallNote>() {
+            query.getFirstInBackground(new GetCallback<oldCallNote>() {
                 @Override
-                public void done(CallNote note, ParseException e) {
+                public void done(oldCallNote note, ParseException e) {
                     if (e == null) {
                         if (callNote == null) {
                             Log.e(TAG, "call note is null");

@@ -21,9 +21,9 @@ android {
     defaultConfig {
         applicationId "com.doxa360.android.betacaller"
         minSdkVersion 17
-        targetSdkVersion 23
-        versionCode 21
-        versionName "0.350"
+        targetSdkVersion 24
+        versionCode 26
+        versionName "0.410"
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
 
@@ -38,35 +38,41 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile('com.digits.sdk.android:digits:1.11.1@aar') {
+    compile('com.digits.sdk.android:digits:2.0.4@aar') {
         transitive = true;
     }
-    //    compile 'com.parse:parsefacebookutils-v4-android:1.10.3@aar'
-//    compile 'com.parse:parsetwitterutils-android:1.10.3'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
         transitive = true;
     }
-    compile('com.crashlytics.sdk.android:answers:1.3.9@aar') {
+    compile('com.crashlytics.sdk.android:answers:1.3.10@aar') {
         transitive = true;
     }
+
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support:palette-v7:24.2.1'
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
-    compile 'com.google.android.gms:play-services-location:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:10.0.1'
+    compile 'com.google.android.gms:play-services-location:10.0.1'
     compile 'com.parse.bolts:bolts-android:1.2.1'
     compile 'com.parse:parse-android:1.10.2'
-    compile 'com.squareup.picasso:picasso:2.3.3'
-    compile 'com.squareup.okhttp3:okhttp:3.0.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+    compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.facebook.android:facebook-android-sdk:4.7.0'
     compile 'org.apache.commons:commons-io:1.3.2'
-    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
+    compile 'com.google.firebase:firebase-appindexing:10.0.1'
     compile 'com.github.paolorotolo:appintro:3.4.0'
     compile 'com.thinkincode.utils:Android:0.0.3'
     compile 'it.sephiroth.android.library.targettooltip:target-tooltip-library:1.3.15'
-
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    compile 'com.github.deano2390:MaterialShowcaseView:1.1.0@aar'
+    testCompile 'junit:junit:4.12'
 }
+
+apply plugin: 'com.google.gms.google-services'

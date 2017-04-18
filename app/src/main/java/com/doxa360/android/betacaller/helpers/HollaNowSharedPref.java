@@ -1,9 +1,14 @@
 package com.doxa360.android.betacaller.helpers;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import com.doxa360.android.betacaller.model.User;
+import com.google.gson.GsonBuilder;
 
 /**
  * Created by Apple on 23/06/15.
@@ -38,25 +43,25 @@ public class HollaNowSharedPref {
                 .apply();
     }
 
-    public double getLattitude(){
+    public float getLattitude(){
         return mSharedPreferences.getFloat("lattitude", (float) 0);
     }
 
-    public void setLattitude(double lattitude){
+    public void setLattitude(float lattitude){
         mSharedPreferences
                 .edit()
-                .putFloat("lattitude", (float) lattitude)
+                .putFloat("lattitude",  lattitude)
                 .apply();
     }
 
-    public double getLongtitude(){
+    public float getLongtitude(){
         return mSharedPreferences.getFloat("longtitude", (float) 0);
     }
 
-    public void setLongtitude(double longtitude){
+    public void setLongtitude(float longtitude){
         mSharedPreferences
                 .edit()
-                .putFloat("longtitude", (float) longtitude)
+                .putFloat("longtitude",  longtitude)
                 .apply();
     }
 
@@ -68,7 +73,7 @@ public class HollaNowSharedPref {
     }
 
     public boolean isTutorial() {
-        Log.e("shared", mSharedPreferences.getBoolean("tutorial", false)+"");
+        Log.e("shared pref", mSharedPreferences.getBoolean("tutorial", false)+"");
         return mSharedPreferences.getBoolean("tutorial", false);
     }
 
@@ -118,4 +123,57 @@ public class HollaNowSharedPref {
                 .putBoolean("pro_shared", true)
                 .apply();
     }
+
+    public void setCurrentUser(String jsonUser) {
+        mSharedPreferences.edit()
+                .putString("jsonUser", jsonUser)
+//                .commit();
+                .apply();
+    }
+
+    public User getCurrentUser() {
+        String user =  mSharedPreferences.getString("jsonUser", "");
+        return new GsonBuilder().create().fromJson(user, User.class);
+    }
+
+    @SuppressLint("CommitPrefEdits")
+    public boolean clearCurrentUser() {
+        mSharedPreferences.edit()
+                .remove("jsonUser")
+                .commit();
+        return true;
+    }
+
+    public void setToken(String token) {
+        mSharedPreferences.edit()
+                .putString("token", token)
+                .apply();
+    }
+
+    public String getToken() {
+        return mSharedPreferences.getString("token", "");
+    }
+
+    public void setDeviceId(String deviceId) {
+        mSharedPreferences.edit()
+                .putString("deviceId", deviceId)
+                .apply();
+    }
+
+    public String getDeviceId() {
+        return mSharedPreferences.getString("deviceId", "");
+    }
+
+//    public void setDevice(boolean value) {
+//        mSharedPreferences
+//                .edit()
+//                .putBoolean("tutorial", value)
+//                .apply();
+//    }
+//
+//    public boolean isTutorial() {
+//        Log.e("shared", mSharedPreferences.getBoolean("tutorial", false)+"");
+//        return mSharedPreferences.getBoolean("tutorial", false);
+//    }
+
 }

@@ -8,12 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.doxa360.android.betacaller.BetaCaller;
 import com.doxa360.android.betacaller.ProfileActivity;
 import com.doxa360.android.betacaller.R;
-import com.doxa360.android.betacaller.model.Category;
-import com.parse.ParseUser;
+import com.doxa360.android.betacaller.model.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -23,13 +22,13 @@ import java.util.List;
  */
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ContactViewHolder> {
 
-    private List<ParseUser> mParseUserList;
+    private List<User> mUserList;
     ContactViewHolder mHolder;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
 
-    public UserAdapter(List<ParseUser> parseUserList, Context context) {
-        mParseUserList = parseUserList;
+    public UserAdapter(List<User> userList, Context context) {
+        mUserList = userList;
         mContext = context;
         mLayoutInflater = LayoutInflater.from(context);
     }
@@ -40,6 +39,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ContactViewHol
         TextView mUsername;
         TextView mPhoneNumber;
         ImageView mPhoto;
+        TextView mOccupation;
 
         public ContactViewHolder(View itemView) {
             super(itemView);
@@ -53,15 +53,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ContactViewHol
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(mContext, ProfileActivity.class);
-                    ParseUser user = mParseUserList.get(getPosition());
-                    intent.putExtra(ProfileActivity.USER_ID, user.getObjectId());
-                    intent.putExtra(ProfileActivity.USER_NAME, user.getUsername());
-                    intent.putExtra(ProfileActivity.FULL_NAME, user.getString("name"));
-                    intent.putExtra(ProfileActivity.PHONE, user.getString("phoneNumber"));
-                    intent.putExtra(ProfileActivity.EMAIL, user.getEmail());
-                    if (user.getParseFile("photo")!=null) {
-                        intent.putExtra(ProfileActivity.PHOTO, user.getParseFile("photo").getUrl());
-                    }
+                    User user = mUserList.get(getPosition());
+                    intent.putExtra(BetaCaller.USER_PROFILE, user);
                     mContext.startActivity(intent);
                 }
             });
@@ -78,14 +71,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ContactViewHol
 
     @Override
     public void onBindViewHolder(ContactViewHolder holder, int position) {
-        ParseUser user = mParseUserList.get(position);
+        User user = mUserList.get(position);
         mHolder = holder;
 
-        holder.mDisplayName.setText(user.getString("name"));
-        holder.mPhoneNumber.setText(user.getString("phoneNumber"));
-        if (user.getParseFile("photo")!=null) {
+        holder.mDisplayName.setText(user.getName());
+        holder.mPhoneNumber.setText(user.getPhone());
+        if (user.getProfilePhoto()!=null) {
             Picasso.with(mContext)
-                    .load(user.getParseFile("photo").getUrl())
+                    .load(BetaCaller.PHOTO_URL + user.getProfilePhoto())
                     .placeholder(R.drawable.wil_profile)
                     .error(R.drawable.wil_profile)
                     .into(holder.mPhoto);
@@ -101,8 +94,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ContactViewHol
 
     @Override
     public int getItemCount() {
-        if (mParseUserList != null)
-            return mParseUserList.size();
+        if (mUserList != null)
+            return mUserList.size();
         else
             return 0;
     }

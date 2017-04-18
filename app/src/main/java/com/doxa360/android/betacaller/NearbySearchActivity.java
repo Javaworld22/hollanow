@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.doxa360.android.betacaller.adapter.NearbyUserAdapter;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
+import com.doxa360.android.betacaller.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -26,6 +27,10 @@ import com.parse.ParseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class NearbySearchActivity extends AppCompatActivity {
 
     private static final String TAG = NearbySearchActivity.class.getSimpleName();
@@ -34,12 +39,15 @@ public class NearbySearchActivity extends AppCompatActivity {
     private ParseGeoPoint mCurrentParseGeopoint;
     private RecyclerView mRecyclerView;
     private HollaNowSharedPref mSharedPref;
-    private ArrayList<ParseUser> nearbyUsersList;
+    private ArrayList<User> nearbyUsersList;
     private NearbyUserAdapter nearbyUsersAdapter;
     private ProgressBar mProgressBar;
     private TextView mTurnLocation;
     private boolean locationOn = false;
     private TextView mEmpty;
+    private HollaNowApiInterface hollaNowApiInterface;
+
+    int mDistKm = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +59,9 @@ public class NearbySearchActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
+        nearbyUsersList = new ArrayList<User>();
         mSharedPref = new HollaNowSharedPref(this);
-        nearbyUsersList = new ArrayList<ParseUser>();
+        hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
 
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mEmpty = (TextView) findViewById(R.id.empty_text);
@@ -65,16 +74,15 @@ public class NearbySearchActivity extends AppCompatActivity {
         layoutManager.setAutoMeasureEnabled(true);
         mRecyclerView.setLayoutManager(layoutManager);
 
-//        if (locationOn) {
-            mCurrentParseGeopoint = new ParseGeoPoint(mSharedPref.getLattitude(), mSharedPref.getLongtitude());
-//        }
-        nearbyUsersAdapter = new NearbyUserAdapter(nearbyUsersList, mCurrentParseGeopoint, NearbySearchActivity.this, true);
+
+        nearbyUsersAdapter = new NearbyUserAdapter(nearbyUsersList, mSharedPref.getLattitude(), mSharedPref.getLongtitude(), NearbySearchActivity.this, true);
         mRecyclerView.setAdapter(nearbyUsersAdapter);
 
         nearbySeekbar = (SeekBar) findViewById(R.id.nearby_seekbar);
         nearbySeekbar.setProgress(30);
         nearbySeekbar.setMax(100);
-        findNearbyUsers(BetaCaller.LOCATION_DISTANCE_CLOSE);
+        findNearbyUsers(mSharedPref.getLattitude(), mSharedPref.getLongtitude(),
+                BetaCaller.LOCATION_DISTANCE_CLOSE, mSharedPref.getToken());
 
         nearbySeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -83,16 +91,19 @@ public class NearbySearchActivity extends AppCompatActivity {
                 if (progress >= 0 && progress <= 30) {
                     seekBar.setProgress(30);
                     Log.e(TAG, "default");
-                    findNearbyUsers(BetaCaller.LOCATION_DISTANCE_CLOSE);
+                    mDistKm = BetaCaller.LOCATION_DISTANCE_CLOSE;
                 } else if (progress >= 30 && progress <= 70) {
                     seekBar.setProgress(60);
                     mProgressBar.setVisibility(View.VISIBLE);
-                    findNearbyUsers(BetaCaller.LOCATION_DISTANCE_MEDIUM);
+                    mDistKm = BetaCaller.LOCATION_DISTANCE_MEDIUM;
                 } else {
                     seekBar.setProgress(100);
                     mProgressBar.setVisibility(View.VISIBLE);
-                    findNearbyUsers(BetaCaller.LOCATION_DISTANCE_FARTHER);
+                    mDistKm = BetaCaller.LOCATION_DISTANCE_FARTHER;
                 }
+
+                findNearbyUsers(mSharedPref.getLattitude(), mSharedPref.getLongtitude(),
+                        mDistKm, mSharedPref.getToken());
 
             }
 
@@ -103,61 +114,43 @@ public class NearbySearchActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-//                int mProgress = seekBar.getProgress();
-//                if (mProgress > 0 & mProgress < 21) {
-//                    nearbySeekbar.setProgress(10);
-//                    sendStateResponse("TODO");
-//                    setBoldText(0);
-//                } else if (mProgress > 20 & mProgress < 41) {
-//                    nearbySeekbar.setProgress(30);
-//                    sendStateResponse("START");
-//                    setBoldText(1);
-//                } else if (mProgress > 40 & mProgress < 61) {
-//                    nearbySeekbar.setProgress(50);
-//                    sendStateResponse("STOP");
-//                    setBoldText(2);
-//                } else if (mProgress > 60 & mProgress < 81) {
-//                    nearbySeekbar.setProgress(70);
-//                    sendStateResponse("CONTINUE");
-//                    setBoldText(3);
-//                } else {
-//                    nearbySeekbar.setProgress(90);
-//                    sendStateResponse("FINISHED");
-//                    setBoldText(4);
-//                }
             }
         });
 
     }
 
-    private void findNearbyUsers(int distanceAway) {
+    private void findNearbyUsers(float lat, float lng, int distKm, String token) {
         if (MyToolBox.isNetworkAvailable(NearbySearchActivity.this)) {
-            ParseQuery<ParseUser> nearbyQuery = ParseUser.getQuery();
-            nearbyQuery.whereNear("lastSeen", mCurrentParseGeopoint);
-            nearbyQuery.whereWithinKilometers("lastSeen", mCurrentParseGeopoint, (double) distanceAway); //25 miles
-            nearbyQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-            nearbyQuery.whereNotEqualTo("searchVisible", false);
-            nearbyQuery.findInBackground(new FindCallback<ParseUser>() {
+
+            Call<List<User>> call = hollaNowApiInterface.getNearbyUsers(lat, lng, distKm, token);
+            call.enqueue(new Callback<List<User>>() {
                 @Override
-                public void done(List<ParseUser> nearbyUsers, ParseException e) {
-                    if (e == null) {
-                        if (nearbyUsers.size()==0) {
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    if (response.code() == 200) {
+                        if (response.body().size() == 0) {
                             mEmpty.setText("No users nearby.");
                         } else {
                             mEmpty.setText("");
                         }
                         nearbyUsersList.clear();
-                        nearbyUsersList.addAll(nearbyUsers);
+                        nearbyUsersList.addAll(response.body());
                         mProgressBar.setVisibility(View.INVISIBLE);
                         nearbyUsersAdapter.notifyDataSetChanged();
                     } else {
-                        Log.e(TAG, e.getMessage());
+                        Toast.makeText(NearbySearchActivity.this, "Error retrieving users", Toast.LENGTH_SHORT).show();
                     }
                 }
+
+                @Override
+                public void onFailure(Call<List<User>> call, Throwable t) {
+                    Toast.makeText(NearbySearchActivity.this, "Network error. Please check your connection", Toast.LENGTH_SHORT).show();
+                }
             });
+
         } else {
-            Toast.makeText(NearbySearchActivity.this, "Network error. Please check your connection", Toast.LENGTH_LONG).show();
+            MyToolBox.AlertMessage(this, "Network error. Please check your connection");
         }
+
     }
 
 }

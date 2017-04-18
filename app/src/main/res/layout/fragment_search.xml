@@ -85,7 +85,6 @@
                            android:layout_alignParentTop="true"
                            android:layout_alignParentEnd="true"
                            android:id="@+id/nearby_search_icon"
-                           android:src="@drawable/places_ic_search"
                            android:tint="@color/accent"/>
 
                 <android.support.v7.widget.RecyclerView
@@ -147,6 +146,13 @@
                     android:layout_below="@+id/category_label"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="16dp" />
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/empty_industry"
+                          android:layout_below="@+id/category_horizontal_layout"
+                          tools:text="empty"
+                          android:textColor="@color/accent"/>
 
 
 

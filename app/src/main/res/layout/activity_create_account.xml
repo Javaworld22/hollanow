@@ -7,7 +7,14 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:id="@+id/container"
-    tools:context="com.doxa360.android.betacaller.CreateAccount">
+    tools:context="com.doxa360.android.betacaller.CreateAccountActivity">
 
+
+    <ImageView android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:src="@drawable/backdrop"
+               android:scaleType="centerCrop"/>
+
+    <!--<include layout="@layout/fragment_create_account" />-->
 
 </android.support.design.widget.CoordinatorLayout>

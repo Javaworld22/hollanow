@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.digits.sdk.android.AuthCallback;
+import com.digits.sdk.android.AuthConfig;
 import com.digits.sdk.android.Digits;
 import com.digits.sdk.android.DigitsException;
 import com.digits.sdk.android.DigitsSession;
@@ -158,25 +159,32 @@ public class ConfirmFacebook extends Fragment {
     }
 
     private void verifyPhoneNumber(String phone) {
-        if (Digits.getSessionManager().getActiveSession()!=null) {
-            Digits.getSessionManager().clearActiveSession();
+        if (Digits.getActiveSession()!=null) {
+            //TODO: review the necessity of this session thingy.
+            Digits.clearActiveSession();
         }
 
-        Digits.authenticate(new AuthCallback() {
-            @Override
-            public void success(DigitsSession session, String verifiedPhone) {
-                if (profilePicUrl!=null) {
-                    new urlToBytes(Uri.parse(profilePicUrl), verifiedPhone).execute();
-                } else {
-                    createUser(verifiedPhone, null);
-                }
-            }
+        AuthConfig.Builder authConfigBuilder = new AuthConfig.Builder()
+                .withAuthCallBack(new AuthCallback() {
+                    @Override
+                    public void success(DigitsSession session, String phoneNumber) {
+                        if (profilePicUrl!=null) {
+                            new urlToBytes(Uri.parse(profilePicUrl), phoneNumber).execute();
+                        } else {
+                            createUser(phoneNumber, null);
+                        }
+                    }
 
-            @Override
-            public void failure(DigitsException error) {
-                Toast.makeText(mContext, error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }, phone);
+                    @Override
+                    public void failure(DigitsException error) {
+                        Toast.makeText(mContext, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                })
+                .withPhoneNumber(phone);
+
+        Digits.authenticate(authConfigBuilder.build());
+
+
     }
 
     private class urlToBytes extends AsyncTask<Uri, String, byte[]> {

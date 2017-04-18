@@ -35,7 +35,10 @@ import android.widget.Toast;
 import com.doxa360.android.betacaller.adapter.CategoryAdapter;
 import com.doxa360.android.betacaller.adapter.NearbyUserAdapter;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
+import com.doxa360.android.betacaller.helpers.MyToolBox;
 import com.doxa360.android.betacaller.model.Category;
+import com.doxa360.android.betacaller.model.Industry;
+import com.doxa360.android.betacaller.model.User;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -61,6 +64,9 @@ import java.util.List;
 import java.util.Locale;
 
 import it.sephiroth.android.library.tooltip.Tooltip;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -74,7 +80,7 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
     private static final int REQUEST_LOCATION = 1;
     private static final int REQUEST_CHECK_SETTINGS = 0x1;
     private final static int CONNECTION_FAILURE_RESOLUTION_REQUEST = 9000;
-    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 123450;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1044;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private LocationSettingsRequest mLocationSettingsRequest;
@@ -91,11 +97,13 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
     private HorizontalFlowLayout mCategoryLayout;
     private SearchView mSearchView;
     private ParseGeoPoint mCurrentParseGeopoint;
-    List<ParseUser> nearbyUsersList;
+    List<User> nearbyUsersList;
     NearbyUserAdapter nearbyUsersAdapter;
     HollaNowSharedPref mSharedPref;
     private boolean isConnected = false;
     private Status status;
+    private HollaNowApiInterface hollaNowApiInterface;
+    private TextView mEmptyIndustry;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -133,9 +141,17 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
 
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         mCategoryLayout = (HorizontalFlowLayout) rootView.findViewById(R.id.category_horizontal_layout);
+        mEmptyIndustry = (TextView) rootView.findViewById(R.id.empty_industry);
         mSearchLayout = (CardView) rootView.findViewById(R.id.search_card);
         mTurnLocation = (TextView) rootView.findViewById(R.id.turn_on_location_label);
         mSearchNearby = (ImageView) rootView.findViewById(R.id.nearby_search_icon);
+        mEmptyIndustry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mProgressBar.setVisibility(View.VISIBLE);
+                getIndustries();
+            }
+        });
         mSearchNearby.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,6 +173,8 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
             }
         });
 
+        hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
+
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.nearby_contacts_recyclerview);
         mRecyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(mContext, 1, GridLayoutManager.HORIZONTAL, false);
@@ -164,7 +182,11 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
 
-        getCategories();
+        if (MyToolBox.isNetworkAvailable(mContext)) {
+            getIndustries();
+        } else {
+            MyToolBox.AlertMessage(mContext, "Network error. Check your connection");
+        }
 
 
         return rootView;
@@ -181,64 +203,126 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
         Log.e(TAG, "turn location on clicked");
     }
 
+//    private void findNearbyUsers() {
+//        mCurrentParseGeopoint = new ParseGeoPoint(mSharedPref.getLattitude(), mSharedPref.getLongtitude());
+//        ParseQuery<ParseUser> nearbyQuery = ParseUser.getQuery();
+//        nearbyQuery.whereNear("lastSeen", mCurrentParseGeopoint);
+//        nearbyQuery.whereWithinMiles("lastSeen", mCurrentParseGeopoint, 25.0); //25 miles
+//        nearbyQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
+//        nearbyQuery.whereNotEqualTo("searchVisible", false);
+//        nearbyQuery.setLimit(6);
+//        nearbyQuery.findInBackground(new FindCallback<ParseUser>() {
+//            @Override
+//            public void done(List<ParseUser> nearbyUsers, ParseException e) {
+//                if (e==null) {
+//                    nearbyUsersList = new ArrayList<User>();
+//                    nearbyUsersList.addAll(nearbyUsers);
+//                    nearbyUsersList.add(null);
+//                    nearbyUsersAdapter = new NearbyUserAdapter(nearbyUsersList, mCurrentParseGeopoint, mContext);
+//                    mRecyclerView.setAdapter(nearbyUsersAdapter);
+//                } else {
+//                    Log.e(TAG, e.getMessage());
+//                }
+//            }
+//        });
+//    }
+
     private void findNearbyUsers() {
-        mCurrentParseGeopoint = new ParseGeoPoint(mSharedPref.getLattitude(), mSharedPref.getLongtitude());
-        ParseQuery<ParseUser> nearbyQuery = ParseUser.getQuery();
-        nearbyQuery.whereNear("lastSeen", mCurrentParseGeopoint);
-        nearbyQuery.whereWithinMiles("lastSeen", mCurrentParseGeopoint, 25.0); //25 miles
-        nearbyQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-        nearbyQuery.whereNotEqualTo("searchVisible", false);
-        nearbyQuery.setLimit(6);
-        nearbyQuery.findInBackground(new FindCallback<ParseUser>() {
+        if (MyToolBox.isNetworkAvailable(mContext)) {
+
+//            findNearbyUsers(mSharedPref.getLattitude(), mSharedPref.getLongtitude(),
+//                    BetaCaller.LOCATION_DISTANCE_CLOSE, mSharedPref.getToken());
+
+            Call<List<User>> call = hollaNowApiInterface.getNearbyUsers(mSharedPref.getLattitude(), mSharedPref.getLongtitude(),
+                    BetaCaller.LOCATION_DISTANCE_FARTHER, mSharedPref.getToken()); // 4km
+
+            call.enqueue(new Callback<List<User>>() {
+                @Override
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    if (response.code() == 200) {
+                        nearbyUsersList = new ArrayList<User>();
+                        if (response.body().size() == 0) {
+//                            mEmpty.setText("No users nearby.");
+                        } else {
+//                            mEmpty.setText("");
+                            nearbyUsersList.addAll(response.body());
+                            nearbyUsersList.add(null);
+
+                        }
+                        mProgressBar.setVisibility(View.INVISIBLE);
+                        nearbyUsersAdapter = new NearbyUserAdapter(nearbyUsersList, mSharedPref.getLattitude(), mSharedPref.getLongtitude(), mContext);
+                        mRecyclerView.setAdapter(nearbyUsersAdapter);
+
+                    } else {
+//                        Toast.makeText(mContext, "Error retrieving nearby users", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Error retrieving nearby users "+ response.code()+response.message());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<User>> call, Throwable t) {
+                    Toast.makeText(mContext, "Network error. Please check your connection", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        } else {
+            MyToolBox.AlertMessage(mContext, "Network error. Please check your connection");
+        }
+
+    }
+
+    private void getIndustries() {
+        Call<List<Industry>> call = hollaNowApiInterface.
+                getIndustry(mSharedPref.getToken());
+        Log.e("TOKEN search frag", mSharedPref.getToken()+"");
+        call.enqueue(new Callback<List<Industry>>() {
             @Override
-            public void done(List<ParseUser> nearbyUsers, ParseException e) {
-                if (e==null) {
-                    nearbyUsersList = new ArrayList<ParseUser>();
-                    nearbyUsersList.addAll(nearbyUsers);
-                    nearbyUsersList.add(null);
-                    nearbyUsersAdapter = new NearbyUserAdapter(nearbyUsersList, mCurrentParseGeopoint, mContext);
-                    mRecyclerView.setAdapter(nearbyUsersAdapter);
+            public void onResponse(Call<List<Industry>> call, Response<List<Industry>> response) {
+                if (response.code()==200) {
+                    displayIndustries(response.body());
                 } else {
-                    Log.e(TAG, e.getMessage());
+                    Toast.makeText(mContext, "Error loading services", Toast.LENGTH_SHORT).show();
+                    mEmptyIndustry.setText(response.message()+ response.body()+ "Network error. Check your connection: " + mSharedPref.getToken()+"");
                 }
             }
-        });
-    }
 
-    private void getCategories() {
-        ParseQuery<Category> query = Category.getQuery();
-        query.findInBackground(new FindCallback<Category>() {
             @Override
-            public void done(List<Category> categories, ParseException e) {
-                if (e==null) {
-                    displayCategories(categories);
-                }
+            public void onFailure(Call<List<Industry>> call, Throwable t) {
+//                Log.e(TAG, t.getMessage());
+                mEmptyIndustry.setText("Network error. Check your connection");
+                Toast.makeText(mContext, "Network error. Please check your connection", Toast.LENGTH_LONG).show();
             }
         });
     }
 
 
-    private void displayCategories(List<Category> categories) {
-        TextView categoryChips;
-        if (categories!=null) {
-            Log.e(TAG, categories.size() + "");
-            for (Category category : categories) {
+    private void displayIndustries(List<Industry> industries) {
+        TextView industryChips;
+        if (industries!=null) {
+            for (Industry industry : industries) {
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 lp.setMargins(0, 0, 16, 32);
-                Log.e(TAG, category.getCategory());
-                categoryChips = new TextView(mContext);
-                categoryChips.setLayoutParams(lp);
-                categoryChips.setPadding(16, 16, 16, 16);
-                categoryChips.setBackgroundResource(R.drawable.chips);
-//                categoryChips.setSingleLine();
-//                categoryChips.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
-                categoryChips.setText(category.getCategory());
-                categoryChips.setOnClickListener(categoryClickListener(category));
-                mCategoryLayout.addView(categoryChips);
+                industryChips = new TextView(mContext);
+                industryChips.setLayoutParams(lp);
+                industryChips.setPadding(16, 16, 16, 16);
+                industryChips.setBackgroundResource(R.drawable.chips);
+                industryChips.setText(industry.getIndustry());
+                industryChips.setOnClickListener(industryClickListener(industry.getIndustry()));
+                mCategoryLayout.addView(industryChips);
             }
             mProgressBar.setVisibility(View.INVISIBLE);
         }
+    }
 
+    private View.OnClickListener industryClickListener(final String industry) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, CategoryActivity.class);
+                intent.putExtra("INDUSTRY", industry);
+                startActivity(intent);
+            }
+        };
     }
 
     private View.OnClickListener categoryClickListener(final Category category) {
@@ -390,8 +474,8 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
 
     private void handleNewLocation(Location location) {
         if (location!=null) {
-            mSharedPref.setLattitude(location.getLatitude());
-            mSharedPref.setLongtitude(location.getLongitude());
+            mSharedPref.setLattitude((float) location.getLatitude());
+            mSharedPref.setLongtitude((float) location.getLongitude());
             findNearbyUsers();
         } else {
             startUpdates();

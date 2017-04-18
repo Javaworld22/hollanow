@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.doxa360.android.betacaller.adapter.UserAdapter;
+import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
+import com.doxa360.android.betacaller.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -33,25 +35,24 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener  {
 
     private  final String TAG = getClass().getSimpleName() ;
-    EditText mSearchEditText;
     RecyclerView mSearchResults;
     UserAdapter mAdapter;
     //    SearchUserAdapter mAdapter;
     private ProgressBar mProgressBar;
     private TextView mEmpty;
-    private ArrayList<String> mSelectedMembers = new ArrayList<String>();
-    private List<String> mSelectedMembersName = new ArrayList<String>();
-
-
-    public  List<String> memberIds = new ArrayList<String>();
-    public  List<String> memberNames = new ArrayList<String>();
-    private List<ParseUser> searchedUsers;
     Toolbar mToolBar;
     SearchView searchView;
+    private HollaNowApiInterface hollaNowApiInterface;
+    HollaNowSharedPref mSharedPref;
+    private User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,238 +62,67 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         mToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolBar);
 
+        hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
+        mSharedPref = new HollaNowSharedPref(this);
+        currentUser = mSharedPref.getCurrentUser();
+
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.INVISIBLE);
-//        mEmpty = (TextView) findViewById(R.id.empty_text);
-//        mSearchEditText = (EditText) findViewById(R.id.search_edittext);
+        mEmpty = (TextView) findViewById(R.id.empty_text);
         mSearchResults = (RecyclerView) findViewById(R.id.search_results);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setAutoMeasureEnabled(true);
         mSearchResults.setLayoutManager(layoutManager);
 
-//        mSearchResults.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE);
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-//        mSearchEditText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                if (!charSequence.toString().trim().isEmpty()) {
-//                    getSearch(charSequence.toString().trim());
-//                    if (mAdapter!=null)
-//                        mAdapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//
-//            }
-//        });
-//
-
-
-
-
-//        Button mFinish = (Button) findViewById(R.id.finish_button);
-//        mFinish.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                addMembers();
-//            }
-//        });
-
 
 
 
     }
 
-    private void getSearch(final CharSequence charSequence) {
-//        if (charSequence.toString().isEmpty() || charSequence.toString().length()<=3) {
-//
-//        } else {
-            mProgressBar.setVisibility(View.VISIBLE);
-//            ParseQuery<ParseUser> queryName = ParseUser.getQuery();
-//            if (charSequence.toString().length()>=2) {
-//                queryName.whereEqualTo("name", charSequence.toString().substring(0, 1).toUpperCase() + charSequence.toString().substring(1).toLowerCase());
-//
-//                queryName.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-//                queryName.whereNotEqualTo("searchVisible", false);
-//            }
-
-
-//            ParseQuery<ParseUser> queryLowerCaseName = ParseUser.getQuery();
-//            queryLowerCaseName.whereEqualTo("name", charSequence.toString().toLowerCase());
-//            queryLowerCaseName.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-//        queryLowerCaseName.whereNotEqualTo("searchVisible", false);
-
-        //TODO: neatify and optimize later.
+    public void getSearch(final CharSequence charSequence) {
+        mProgressBar.setVisibility(View.VISIBLE);
         if (charSequence.toString().length()>=3) {
             mSearchResults.setVisibility(View.VISIBLE);
 
-            ParseQuery<ParseUser> realQuery = ParseUser.getQuery();
-            if (charSequence.toString().startsWith("0")) {
-                String phoneNumber = charSequence.toString().replaceFirst("[0]", "+234");
-                realQuery.whereContains("phoneNumber", phoneNumber);
-                realQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-                realQuery.whereNotEqualTo("searchVisible", false);
-                realQuery.setLimit(25);
-                realQuery.findInBackground(new FindCallback<ParseUser>() {
-                    @Override
-                    public void done(List<ParseUser> objects, ParseException e) {
-                        if (e == null) {
-                            Log.e(TAG, objects.size() + " count");
-                            searchedUsers = new ArrayList<ParseUser>();
-                            searchedUsers.addAll(objects);
-                            mAdapter = new UserAdapter(searchedUsers, SearchActivity.this);
-                            mSearchResults.setAdapter(mAdapter);
-                            mProgressBar.setVisibility(View.INVISIBLE);
-//                    mEmpty.setText("\'" + mSearchEditText.getText().toString().trim() + "\' not found on HollaNow");
-//                    Toast.makeText(SearchActivity.this, charSequence +" not found on HollaNow", LEN).show
-                            if (objects.size() == 0) {
-                                Log.e(TAG, "User not found on HollaNow.");
-//                        mEmpty.setText("Sorry. User not found on HollaNow.");
-                            } else {
-//                        mEmpty.setText("");
-                            }
-                            if (charSequence.toString().length() > 5) {
-                                SearchRecentSuggestions suggestions =
-                                        new SearchRecentSuggestions(SearchActivity.this,
-                                                MySuggestionProvider.AUTHORITY,
-                                                MySuggestionProvider.MODE);
-                                suggestions.saveRecentQuery(charSequence.toString(), null);
-                            }
+            Call<List<User>> call = hollaNowApiInterface.search(charSequence.toString(), currentUser.getToken());
+            call.enqueue(new Callback<List<User>>() {
+                @Override
+                public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                    if (response.code() == 200) {
+                        Log.e(TAG, "size: " + response.body().size());
+                        mAdapter = new UserAdapter(response.body(), SearchActivity.this);
+                        mSearchResults.setAdapter(mAdapter);
+                        mProgressBar.setVisibility(View.INVISIBLE);
+
+                        if (response.body().size() == 0) {
+                            Log.e(TAG, "User not found on HollaNow.");
+                            mEmpty.setText("No user matched the search results.");
+                        } else {
+                            mEmpty.setText("");
                         }
-                    }
-                });
-            } else if (charSequence.toString().startsWith("+")) {
-                realQuery.whereContains("phoneNumber", charSequence.toString());
-                realQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-                realQuery.whereNotEqualTo("searchVisible", false);
-                realQuery.setLimit(25);
-                realQuery.findInBackground(new FindCallback<ParseUser>() {
-                    @Override
-                    public void done(List<ParseUser> objects, ParseException e) {
-                        if (e == null) {
-                            Log.e(TAG, objects.size() + " count");
-                            searchedUsers = new ArrayList<ParseUser>();
-                            searchedUsers.addAll(objects);
-                            mAdapter = new UserAdapter(searchedUsers, SearchActivity.this);
-                            mSearchResults.setAdapter(mAdapter);
-                            mProgressBar.setVisibility(View.INVISIBLE);
-//                    mEmpty.setText("\'" + mSearchEditText.getText().toString().trim() + "\' not found on HollaNow");
-//                    Toast.makeText(SearchActivity.this, charSequence +" not found on HollaNow", LEN).show
-                            if (objects.size() == 0) {
-                                Log.e(TAG, "User not found on HollaNow.");
-//                        mEmpty.setText("Sorry. User not found on HollaNow.");
-                            } else {
-//                        mEmpty.setText("");
-                            }
-                            if (charSequence.toString().length() > 5) {
-                                SearchRecentSuggestions suggestions =
-                                        new SearchRecentSuggestions(SearchActivity.this,
-                                                MySuggestionProvider.AUTHORITY,
-                                                MySuggestionProvider.MODE);
-                                suggestions.saveRecentQuery(charSequence.toString(), null);
-                            }
+                        if (charSequence.toString().length() > 5) {
+                            SearchRecentSuggestions suggestions =
+                                    new SearchRecentSuggestions(SearchActivity.this,
+                                            MySuggestionProvider.AUTHORITY,
+                                            MySuggestionProvider.MODE);
+                            suggestions.saveRecentQuery(charSequence.toString(), null);
                         }
+
+                    } else {
+                        Log.e(TAG, response.code()+"");
+                        Toast.makeText(SearchActivity.this, "Network error. Try again", Toast.LENGTH_SHORT).show();
                     }
-                });
-            } else {
-                realQuery.whereContains("username", charSequence.toString().toLowerCase());
-                realQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-                realQuery.whereNotEqualTo("searchVisible", false);
-//
-                ParseQuery<ParseUser> occupationQuery = ParseUser.getQuery();
-                occupationQuery.whereContains("occupation", charSequence.toString().toLowerCase());
-                occupationQuery.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-                occupationQuery.whereNotEqualTo("searchVisible", false);
+                }
 
-                List<ParseQuery<ParseUser>> queryUser = new ArrayList<ParseQuery<ParseUser>>();
-                queryUser.add(realQuery);
-                queryUser.add(occupationQuery);
-
-                ParseQuery<ParseUser> mainQuery = ParseQuery.or(queryUser);
-                mainQuery.setLimit(25);
-                mainQuery.findInBackground(new FindCallback<ParseUser>() {
-                    @Override
-                    public void done(List<ParseUser> objects, ParseException e) {
-                        if (e == null) {
-                            Log.e(TAG, objects.size() + " count");
-                            searchedUsers = new ArrayList<ParseUser>();
-                            searchedUsers.addAll(objects);
-                            mAdapter = new UserAdapter(searchedUsers, SearchActivity.this);
-                            mSearchResults.setAdapter(mAdapter);
-                            mProgressBar.setVisibility(View.INVISIBLE);
-//                    mEmpty.setText("\'" + mSearchEditText.getText().toString().trim() + "\' not found on HollaNow");
-//                    Toast.makeText(SearchActivity.this, charSequence +" not found on HollaNow", LEN).show
-                            if (objects.size() == 0) {
-                                Log.e(TAG, "User not found on HollaNow.");
-//                        mEmpty.setText("Sorry. User not found on HollaNow.");
-                            } else {
-//                        mEmpty.setText("");
-                            }
-                            if (charSequence.toString().length() > 5) {
-                                SearchRecentSuggestions suggestions =
-                                        new SearchRecentSuggestions(SearchActivity.this,
-                                                MySuggestionProvider.AUTHORITY,
-                                                MySuggestionProvider.MODE);
-                                suggestions.saveRecentQuery(charSequence.toString(), null);
-                            }
-                        }
-                    }
-                });
-            }
+                @Override
+                public void onFailure(Call<List<User>> call, Throwable t) {
+//                    Log.e(TAG, t.getMessage()+"");
+                    Toast.makeText(SearchActivity.this, "Network error. Try again", Toast.LENGTH_SHORT).show();
+                }
+            });
 
 
-//        ParseQuery<ParseUser> queryEmail = ParseUser.getQuery();
-//            if (charSequence.toString().startsWith("0")) {
-//                String phoneNumber = charSequence.toString().replaceFirst("[0]", "+234");
-//                queryEmail.whereContains("phoneNumber", phoneNumber);
-//                queryEmail.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-//                queryEmail.whereNotEqualTo("searchVisible", false);
-//            }
-//
-//            ParseQuery<ParseUser> queryUsername = ParseUser.getQuery();
-//            queryUsername.whereEqualTo("username", charSequence.toString().toLowerCase());
-//            queryUsername.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-//            queryUsername.whereNotEqualTo("searchVisible", false);
-
-
-//        ParseQuery<ParseUser> queryAddress = ParseUser.getQuery();
-//        queryAddress.whereContains("address", charSequence.toString().toLowerCase());
-//        queryAddress.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-
-//            ParseQuery<ParseUser> queryLastSeenAddress = ParseUser.getQuery();
-//            queryLastSeenAddress.whereContains("lastSeenAddress", charSequence.toString().toLowerCase());
-//            queryLastSeenAddress.whereNotEqualTo("objectId", ParseUser.getCurrentUser().getObjectId());
-
-//            List<ParseQuery<ParseUser>> queryUser = new ArrayList<ParseQuery<ParseUser>>();
-//            queryUser.add(queryName);
-//            queryUser.add(queryEmail);
-//            queryUser.add(queryLowerCaseName);
-//            queryUser.add(queryUsername);
-//        queryUser.add(queryAddress);
-//            queryUser.add(queryLastSeenAddress);
-
-
-//            ParseQuery<ParseUser> mainQuery = ParseQuery.or(queryUser);
-
-//        }
 
         } else {
             mProgressBar.setVisibility(View.INVISIBLE);
@@ -301,7 +131,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
 
     }
-
 
 
     @Override
@@ -353,11 +182,6 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
     @Override
     public boolean onQueryTextChange(String newText) {
-//        if (TextUtils.isEmpty(searchView.getQuery())) {
-////            searchView.setQuery(null, true);
-//            mSearchResults.setVisibility(View.INVISIBLE);
-//
-//        }
             if (newText!= null&& newText.length()>=3) {
             getSearch(newText);
         } else {
@@ -365,28 +189,11 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
             mSearchResults.setVisibility(View.INVISIBLE);
             getSearch("");
-//            if (searchedUsers!=null && mAdapter!=null) {
-//                searchedUsers.clear();
-////            searchedUsers.add(null);
-//                mAdapter.notifyDataSetChanged();
-//            }
+
         }
         return false;
     }
 
-//    @Override
-//    protected void onNewIntent(Intent intent) {
-//        super.onNewIntent(intent);
-//        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-//            String query = intent.getStringExtra(SearchManager.QUERY);
-//
-////            Toast.makeText(this, "Searching by: "+ query, Toast.LENGTH_SHORT).show();
-//
-//        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-//            String uri = intent.getDataString();
-//            Toast.makeText(this, "Suggestion: "+ uri, Toast.LENGTH_SHORT).show();
-//        }
-//    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -399,14 +206,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     {
         if (Intent.ACTION_SEARCH.equalsIgnoreCase(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-
-//            searchView.setQuery(query, true);
-//            getSearch(query);
-
-
             SearchRecentSuggestions searchRecentSuggestions=new SearchRecentSuggestions(this,
                     MySuggestionProvider.AUTHORITY,MySuggestionProvider.MODE);
-
             searchRecentSuggestions.saveRecentQuery(query,null);
         }
     }

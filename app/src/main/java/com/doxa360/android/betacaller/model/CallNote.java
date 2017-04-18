@@ -1,16 +1,12 @@
 package com.doxa360.android.betacaller.model;
 
-import com.parse.ParseClassName;
-import com.parse.ParseObject;
-import com.parse.ParseQuery;
+import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by Apple on 12/04/16.
+ * Created by Apple on 06/01/2017.
  */
-@ParseClassName("CallNote")
 
-public class CallNote extends ParseObject {
-
+public class CallNote {
     public static final String CALL_NOTE = "CALL_NOTE";
     public static final String CALL_NOTE_ID = "CALL_NOTE_ID";
     public static final String CALLER_ID = "CALLER_ID";
@@ -21,86 +17,101 @@ public class CallNote extends ParseObject {
     public static final String CALLER_PHOTO = "CALLER_PHOTO";
     public static final String PHONE_NUMBER = "PHONE_NUMBER";
 
+    @SerializedName("id")
+    private int mId;
+    @SerializedName("note")
+    private String mNote;
+    @SerializedName("username")
+    private String mUsername;
+    @SerializedName("name")
+    private String mName;
+    @SerializedName("from")
+    private String mPhone;
+    @SerializedName("industry")
+    private String mIndustry;
+    @SerializedName("photo")
+    private String mPhoto;
+    @SerializedName("to")
+    private String mReceiverPhone;
+    //TODO: expiry times on call notes - or check duration of call note from created at date.
+
     public CallNote() {
+
     }
 
-    public String getCallNote() {
-        return getString("callNote");
+    public CallNote(String note, String username, String name, String phone,
+                    String industry, String photo, String receiverPhone) {
+        mNote = note;
+        mUsername = username;
+        mName = name;
+        mPhone = phone;
+        mIndustry = industry;
+        mPhoto = photo;
+        mReceiverPhone = receiverPhone;
     }
 
-    public void setCallNote(String value) {
-        put("callNote", value);
+    public int getId() {
+        return mId;
     }
 
-    public String getCallerId() {
-        return getString("callerId");
+    public void setId(int id) {
+        mId = id;
     }
 
-    public void setCallerId(String value) {
-        put("callerId", value);
+    public String getNote() {
+        return mNote;
     }
 
-    public String getCallerUserName() {
-        return getString("callerUserName");
+    public void setNote(String note) {
+        mNote = note;
     }
 
-    public void setCallerUserName(String value) {
-        put("callerUserName", value);
+    public String getUsername() {
+        return mUsername;
     }
 
-    public String getCallerEmail() {
-        return getString("callerEmail");
+    public void setUsername(String username) {
+        mUsername = username;
     }
 
-    public void setCallerEmail(String value) {
-        put("callerEmail", value);
+    public String getName() {
+        return mName;
     }
 
-    public String getCallerName() {
-        return getString("callerName");
+    public void setName(String name) {
+        mName = name;
     }
 
-    public void setCallerName(String value) {
-        put("callerName", value);
+    public String getPhone() {
+        return mPhone;
     }
 
-    public String getCallerNumber() {
-        return getString("callerNumber");
+    public void setPhone(String phone) {
+        mPhone = phone;
     }
 
-    public void setCallerNumber(String value) {
-        put("callerNumber", value);
+    public String getIndustry() {
+        return mIndustry;
     }
 
-
-    public String getCallerPhoto() {
-        return getString("callerPhoto");
+    public void setIndustry(String industry) {
+        mIndustry = industry;
     }
 
-    public void setCallerPhoto(String value) {
-        put("callerPhoto", value);
+    public String getPhoto() {
+        return mPhoto;
     }
 
-    public String getUser() {
-        return getString("user");
+    public void setPhoto(String photo) {
+        mPhoto = photo;
     }
 
-    public void setUser(String value) {
-        put("user", value);
+    public String getReceiverPhone() {
+        return mReceiverPhone;
     }
 
-    public String getUserNumber() {
-        return getString("userNumber");
+    public void setReceiverPhone(String receiverPhone) {
+        mReceiverPhone = receiverPhone;
     }
-
-    public void setUserNumber(String value) {
-        put("userNumber", value);
-    }
-
-    public static ParseQuery<CallNote> getQuery() {
-        return ParseQuery.getQuery(CallNote.class);
-    }
-
-
 
 }

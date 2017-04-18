@@ -1,17 +1,24 @@
 package com.doxa360.android.betacaller;
 
 
+import android.*;
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabaseLockedException;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -54,6 +61,9 @@ public class CallDiaryFragment extends Fragment {
     private HollaNowDbHelper dbHelper;
     private HollaNowSharedPref mSharedPref;
     private TextView mTooltipAnchor;
+    private TextView mEmptyText;
+
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 1091;
 
     public CallDiaryFragment() {
         // Required empty public constructor
@@ -71,6 +81,7 @@ public class CallDiaryFragment extends Fragment {
         allCallLogs = new ArrayList<PhoneCallLog>();
 
 //        mTooltipAnchor = (TextView) rootView.findViewById(R.id.tooltip_anchor);
+        mEmptyText = (TextView) rootView.findViewById(R.id.empty_text);
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
         mCallLogRecyclerview = (RecyclerView) rootView.findViewById(R.id.callLog_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
@@ -93,7 +104,27 @@ public class CallDiaryFragment extends Fragment {
 
         @Override
         protected Void doInBackground(String... string) {
-            fetchCallLog();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                    ContextCompat.checkSelfPermission(mContext,
+                            Manifest.permission.READ_CALL_LOG)
+                            != PackageManager.PERMISSION_GRANTED) {
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.READ_CALL_LOG)) {
+
+
+                } else {
+
+                    // No explanation needed, we can request the permission.
+                    requestPermissions(
+                            new String[]{Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG},
+                            MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+
+                }
+            } else {
+                fetchCallLog();
+            }
             return null;
         }
 
@@ -269,6 +300,11 @@ public class CallDiaryFragment extends Fragment {
         mProgressBar.setVisibility(View.INVISIBLE);
         mAdapter = new PhoneCallLogAdapter(allCallLogs, mContext);
         mCallLogRecyclerview.setAdapter(mAdapter);
+        if (allCallLogs.size()==0) {
+            mEmptyText.setText("No recent calls...");
+        } else {
+            mEmptyText.setText("");
+        }
 
 
         new syncDb("sync call logs").execute("yes");
@@ -279,6 +315,33 @@ public class CallDiaryFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
 
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[], @NonNull int[] grantResults) {
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_CONTACTS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    fetchCallLog();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
 }

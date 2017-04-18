@@ -15,11 +15,10 @@
                  android:id="@+id/progress_bar"
                  android:layout_centerInParent="true"/>
 
-    <!--<TextView android:layout_width="wrap_content"-->
-              <!--android:layout_height="wrap_content"-->
-              <!--android:layout_centerHorizontal="true"-->
-              <!--android:layout_alignParentBottom="true"-->
-              <!--android:id="@+id/tooltip_anchor" />-->
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerInParent="true"
+              android:id="@+id/empty_text" />
 
 
 

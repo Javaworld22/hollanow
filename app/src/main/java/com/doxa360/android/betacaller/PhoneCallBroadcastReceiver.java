@@ -3,11 +3,7 @@ package com.doxa360.android.betacaller;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.telephony.TelephonyManager;
-
-import com.doxa360.android.betacaller.model.Contact;
-import com.facebook.FacebookBroadcastReceiver;
 
 import java.util.Date;
 
@@ -30,23 +26,23 @@ public class PhoneCallBroadcastReceiver extends BroadcastReceiver {
             savedNumber = intent.getExtras().getString("android.intent.extra.PHONE_NUMBER");
         }
         else {
-            String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
-            String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
-            int state = 0;
-            if (stateStr != null) {
-                if(stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)){
-                    state = TelephonyManager.CALL_STATE_IDLE;
+            if(intent.getExtras()!=null) {
+                String stateStr = intent.getExtras().getString(TelephonyManager.EXTRA_STATE);
+                String number = intent.getExtras().getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+                int state = 0;
+                if (stateStr != null) {
+                    if (stateStr.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+                        state = TelephonyManager.CALL_STATE_IDLE;
+                    } else if (stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
+                        state = TelephonyManager.CALL_STATE_OFFHOOK;
+                    } else if (stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                        state = TelephonyManager.CALL_STATE_RINGING;
+                    }
                 }
-                else if(stateStr.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)){
-                    state = TelephonyManager.CALL_STATE_OFFHOOK;
-                }
-                else if(stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)){
-                    state = TelephonyManager.CALL_STATE_RINGING;
-                }
+
+
+                onCallStateChanged(context, state, number);
             }
-
-
-            onCallStateChanged(context, state, number);
         }
 
     }

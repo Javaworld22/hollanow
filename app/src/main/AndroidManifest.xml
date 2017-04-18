@@ -23,6 +23,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- Fixed note issue -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-feature android:name="android.hardware.location.gps" />
 
@@ -181,13 +184,29 @@
                 android:value="com.doxa360.android.betacaller.HomeActivity"/>
         </activity>
 
-        <service android:name=".CallNoteService">
+        <service
+            android:name=".FirebaseInstanceIdService">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
 
+        <!--<service android:name=".CallNoteServiceNew">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+
+        <!--<receiver android:name=".BootCompleteReceiver">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+
         <receiver android:name=".CallReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
@@ -196,7 +215,7 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".CreateAccount"
+        <activity android:name=".CreateAccountActivity"
                   android:screenOrientation="portrait">
         </activity>
         <activity

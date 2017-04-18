@@ -27,18 +27,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="256dp"
                 android:scaleType="centerCrop"
-                app:layout_collapseMode="pin"
-                tools:src="@drawable/slide1"/>
-
-            <com.doxa360.android.betacaller.helpers.MLRoundedImageView
-                android:layout_width="@dimen/com_facebook_profilepictureview_preset_size_normal"
-                android:layout_height="@dimen/com_facebook_profilepictureview_preset_size_normal"
-                app:layout_collapseMode="parallax"
-                android:scaleType="centerCrop"
-                android:id="@+id/photo"
-                android:src="@drawable/wil_profile"
                 android:adjustViewBounds="true"
-                android:layout_gravity="center"/>
+                app:layout_collapseMode="parallax"
+                android:src="@drawable/wil_profile"/>
+
+            <!--<com.doxa360.android.betacaller.helpers.MLRoundedImageView-->
+                <!--android:layout_width="75dp"-->
+                <!--android:layout_height="75dp"-->
+                <!--app:layout_collapseMode="parallax"-->
+                <!--android:scaleType="centerCrop"-->
+                <!--android:id="@+id/photo"-->
+                <!--android:src="@drawable/wil_profile"-->
+                <!--android:adjustViewBounds="true"-->
+                <!--android:layout_gravity="center"/>-->
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

@@ -9,18 +9,12 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
 
-import com.doxa360.android.betacaller.adapter.UsersListAdapter;
 import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.squareup.picasso.Downloader;
-import com.squareup.picasso.Request;
-
-import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +26,7 @@ public class UserSuggestionProvider extends ContentProvider {
 
     private static final String TAG = UserSuggestionProvider.class.getSimpleName();
     List<String> phoneNumbers;
-    List<Contact> contacts;
+    List<Parse_Contact> contacts;
     HollaNowDbHelper mDbHelper = new HollaNowDbHelper(getContext());
 
     @Override
@@ -45,9 +39,9 @@ public class UserSuggestionProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         if (contacts == null || contacts.isEmpty()){
             //DO search
-            contacts = new ArrayList<Contact>();
+            contacts = new ArrayList<Parse_Contact>();
             String query = uri.getLastPathSegment().toLowerCase().trim();
-            List<Contact> queriedContacts = mDbHelper.searchContacts(query);
+            List<Parse_Contact> queriedContacts = mDbHelper.searchContacts(query);
             Log.e(TAG, queriedContacts.size()+" query results");
             for (int i=0;i<queriedContacts.size();i++) {
                 contacts.add(queriedContacts.get(i));
@@ -77,7 +71,7 @@ public class UserSuggestionProvider extends ContentProvider {
 
             int lenght = contacts.size();
             for (int i = 0; i < lenght && cursor.getCount() < limit; i++) {
-                Contact contact = contacts.get(i);
+                Parse_Contact contact = contacts.get(i);
                 if (contact.getPhoneNumber().toLowerCase().contains(query)) { //TODO: check other params using ||
                     cursor.addRow(new Object[]{i, contact.getDisplayName(), contact.getId()});
                     Log.e(TAG, contact.getDisplayName()+"");

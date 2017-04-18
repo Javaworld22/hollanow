@@ -4,13 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.util.Log;
 
-import com.doxa360.android.betacaller.model.Contact;
+import com.doxa360.android.betacaller.model.Parse_Contact;
 import com.doxa360.android.betacaller.model.PhoneCallLog;
 
 import java.util.ArrayList;
@@ -151,7 +150,7 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
         Log.e(TAG, "deleted call diary");
     }
 
-    public long cacheContacts(Contact contact){
+    public long cacheContacts(Parse_Contact contact){
 
 //        Log.e("DB", "im here o");
         SQLiteDatabase db = this.getWritableDatabase();
@@ -189,9 +188,9 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-    public List<Contact> allContacts(){
+    public List<Parse_Contact> allContacts(){
 
-        List<Contact> contactList = new ArrayList<Contact>();
+        List<Parse_Contact> contactList = new ArrayList<Parse_Contact>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         String[] projection = {
@@ -220,7 +219,7 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
 
         if (mCursor.moveToFirst()){
             do {
-                Contact contact = new Contact();
+                Parse_Contact contact = new Parse_Contact();
                 String version = mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_VERSION));
                 String phone = mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_PHONE));
                 String id = mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_ID));
@@ -334,7 +333,7 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
         return phoneLogsList;
     }
 
-    public Contact getContactByPhone(String phone) {
+    public Parse_Contact getContactByPhone(String phone) {
 //        String phoneNumber = phone.replace("*","");
 //        phoneNumber = phoneNumber.replace("+243","0");
         String phoneNumber = phone.replace(" ","");
@@ -343,7 +342,7 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
             Log.e(TAG, "plus here "+ phoneNumber);
         }
 
-        Contact contact = null;
+        Parse_Contact contact = null;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -370,7 +369,7 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
 
         if (mCursor.moveToFirst()){
             do {
-                contact = new Contact();
+                contact = new Parse_Contact();
                 contact.setId(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_ID)));
                 contact.setDisplayName(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_NAME)));
                 contact.setPhoneNumber(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_PHONE)));
@@ -384,11 +383,11 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
         return contact;
     }
 
-    public List<Contact> searchContacts(String search) {
+    public List<Parse_Contact> searchContacts(String search) {
         String query = search.replace("*","");
 
-        List<Contact> contacts = null;
-        Contact contact;
+        List<Parse_Contact> contacts = null;
+        Parse_Contact contact;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -399,9 +398,9 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
                 null, null, null, null);
 
         if (mCursor.moveToFirst()){
-            contacts = new ArrayList<Contact>();
+            contacts = new ArrayList<Parse_Contact>();
             do {
-                contact = new Contact();
+                contact = new Parse_Contact();
                 contact.setId(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_ID)));
                 contact.setDisplayName(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_NAME)));
                 contact.setPhoneNumber(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_PHONE)));
@@ -418,11 +417,14 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
         return contacts;
     }
 
-    public Contact searchContactByPhoneNumber(String search) {
+    public Parse_Contact searchContactByPhoneNumber(String search) {
+        if (search==null) {
+            return null;
+        }
         String searchQuery = search.replace("*","");
         String query = searchQuery.replace("+","");
 
-        Contact contact = null;
+        Parse_Contact contact = null;
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -434,7 +436,7 @@ public class HollaNowDbHelper extends SQLiteOpenHelper {
 
         if (mCursor.moveToFirst()){
             do {
-                contact = new Contact();
+                contact = new Parse_Contact();
                 contact.setId(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_ID)));
                 contact.setDisplayName(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_NAME)));
                 contact.setPhoneNumber(mCursor.getString(mCursor.getColumnIndexOrThrow(COLUMN_CONTACT_PHONE)));

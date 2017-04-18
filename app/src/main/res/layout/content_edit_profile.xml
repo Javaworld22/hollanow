@@ -33,23 +33,32 @@
                         android:id="@+id/photo"
                         android:src="@drawable/wil_profile"
                         android:layout_alignParentStart="true"
-                        android:layout_marginEnd="8dp"/>
+                        android:layout_marginEnd="8dp"
+                        android:padding="16dp"/>
 
-                    <Button android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/edit"
-                            style="?android:attr/buttonStyleSmall"
-                            android:text="Change profile photo"
-                            android:layout_below="@+id/email"
-                            android:layout_toEndOf="@+id/photo"/>
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:id="@+id/change_photo"
+                               android:src="@drawable/ic_edit_white_24dp"
+                               android:tint="@color/accent"
+                               android:layout_alignBottom="@+id/photo"
+                               android:layout_alignEnd="@+id/photo"/>
+
+                    <!--<Button android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:id="@+id/edit"-->
+                            <!--style="?android:attr/buttonStyleSmall"-->
+                            <!--android:text="Change profile photo"-->
+                            <!--android:layout_below="@+id/user_name"-->
+                            <!--android:layout_toEndOf="@+id/photo"/>-->
 
                     <TextView android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:id="@+id/email"
+                              android:id="@+id/user_name"
                               android:paddingBottom="8dp"
                               android:paddingRight="8dp"
                               android:paddingLeft="8dp"
-                              tools:text="yemi@jbs.com"
+                              tools:text="yemi"
                               android:textStyle="bold"
                               android:layout_toEndOf="@+id/photo"/>
 
@@ -57,7 +66,8 @@
                     android:id="@+id/layout_full_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/photo">
+                    android:layout_toEndOf="@+id/photo"
+                    android:layout_below="@+id/user_name">
 
                     <EditText
                         android:id="@+id/full_name"
@@ -72,35 +82,35 @@
 
             </android.support.v7.widget.CardView>
 
-            <LinearLayout android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/shareLayout"
-                          android:orientation="vertical"
-                          android:layout_below="@+id/profile_card"
-                          android:gravity="center"
-                          android:padding="8dp" >
+            <!--<LinearLayout android:layout_width="match_parent"-->
+                          <!--android:layout_height="wrap_content"-->
+                          <!--android:id="@+id/shareLayout"-->
+                          <!--android:orientation="vertical"-->
+                          <!--android:layout_below="@+id/profile_card"-->
+                          <!--android:gravity="center"-->
+                          <!--android:padding="8dp" >-->
 
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/shareTitle"
-                          style="?android:attr/textAppearanceLarge"
-                          android:padding="8dp"
-                          android:text="Go Pro!"/>
+                <!--<TextView android:layout_width="wrap_content"-->
+                          <!--android:layout_height="wrap_content"-->
+                          <!--android:id="@+id/shareTitle"-->
+                          <!--style="?android:attr/textAppearanceLarge"-->
+                          <!--android:padding="8dp"-->
+                          <!--android:text="Go Pro!"/>-->
 
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/shareDesc"
-                          android:gravity="center"
-                          android:padding="8dp"
-                          android:text="@string/pro_share_description"/>
+                <!--<TextView android:layout_width="wrap_content"-->
+                          <!--android:layout_height="wrap_content"-->
+                          <!--android:id="@+id/shareDesc"-->
+                          <!--android:gravity="center"-->
+                          <!--android:padding="8dp"-->
+                          <!--android:text="@string/pro_share_description"/>-->
 
-                <com.facebook.share.widget.ShareButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/facebook_share_button"
-                    android:layout_marginTop="8dp" />
+                <!--<com.facebook.share.widget.ShareButton-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/facebook_share_button"-->
+                    <!--android:layout_marginTop="8dp" />-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
 
             <android.support.v7.widget.CardView
@@ -112,8 +122,7 @@
                 android:layout_marginTop="16dp"
                 app:cardCornerRadius="4dp"
                 app:cardUseCompatPadding="true"
-                app:cardElevation="4dp"
-                android:visibility="invisible">
+                app:cardElevation="4dp">
 
                 <RelativeLayout android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -121,9 +130,55 @@
 
                     <TextView android:layout_width="match_parent"
                               android:layout_height="wrap_content"
+                              android:id="@+id/contact_label"
+                              android:text="Address"
+                    />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/layout_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/contact_label">
+
+                        <EditText
+                            android:id="@+id/address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Address"
+                        />
+
+                    </android.support.design.widget.TextInputLayout>
+
+
+                    <TextView android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
+                              android:id="@+id/about_label"
+                              android:text="About"
+                              android:layout_below="@+id/layout_address"
+                              android:layout_marginTop="8dp"
+                    />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/layout_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/about_label">
+
+                        <EditText
+                            android:id="@+id/about"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Say something about yourself"
+                        />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView android:layout_width="match_parent"
+                              android:layout_height="wrap_content"
                               android:id="@+id/occupation_label"
                               android:text="Occupation"
                               android:layout_marginTop="8dp"
+                              android:layout_below="@+id/layout_about"
                         />
 
                     <android.support.design.widget.TextInputLayout
@@ -159,58 +214,12 @@
                             android:id="@+id/industry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:focusable="false"
                             android:hint="What industry do you work in??"
                             />
 
                     </android.support.design.widget.TextInputLayout>
 
-
-                    <TextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/about_label"
-                              android:text="About"
-                              android:layout_below="@+id/layout_industry"
-                              android:layout_marginTop="8dp"
-                              />
-
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/layout_about"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/about_label">
-
-                        <EditText
-                            android:id="@+id/about"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Why should others call you?"
-                            />
-
-                    </android.support.design.widget.TextInputLayout>
-
-
-                    <TextView android:layout_width="match_parent"
-                              android:layout_height="wrap_content"
-                              android:id="@+id/contact_label"
-                              android:text="Contact Address"
-                              android:layout_below="@+id/layout_about"
-                              android:layout_marginTop="8dp"
-                        />
-
-                    <android.support.design.widget.TextInputLayout
-                        android:id="@+id/layout_address"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/contact_label">
-
-                        <EditText
-                            android:id="@+id/address"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Contact Address"
-                            />
-
-                    </android.support.design.widget.TextInputLayout>
 
                 </RelativeLayout>
 

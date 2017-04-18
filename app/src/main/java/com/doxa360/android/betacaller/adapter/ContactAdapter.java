@@ -3,7 +3,6 @@ package com.doxa360.android.betacaller.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,10 +19,8 @@ import com.doxa360.android.betacaller.ContactDetailActivity;
 import com.doxa360.android.betacaller.HomeActivity;
 import com.doxa360.android.betacaller.R;
 import com.doxa360.android.betacaller.helpers.BubbleTextGetter;
-import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
-import com.doxa360.android.betacaller.helpers.MyToolBox;
-import com.doxa360.android.betacaller.model.Contact;
+import com.doxa360.android.betacaller.model.Parse_Contact;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -34,13 +31,13 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> implements BubbleTextGetter {
 
     private static final String TAG = ContactAdapter.class.getSimpleName();
-    private List<Contact> mContactList;
+    private List<Parse_Contact> mContactList;
     ContactViewHolder mHolder;
     private Context mContext;
     private LayoutInflater mLayoutInflater;
     HollaNowSharedPref sharedPref;
 
-    public ContactAdapter(List<Contact> contactList, Context context) {
+    public ContactAdapter(List<Parse_Contact> contactList, Context context) {
         mContactList = contactList;
         mContext = context;
         sharedPref = new HollaNowSharedPref(context);
@@ -110,7 +107,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         CallNoteBottomSheet callNoteBottomSheet = new CallNoteBottomSheet();
         FragmentManager fragmentManager = ((HomeActivity) mContext).getSupportFragmentManager();
         Bundle args = new Bundle();
-        args.putString(Contact.PHONE_NUMBER, phoneNumber);
+        args.putString(Parse_Contact.PHONE_NUMBER, phoneNumber);
         callNoteBottomSheet.setArguments(args);
         callNoteBottomSheet.show(fragmentManager,"CALL_NOTE");
     }
@@ -123,7 +120,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     @Override
     public void onBindViewHolder(ContactViewHolder holder, int position) {
-        Contact contact = mContactList.get(position);
+        Parse_Contact contact = mContactList.get(position);
         mHolder = holder;
 
         holder.mContactName.setText(contact.getDisplayName());

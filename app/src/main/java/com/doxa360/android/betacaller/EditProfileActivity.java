@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -13,7 +16,6 @@ import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -29,48 +31,55 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.crashlytics.android.beta.Beta;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.ImageResizer;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
+import com.doxa360.android.betacaller.model.User;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.widget.ShareButton;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.doxa360.android.betacaller.helpers.ImageResizer.calculateInSampleSize;
+import static com.doxa360.android.betacaller.helpers.MyToolBox.isExternalStorageAvailable;
 
 public class EditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "EditProfileActivity";
     public static final int SHORT_SIDE_TARGET = 600;//1280;
     private FloatingActionButton fab;
-    private Button mEdit;
+//    private Button mEdit;
     private EditText mFullName, mAbout, mOccupation, mAddress;
-    private TextView mEmail;
+    private TextView mUsername;
     private ImageView mPhoto;
+    private ImageView mChangePhoto;
     private Button mFinish;
     private ProgressDialog mProgressDialog;
     private TextInputLayout mFullNameLayout;
@@ -96,6 +105,8 @@ public class EditProfileActivity extends AppCompatActivity {
     String fileName;
 
 
+    private File mediaFile = null;
+
     protected DialogInterface.OnClickListener mDialogListener =
             new DialogInterface.OnClickListener() {
                 @Override
@@ -103,22 +114,22 @@ public class EditProfileActivity extends AppCompatActivity {
                     switch (which){
                         case 0:
                             //Capture Image
-                            Intent captureVideoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE);
+                            Intent captureImageIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); //cos of the broadcast...
                             if (mMediaUri == null){
-                                Toast.makeText(EditProfileActivity.this, "There was a problem", Toast.LENGTH_LONG).show();
+                                Toast.makeText(EditProfileActivity.this, "There was a problem capturing your photo", Toast.LENGTH_LONG).show();
                             }
                             else{
-                                captureVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                                startActivityForResult(captureVideoIntent, TAKE_PHOTO_REQUEST);
+                                captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+                                startActivityForResult(captureImageIntent, TAKE_PHOTO_REQUEST);
                             }
                             break;
                         case 1:
                             //Choose Image
-                            Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                            chooseVideoIntent.setType("image/*");
+                            Intent chooseImageIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                            chooseImageIntent.setType("image/*");
                             //Toast.makeText(getActivity(), "The size of your video must be less than 10MB", Toast.LENGTH_LONG).show();
-                            startActivityForResult(chooseVideoIntent, CHOOSE_PHOTO_REQUEST);
+                            startActivityForResult(chooseImageIntent, CHOOSE_PHOTO_REQUEST);
                             break;
                     }
                 }
@@ -135,13 +146,14 @@ public class EditProfileActivity extends AppCompatActivity {
                             }
                         }
                         //file name and create the file
-                        File mediaFile;
+                        //mediaFile;
                         Date now = new Date();
                         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(now);
 
                         String path = mediaStorageDir.getPath() + File.separator;
                         if (mediaType == MEDIA_TYPE_IMAGE){
                             mediaFile = new File(path+"IMG_"+timestamp+".jpg");
+
                         }
                         else if (mediaType == MEDIA_TYPE_VIDEO){
                             mediaFile = new File(path+"VID_"+timestamp+".mp4");
@@ -173,7 +185,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private LinearLayout mShareLayout;
     private CardView mProCard;
     private HollaNowSharedPref mSharedPref;
-    private CallbackManager callbackManager;
+    private User currentUser;
+    private HollaNowApiInterface hollaNowApiInterface;
 
 
     @Override
@@ -181,8 +194,6 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        FacebookSdk.sdkInitialize(this);
-        callbackManager = CallbackManager.Factory.create();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -197,118 +208,60 @@ public class EditProfileActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("Edit Profile");
 
 
-        mEmail = (TextView) findViewById(R.id.email);
+        mUsername = (TextView) findViewById(R.id.user_name);
         mFullName = (EditText) findViewById(R.id.full_name);
         mFullNameLayout = (TextInputLayout) findViewById(R.id.layout_full_name);
         mAbout = (EditText) findViewById(R.id.about);
         mOccupation = (EditText) findViewById(R.id.occupation);
         mAddress = (EditText) findViewById(R.id.address);
         mIndustry = (EditText) findViewById(R.id.industry);
-        mEdit = (Button) findViewById(R.id.edit);
+//        mEdit = (Button) findViewById(R.id.edit);
+        mChangePhoto = (ImageView) findViewById(R.id.change_photo);
         mPhoto = (ImageView) findViewById(R.id.photo);
 
         mShareLayout = (LinearLayout) findViewById(R.id.shareLayout);
         mProCard = (CardView) findViewById(R.id.pro_card);
+
+        hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
+
         mSharedPref = new HollaNowSharedPref(this);
-
-        ShareLinkContent sharedContent = new ShareLinkContent.Builder()
-                .setContentUrl(Uri.parse("https://play.google.com/store/apps/details?id=com.doxa360.android.betacaller"))
-                .setContentDescription("Hello friends, I now use the HollaNow app. So whenever you want to talk to me, just holla @"+ParseUser.getCurrentUser().getUsername()+ ". It\'s cooler.")
-//                .setImageUrl(Uri.parse("http://hollanow.com/facebook_share.png"))
-                .build();
+        currentUser = mSharedPref.getCurrentUser();
 
 
-        ShareButton shareButton = (ShareButton)findViewById(R.id.facebook_share_button);
-        shareButton.setShareContent(sharedContent);
-
-        shareButton.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
-            @Override
-            public void onSuccess(Sharer.Result result) {
-                mSharedPref.setShared();
-                toggleProShare();
-                Log.e(TAG, "shared "+ result.toString() + " - " + result.getPostId());
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-        });
+        mUsername.setText(currentUser.getEmail());
+        mFullName.setText(currentUser.getName());
 
 
-        toggleProShare();
+//        mAbout.setText((!currentUser.getAbout().isEmpty())?currentUser.getAbout():"-");
+//        mAddress.setText((!currentUser.getAddress().isEmpty())?currentUser.getAddress():"-");
+//        mOccupation.setText((!currentUser.getOccupation().isEmpty())?currentUser.getOccupation():"-");
+//        mIndustry.setText((!currentUser.getIndustry().isEmpty())?currentUser.getIndustry():"-");
+
+        mAbout.setText((currentUser.getAbout() != null)?currentUser.getAbout():"-");
+        mAddress.setText((currentUser.getAddress() != null)?currentUser.getAddress():"-");
+        mOccupation.setText((currentUser.getOccupation() != null)?currentUser.getOccupation():"-");
+        mIndustry.setText((currentUser.getIndustry() != null)?currentUser.getIndustry():"-");
 
 
-        mEmail.setText(ParseUser.getCurrentUser().getEmail());
-        mFullName.setText(ParseUser.getCurrentUser().getString("name"));
-//        mPhone.setText(ParseUser.getCurrentUser().getString("phoneNumber"));
-
-        if (ParseUser.getCurrentUser().getString("bio")!=null) {
-            mAbout.setText(ParseUser.getCurrentUser().getString("bio"));
-        } else {
-        }
-        if (ParseUser.getCurrentUser().getString("occupation")!=null) {
-            mOccupation.setText(ParseUser.getCurrentUser().getString("occupation"));
-        } else {
-        }
-        if (ParseUser.getCurrentUser().getString("address")!=null) {
-            mAddress.setText(ParseUser.getCurrentUser().getString("address"));
-        } else {
-        }
-        if (ParseUser.getCurrentUser().getString("industry")!=null) {
-            StringBuilder stringBuilder = new StringBuilder();
-            for (int i=0;i<ParseUser.getCurrentUser().getList("industry").size();i++){
-                String string = (String) ParseUser.getCurrentUser().getList("industry").get(i);
-                stringBuilder.append(string);
-                if (i != (ParseUser.getCurrentUser().getList("industry").size() - 1)) {
-                    stringBuilder.append(",");
-                }
-            }
-            mIndustry.setText(stringBuilder.toString());
-        } else {
-        }
-//        ArrayList<String> tagList = new ArrayList<String>();
-//        if (ParseUser.getCurrentUser().getList("tags")!=null) {
-//            for (int i = 0; i < ParseUser.getCurrentUser().getList("tags").size(); i++) {
-//                tagList.add((String) ParseUser.getCurrentUser().getList("tags").get(i));
-//            }
-//            mOccupation.setText(MyToolBox.listToString(tagList));
-//        } else {
-//        }
-
-        if (ParseUser.getCurrentUser().getParseFile("photo") != null) {
+        if (currentUser.getProfilePhoto() != null) {
             Picasso.with(EditProfileActivity.this)
-                    .load(ParseUser.getCurrentUser().getParseFile("photo").getUrl())
+                    .load(BetaCaller.PHOTO_URL + currentUser.getProfilePhoto())
                     .into(mPhoto);
         }
 
-        mEdit.setOnClickListener(editPhoto);
+//        mEdit.setOnClickListener(editPhoto);
         mPhoto.setOnClickListener(editPhoto);
+//        mIndustry should not accept user keyboard
         mIndustry.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getSupportFragmentManager();
                 AddIndustryFragment fragment = new AddIndustryFragment();
-
+                fragment.show(fm, "INDUSTRY");
             }
         });
 
 
-    }
-
-    private void toggleProShare() {
-        if (mSharedPref.isShared()) {
-            mProCard.setVisibility(View.VISIBLE);
-            mShareLayout.setVisibility(View.INVISIBLE);
-        } else {
-            mProCard.setVisibility(View.INVISIBLE);
-            mShareLayout.setVisibility(View.VISIBLE);
-        }
     }
 
     private void hideKeyboard() {
@@ -329,35 +282,46 @@ public class EditProfileActivity extends AppCompatActivity {
     private void editProfile() {
         mProgressDialog.show();
         if (!mFullName.getText().toString().trim().isEmpty()) {
-            ParseUser.getCurrentUser().put("name", mFullName.getText().toString().trim());
+            currentUser.setName(mFullName.getText().toString());
         }
         if (!mAbout.getText().toString().trim().isEmpty()) {
-            ParseUser.getCurrentUser().put("bio", mAbout.getText().toString().trim());
+            currentUser.setAbout(mAbout.getText().toString());
         }
         if (!mAddress.getText().toString().trim().isEmpty()) {
-            ParseUser.getCurrentUser().put("address", mAddress.getText().toString().trim());
+            currentUser.setAddress(mAddress.getText().toString());
         }
         if (!mOccupation.getText().toString().trim().isEmpty()) {
-            ParseUser.getCurrentUser().put("occupation", mOccupation.getText().toString().trim());
+            currentUser.setOccupation(mOccupation.getText().toString());
         }
-        if (allTags!=null) {
-            ParseUser.getCurrentUser().addAllUnique("industry", allTags);
+        if (!mIndustry.getText().toString().trim().isEmpty()) {
+            currentUser.setIndustry(mIndustry.getText().toString());
         }
-//        ParseUser.getCurrentUser().addAll("tags", Arrays.asList(mFullName.getText().toString().trim().split("\\s*,\\s*")));
-        ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+
+
+        mSharedPref.setCurrentUser(currentUser.toString());
+        Log.e("EDITED_USER=> ", currentUser.toString());
+        Call<User> call = hollaNowApiInterface.editUserProfile(currentUser, mSharedPref.getToken());
+        call.enqueue(new Callback<User>() {
             @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Toast.makeText(EditProfileActivity.this, "Your profile has been successfully updated", Toast.LENGTH_LONG).show();
-                    mProgressDialog.dismiss();
-//                    NavUtils.navigateUpFromSameTask(EditProfileActivity.this);
-                    finish();
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.code() == 200) {
+                    Log.e(TAG, "success "+ response.body().toString());
+                    Toast.makeText(EditProfileActivity.this, "Profile successfully updated", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                    onBackPressed();
+                    finishActivity(12345);
                 } else {
-                    Log.e("What went wrong: ", e.getMessage());
-                    Toast.makeText(EditProfileActivity.this, "Oops! Something went wrong. Please check your connection and try again",
-                            Toast.LENGTH_LONG).show();
-                    mProgressDialog.dismiss();
+                    Log.e(TAG, "error: " + response.code() + response.message());
+                    Toast.makeText(EditProfileActivity.this, "Error updating profile", Toast.LENGTH_SHORT).show();
                 }
+                mProgressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+//                Log.e(TAG, "failed: "+t.getMessage());
+                Toast.makeText(EditProfileActivity.this, "Network error. Try again", Toast.LENGTH_LONG).show();
+                mProgressDialog.dismiss();
             }
         });
 
@@ -366,8 +330,8 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK){
+            mProgressDialog.show();
             //add to gallery
             if (requestCode == CHOOSE_PHOTO_REQUEST){
                 if (data == null){
@@ -382,6 +346,7 @@ public class EditProfileActivity extends AppCompatActivity {
                     inputStream = getContentResolver().openInputStream(mMediaUri);
                     assert inputStream != null;
                     fileSize = inputStream.available();
+
                 }
                 catch (FileNotFoundException e){
                     Toast.makeText(EditProfileActivity.this,"Error opening image. Please try again.",Toast.LENGTH_LONG).show();
@@ -403,28 +368,94 @@ public class EditProfileActivity extends AppCompatActivity {
                     return;
                 }
 
+
+                fileBytes = getByteArrayFromFile(EditProfileActivity.this, mMediaUri);
+                if(mediaFile==null) {
+                    //create mediaFile
+                    Log.e(TAG, "creating media file to write chosen image into");
+                    mediaFile = createFile(MEDIA_TYPE_IMAGE);
+                    Log.e(TAG, "media file succesfully written");
+
+
+                }
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(mediaFile);
+                    fos.write(fileBytes);
+                    fos.flush();
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (MyToolBox.isNetworkAvailable(this)) {
+                        //TODO: do both here - upload file using mediaFile global variable ?
+                        uploadFile(mediaFile);
+                    } else {
+                        MyToolBox.AlertMessage(this, "Oops", "Network Error. Please check your connection");
+                    }
+                }
+
+
+
             }
             else{
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 mediaScanIntent.setData(mMediaUri);
                 sendBroadcast(mediaScanIntent);
+
+                /*
+                 So it begins... ahhhhhhh!
+                */
+                try {
+                    fileBytes = getByteArrayFromFile(this, mMediaUri);
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = BitmapFactory.decodeByteArray(fileBytes, 0, fileBytes.length);
+                    } catch (OutOfMemoryError memoryError) {
+                        Toast.makeText(EditProfileActivity.this, memoryError.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    if (bitmap != null) {
+                        try {
+                            bitmap = rotateImageIfRequired(bitmap, mMediaUri);
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bos);
+                            byte[] bitmapdata = bos.toByteArray();
+                            FileOutputStream fos = new FileOutputStream(mediaFile);
+                            fos.write(bitmapdata);
+                            fos.flush();
+                            fos.close();
+
+                            Log.e(TAG, "media file succesfully written on Captured...");
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Toast.makeText(EditProfileActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                } finally {
+                    if (MyToolBox.isNetworkAvailable(this)) {
+//                    postProfilePhoto();
+                        //TODO: do both here - upload file using mediaFile global variable ?
+                        Log.e(TAG, "... Captured... Finally... ");
+                        uploadFile(mediaFile);
+                    } else {
+                        MyToolBox.AlertMessage(this, "Oops", "Network Error. Please check your connection");
+                    }
+                }
+
             }
 
-            mProgressDialog.show();
-            try {
-                fileBytes = getByteArrayFromFile(this, mMediaUri);
-            }
-            finally{
-                if (MyToolBox.isNetworkAvailable(this)) {
-                    postProfilePhoto();
-                } else {
-                    MyToolBox.AlertMessage(this,"Oops", "Network Error. Please check your connection");
-                }
+//            mProgressDialog.show();
+            if (mediaFile != null ) { // captured image
+
+            } else { //
+
             }
 
         }
         else if (resultCode != RESULT_CANCELED){
-            Toast.makeText(this,"There was an error saving your video",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"There was an error saving your photo",Toast.LENGTH_LONG).show();
         }
 
     }
@@ -515,7 +546,7 @@ public class EditProfileActivity extends AppCompatActivity {
         Bitmap bitmap = ImageResizer.resizeImageMaintainAspectRatio(imageData, shortSide);
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, outputStream);
         byte[] reducedData = outputStream.toByteArray();
         try {
             outputStream.close();
@@ -531,10 +562,10 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent();
-        intent.putExtra("VIEW_PAGER", 3);
-        setResult(RESULT_OK, intent);
-        finishActivity(2016);
+//        Intent intent = new Intent();
+//        intent.putExtra("VIEW_PAGER", 3);
+//        setResult(RESULT_OK, intent);
+//        finishActivity(2016);
     }
 
     @Override
@@ -546,23 +577,16 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-//            Intent intent = new Intent(this, HomeActivity.class);
-//            Log.e(TAG, "hello.");
-//            Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
-//            intent.putExtra("VIEW_PAGER", 3);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(intent);
 
             Intent intent = new Intent();
             intent.putExtra("VIEW_PAGER", 3);
             setResult(RESULT_OK, intent);
             finishActivity(2017);
-//            NavUtils.navigateUpTo(this, intent);
         }
 
         if (item.getItemId() == R.id.action_finish) {
             if (MyToolBox.isNetworkAvailable(EditProfileActivity.this)) {
-                if (!MyToolBox.isMinimumCharacters(mFullName.getText().toString().trim(), 3)) {
+                if (!MyToolBox.isMinimumCharacters(mFullName.getText().toString().trim(), 5)) {
                     mFullNameLayout.setError("Type your full name");
                 }
                 else {
@@ -577,16 +601,143 @@ public class EditProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void updateTags(List<String> selectedTags) {
-        allTags = selectedTags;
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i=0;i<selectedTags.size();i++){
-            String string = selectedTags.get(i);
-            stringBuilder.append(string);
-            if (i != (selectedTags.size() - 1)) {
-                stringBuilder.append(",");
-            }
-        }
-        mIndustry.setText(stringBuilder.toString());
+    public void updateIndustry(String selectedIndustry) {
+        mIndustry.setText(selectedIndustry);
     }
+
+    //Captured mage manipulation - scale and rotation
+
+    public static Bitmap handleSamplingAndRotationBitmap(Context context, Uri selectedImage)
+            throws IOException {
+        int MAX_HEIGHT = 320;
+        int MAX_WIDTH = 320;
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        InputStream imageStream = context.getContentResolver().openInputStream(selectedImage);
+        BitmapFactory.decodeStream(imageStream, null, options);
+        if (imageStream != null) {
+            imageStream.close();
+        }
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, MAX_WIDTH, MAX_HEIGHT);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        imageStream = context.getContentResolver().openInputStream(selectedImage);
+        Bitmap img = BitmapFactory.decodeStream(imageStream, null, options);
+
+        img = rotateImageIfRequired(img, selectedImage);
+
+        return img;
+    }
+
+    private static Bitmap rotateImageIfRequired(Bitmap img, Uri selectedImage) throws IOException {
+
+        ExifInterface ei = new ExifInterface(selectedImage.getPath());
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                return rotateImage(img, 270);
+            default:
+                return img;
+        }
+    }
+
+    private static Bitmap rotateImage(Bitmap img, int degree) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(degree);
+        Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+        img.recycle();
+        return rotatedImg;
+    }
+
+    private void uploadFile(File photo) {
+
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), photo);
+
+        MultipartBody.Part body =
+                MultipartBody.Part.createFormData("photo", photo.getName(), requestFile);
+
+        final String fileName = photo.getName();
+        RequestBody fileNameBody =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), fileName);
+
+        String token = mSharedPref.getToken();
+
+        Call<ResponseBody> call = hollaNowApiInterface.uploadProfilePhoto(token, fileNameBody, body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                //TODO: set photo to imageview, toast success
+                if (response.code() == 200) {
+                    Picasso.with(EditProfileActivity.this)
+                            .load(mediaFile)
+                            .into(mPhoto);
+                    Toast.makeText(EditProfileActivity.this, "Profile photo successfully updated ", Toast.LENGTH_SHORT).show();
+                    currentUser.setProfilePhoto(fileName);
+                    mSharedPref.setCurrentUser(currentUser.toString());
+                } else {
+                    Toast.makeText(EditProfileActivity.this, "Could not update profile photo", Toast.LENGTH_SHORT).show();
+                }
+
+                mProgressDialog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Log.e(TAG, "Retrofit: "+ t.getMessage());
+                Toast.makeText(EditProfileActivity.this, "Error uploading photo. Try again", Toast.LENGTH_LONG).show();
+
+                mProgressDialog.dismiss();
+            }
+        });
+
+    }
+
+    private File createFile(int mediaType) {
+        if(isExternalStorageAvailable()){
+            //storage dir
+            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                    getString(R.string.app_name));
+            //subdir
+            if(!mediaStorageDir.exists()){
+                if(!mediaStorageDir.mkdirs()){
+                    return null;
+                }
+            }
+            //file name and create the file
+            //mediaFile;
+            Date now = new Date();
+            String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(now);
+
+            String path = mediaStorageDir.getPath() + File.separator;
+            if (mediaType == MEDIA_TYPE_IMAGE){
+                mediaFile = new File(path+"IMG_"+timestamp+".jpg");
+
+            }
+            else if (mediaType == MEDIA_TYPE_VIDEO){
+                mediaFile = new File(path+"VID_"+timestamp+".mp4");
+            }
+            else{
+                return null;
+            }
+            Toast.makeText(EditProfileActivity.this,"File: "+Uri.fromFile(mediaFile),Toast.LENGTH_LONG).show();
+            return mediaFile;
+        }
+        else{
+            return null;
+        }
+    }
+
+
 }

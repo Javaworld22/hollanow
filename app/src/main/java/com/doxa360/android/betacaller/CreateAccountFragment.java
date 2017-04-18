@@ -1,8 +1,12 @@
 package com.doxa360.android.betacaller;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -10,8 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.doxa360.android.betacaller.helpers.MyToolBox;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -21,7 +28,6 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -40,9 +46,10 @@ public class CreateAccountFragment extends Fragment {
     private String mParam2;
 
     private Context mContext;
-    private LoginButton mLoginButton;
+    private LoginButton mFacebookLogin;
     private CallbackManager callbackManager;
-    private TextView mEmailSignUp, mLoginEmail;
+    private Button mSignUpButton, mLoginButton;
+    private EditText mEmailTextEdit;
 
     public CreateAccountFragment() {
         // Required empty public constructor
@@ -63,29 +70,60 @@ public class CreateAccountFragment extends Fragment {
 
         View rootView = (View) inflater.inflate(R.layout.fragment_create_account, container, false);
 
-        mLoginButton = (LoginButton) rootView.findViewById(R.id.facebook_login_button);
-        mLoginEmail = (TextView) rootView.findViewById(R.id.login_email);
-        mEmailSignUp = (TextView) rootView.findViewById(R.id.sign_up_email);
+        mFacebookLogin = (LoginButton) rootView.findViewById(R.id.facebook_login_button);
+        mLoginButton = (Button) rootView.findViewById(R.id.loginButton);
+        mSignUpButton = (Button) rootView.findViewById(R.id.signUpButton);
+        mEmailTextEdit = (EditText) rootView.findViewById(R.id.emailTextEdit);
 
-        mLoginEmail.setOnClickListener(new View.OnClickListener() {
+        if (ActivityCompat.checkSelfPermission(mContext, android.Manifest.permission.GET_ACCOUNTS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+//            return TODO;
+        } else {
+            Account[] accountList = AccountManager.get(mContext).getAccountsByType("com.google");
+            if (accountList.length > 0) {
+                mEmailTextEdit.setText(accountList[0].name);
+            }
+        }
+
+        mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, LoginActivity.class);
-                startActivity(intent);
+                if (MyToolBox.isMinimumCharacters(mEmailTextEdit.getText().toString(),6) &&
+                        MyToolBox.isEmailValid(mEmailTextEdit.getText().toString()) ) {
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    intent.putExtra("EMAIL", mEmailTextEdit.getText().toString());
+                    startActivity(intent);
+                } else {
+                    mEmailTextEdit.setError("Please type in a valid email");
+                }
             }
         });
-        mEmailSignUp.setOnClickListener(new View.OnClickListener() {
+
+        mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(mContext, SignUpActivity.class);
-                startActivity(intent);
+                if (MyToolBox.isMinimumCharacters(mEmailTextEdit.getText().toString(),6) &&
+                        MyToolBox.isEmailValid(mEmailTextEdit.getText().toString()) ) {
+                    Intent intent = new Intent(mContext, SignUpActivity.class);
+                    intent.putExtra("EMAIL", mEmailTextEdit.getText().toString());
+                    startActivity(intent);
+                } else {
+                    mEmailTextEdit.setError("Please type in a valid email");
+                }
             }
         });
+
         String[] permissions = new String[]{"email","user_friends", "public_profile"};
-        mLoginButton.setReadPermissions(Arrays.asList(permissions));
-        mLoginButton.setFragment(this);
+        mFacebookLogin.setReadPermissions(Arrays.asList(permissions));
+        mFacebookLogin.setFragment(this);
 
-        mLoginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        mFacebookLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.e(TAG, "success login");

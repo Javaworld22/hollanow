@@ -61,10 +61,10 @@
                 <!--android:key="pref_change_password"-->
     <!--/>-->
 
-    <Preference android:title="Delete Account"
-                android:icon="@null"
-                android:key="pref_delete_account"
-    />
+    <!--<Preference android:title="Delete Account"-->
+                <!--android:icon="@null"-->
+                <!--android:key="pref_delete_account"-->
+    <!--/>-->
 
 
     <!--<Preference android:title="Help"-->
@@ -82,7 +82,7 @@
     <Preference android:title="Terms and Conditions"
                 android:icon="@null"  >
         <intent android:action="android.intent.action.VIEW"
-                android:data="http://www.hollanow.com/terms_conditions.php"/>
+                android:data="http://www.hollanow.com/terms_conditions.html"/>
     </Preference>
 
     <Preference android:title="About"

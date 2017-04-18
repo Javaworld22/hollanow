@@ -3,29 +3,29 @@ package com.doxa360.android.betacaller;
 
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.doxa360.android.betacaller.model.Category;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
+import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
+import com.doxa360.android.betacaller.helpers.MyToolBox;
+import com.doxa360.android.betacaller.model.Industry;
+import com.doxa360.android.betacaller.model.User;
 import com.thinkincode.utils.views.HorizontalFlowLayout;
 
-import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddIndustryFragment extends DialogFragment {
 
@@ -34,7 +34,10 @@ public class AddIndustryFragment extends DialogFragment {
     private EditText mTagsEditText;
     private HorizontalFlowLayout mCategoryLayout;
     private ProgressBar mProgressBar;
-    private List<String> selectedTags;
+    private String selectedIndustry;
+    private HollaNowApiInterface hollaNowApiInterface;
+    HollaNowSharedPref mSharedPref;
+    private User currentUser;
 
     public AddIndustryFragment() {
         // Required empty public constructor
@@ -47,84 +50,74 @@ public class AddIndustryFragment extends DialogFragment {
         // Inflate the layout for this fragment
         View rootView =  inflater.inflate(R.layout.fragment_add_industry, container, false);
 
-        getDialog().setTitle("Select your industry");
+        getDialog().setTitle("Choose your industry");
+
+        mSharedPref = new HollaNowSharedPref(mActivity);
+        currentUser = mSharedPref.getCurrentUser();
+        hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
+
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progress_bar);
-        mCategoryLayout = (HorizontalFlowLayout) rootView.findViewById(R.id.category_horizontal_layout);
-        Button mFinishBtn = (Button) rootView.findViewById(R.id.finish_button);
+        mCategoryLayout = (HorizontalFlowLayout) rootView.findViewById(R.id.industry_layout);
 
-        selectedTags = new ArrayList<String>();
+        if (MyToolBox.isNetworkAvailable(mActivity)) {
+            getIndustries();
+        } else {
+            MyToolBox.AlertMessage(mActivity, "Network error. Please check your connection");
+        }
 
-        getCategories();
-
-        mFinishBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mActivity.updateTags(selectedTags);
-                getDialog().dismiss();
-            }
-        });
 
         return rootView;
     }
 
-    private void getCategories() {
-        ParseQuery<Category> query = Category.getQuery();
-        query.findInBackground(new FindCallback<Category>() {
+    private void getIndustries() {
+        Call<List<Industry>> call = hollaNowApiInterface.
+                getIndustry((currentUser.getToken()!="")?currentUser.getToken():mSharedPref.getToken());
+        call.enqueue(new Callback<List<Industry>>() {
             @Override
-            public void done(List<Category> categories, ParseException e) {
-                if (e == null) {
-                    displayCategories(categories);
+            public void onResponse(Call<List<Industry>> call, Response<List<Industry>> response) {
+                if (response.code()==200) {
+                    displayIndustries(response.body());
+                } else {
+                    Toast.makeText(mActivity, "Error loading industries", Toast.LENGTH_SHORT).show();
+                    getDialog().dismiss();
                 }
+            }
+
+            @Override
+            public void onFailure(Call<List<Industry>> call, Throwable t) {
+//                Log.e(TAG, t.getMessage());
+                MyToolBox.AlertMessage(mActivity, "Network error. Please check your connection");
             }
         });
     }
 
 
-    private void displayCategories(List<Category> categories) {
-        TextView categoryChips;
-        if (categories!=null) {
-            Log.e(TAG, categories.size() + "");
-            for (Category category : categories) {
+    private void displayIndustries(List<Industry> industries) {
+        TextView industryChips;
+        if (industries!=null) {
+            for (Industry industry : industries) {
                 RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 lp.setMargins(0, 0, 16, 32);
-                Log.e(TAG, category.getCategory());
-                categoryChips = new TextView(mActivity);
-                categoryChips.setLayoutParams(lp);
-                categoryChips.setPadding(16, 16, 16, 16);
-                categoryChips.setBackgroundResource(R.drawable.chips);
-//                categoryChips.setSingleLine();
-//                categoryChips.setTextAppearance(mContext, android.R.style.TextAppearance_DeviceDefault_Medium);
-                categoryChips.setText(category.getCategory());
-                categoryChips.setOnClickListener(categoryClickListener(category));
-                mCategoryLayout.addView(categoryChips);
+                industryChips = new TextView(mActivity);
+                industryChips.setLayoutParams(lp);
+                industryChips.setPadding(16, 16, 16, 16);
+                industryChips.setBackgroundResource(R.drawable.chips);
+                industryChips.setText(industry.getIndustry());
+                industryChips.setOnClickListener(industryClickListener(industry.getIndustry()));
+                mCategoryLayout.addView(industryChips);
             }
             mProgressBar.setVisibility(View.INVISIBLE);
         }
-
     }
 
-    private View.OnClickListener categoryClickListener(final Category category) {
+    private View.OnClickListener industryClickListener(final String industry) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isSelected(category.getCategory().toLowerCase())) {
-                    view.setBackgroundResource(R.drawable.chips);
-                    selectedTags.remove(category.getCategory().toLowerCase());
-                } else {
-                    view.setBackgroundResource(R.drawable.selected_chips);
-                    selectedTags.add(category.getCategory().toLowerCase());
-                }
+                mActivity.updateIndustry(industry);
+                getDialog().dismiss();
             }
         };
-    }
-
-    private boolean isSelected(String s) {
-        for (String category:selectedTags) {
-            if (category.equalsIgnoreCase(s)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 

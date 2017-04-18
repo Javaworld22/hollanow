@@ -1,8 +1,6 @@
 package com.doxa360.android.betacaller;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,9 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.doxa360.android.betacaller.adapter.UserAdapter;
-import com.doxa360.android.betacaller.model.Category;
+import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
+import com.doxa360.android.betacaller.helpers.MyToolBox;
+import com.doxa360.android.betacaller.model.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -20,6 +21,10 @@ import com.parse.ParseUser;
 
 import java.util.Arrays;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class CategoryActivity extends AppCompatActivity {
 
@@ -29,8 +34,10 @@ public class CategoryActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     UserAdapter mAdapter;
 
-    String category, categoryId;
+    String industry, categoryId;
     private TextView mEmpty;
+    private HollaNowSharedPref mSharedPref;
+    private HollaNowApiInterface hollaNowApiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +48,12 @@ public class CategoryActivity extends AppCompatActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        categoryId = getIntent().getStringExtra(Category.ID);
-        category = getIntent().getStringExtra(Category.CATEGORY);
+        industry = getIntent().getStringExtra("INDUSTRY");
+        mSharedPref = new HollaNowSharedPref(this);
+        hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
 
-        toolbar.setTitle(category);
-        getSupportActionBar().setTitle(category);
+        toolbar.setTitle(industry);
+        getSupportActionBar().setTitle(industry);
         mEmpty = (TextView) findViewById(R.id.empty_text);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         mRecyclerView = (RecyclerView) findViewById(R.id.category_recyclerview);
@@ -53,28 +61,39 @@ public class CategoryActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(layoutManager);
 
-        getUsersByCategory();
+        if (MyToolBox.isNetworkAvailable(this)) {
+            getUsersByIndustry(industry);
+        } else {
+            MyToolBox.AlertMessage(this, "Network error. Check your connection");
+        }
 
 
     }
 
-    private void getUsersByCategory() {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereContainedIn("industry", Arrays.asList(category.toLowerCase()));
-        query.findInBackground(new FindCallback<ParseUser>() {
+    private void getUsersByIndustry(String industry) {
+        Call<List<User>> call = hollaNowApiInterface.getUserByIndustry(mSharedPref.getToken(), industry);
+        call.enqueue(new Callback<List<User>>() {
             @Override
-            public void done(List<ParseUser> users, ParseException e) {
-                if (e==null){
-                    if (users.size()==0) {
-                        mEmpty.setText("There are currently no users in this category");
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.code() == 200) {
+                    if (response.body().size()==0) {
+                        mEmpty.setText("There are currently no users in this industry");
                     } else {
                         mEmpty.setText("");
                     }
                     mProgressBar.setVisibility(View.INVISIBLE);
-                    mAdapter = new UserAdapter(users, CategoryActivity.this);
+                    mAdapter = new UserAdapter(response.body(), CategoryActivity.this);
                     mRecyclerView.setAdapter(mAdapter);
+                } else {
+                    Toast.makeText(CategoryActivity.this, "Error retrieving users in this industry", Toast.LENGTH_SHORT).show();
                 }
             }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                Toast.makeText(CategoryActivity.this, "Network error. Check your connection", Toast.LENGTH_SHORT).show();
+            }
+
         });
     }
 

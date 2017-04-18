@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.doxa360.android.betacaller.model.Contact;
+import com.doxa360.android.betacaller.model.Parse_Contact;
 
 import java.util.Date;
 
@@ -17,16 +17,21 @@ public class CallReceiver extends PhoneCallBroadcastReceiver {
     protected void onIncomingCallStarted(Context ctx, String number, Date start) {
 //        super.onIncomingCallStarted(ctx, number, start);
         Intent callIntent = new Intent(INCOMING_CALL);
-        callIntent.putExtra(Contact.PHONE_NUMBER, number);
-        LocalBroadcastManager.getInstance(ctx).sendBroadcast(callIntent);
+        callIntent.putExtra(Parse_Contact.PHONE_NUMBER, number);
+//        LocalBroadcastManager.getInstance(ctx).sendBroadcast(callIntent);
+
+        ctx.startService(new Intent(ctx, CallNoteServiceNew.class));
+
     }
 
     @Override
     protected void onIncomingCallEnded(Context ctx, String number, Date start, Date end) {
 //        super.onIncomingCallEnded(ctx, number, start, end);
-        Intent callIntent = new Intent(INCOMING_CALL_ENDED);
-        callIntent.putExtra(Contact.PHONE_NUMBER, number);
-        LocalBroadcastManager.getInstance(ctx).sendBroadcast(callIntent);
+        //TODO: delete below if redundant
+//        Intent callIntent = new Intent(INCOMING_CALL_ENDED);
+//        callIntent.putExtra(Parse_Contact.PHONE_NUMBER, number);
+//        LocalBroadcastManager.getInstance(ctx).sendBroadcast(callIntent);
+
     }
 
     @Override

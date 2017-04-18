@@ -1,21 +1,15 @@
 package com.doxa360.android.betacaller;
 
 import android.Manifest;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,8 +24,7 @@ import android.widget.TextView;
 
 import com.doxa360.android.betacaller.adapter.PhoneCallLogAdapter;
 import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
-import com.doxa360.android.betacaller.helpers.MyToolBox;
-import com.doxa360.android.betacaller.model.Contact;
+import com.doxa360.android.betacaller.model.Parse_Contact;
 import com.doxa360.android.betacaller.model.PhoneCallLog;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -40,7 +32,6 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ContactDetailActivity extends AppCompatActivity {
@@ -75,7 +66,7 @@ public class ContactDetailActivity extends AppCompatActivity {
                 CallNoteBottomSheet callNoteBottomSheet = new CallNoteBottomSheet();
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 Bundle args = new Bundle();
-                args.putString(Contact.PHONE_NUMBER, contactPhone);
+                args.putString(Parse_Contact.PHONE_NUMBER, contactPhone);
                 callNoteBottomSheet.setArguments(args);
                 callNoteBottomSheet.show(fragmentManager,"CALL_NOTE");
 //                placeCall(contactPhone);
@@ -166,7 +157,7 @@ public class ContactDetailActivity extends AppCompatActivity {
 
     private void getContactDetails(final String contactPhone) {
         HollaNowDbHelper dbHelper = new HollaNowDbHelper(this);
-        Contact contact = dbHelper.getContactByPhone(contactPhone);
+        Parse_Contact contact = dbHelper.getContactByPhone(contactPhone);
         if (contact!=null) {
             contactId = contact.getId();
             contactName = contact.getDisplayName();
