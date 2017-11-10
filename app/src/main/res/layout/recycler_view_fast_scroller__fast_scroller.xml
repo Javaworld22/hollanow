@@ -22,7 +22,10 @@
         android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
         android:layout_height="wrap_content"
+<<<<<<< HEAD
         android:background="@color/accent"
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
         android:src="@drawable/recycler_view_fast_scroller__handle"/>
 
 </merge>

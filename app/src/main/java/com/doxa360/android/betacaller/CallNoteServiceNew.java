@@ -1,12 +1,18 @@
 package com.doxa360.android.betacaller;
 
 import android.app.Service;
+<<<<<<< HEAD
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.support.v8.renderscript.Byte4;
+=======
+import android.content.Intent;
+import android.graphics.PixelFormat;
+import android.os.IBinder;
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -27,17 +33,23 @@ import com.doxa360.android.betacaller.model.CallNote;
 import com.doxa360.android.betacaller.model.Parse_Contact;
 import com.doxa360.android.betacaller.model.User;
 import com.doxa360.android.betacaller.model.oldCallNote;
+<<<<<<< HEAD
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.squareup.picasso.Picasso;
 
+<<<<<<< HEAD
 import com.rockerhieu.emojicon.EmojiconEditText;
 import com.rockerhieu.emojicon.EmojiconTextView;
 
 import java.util.ArrayList;
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
 import java.util.List;
 
 import retrofit2.Call;
@@ -52,6 +64,7 @@ public class CallNoteServiceNew extends Service {
     private static final String TAG = CallNoteServiceNew.class.getSimpleName();
     private WindowManager windowManager;
     private ImageView close;
+<<<<<<< HEAD
     private static RelativeLayout chatheadView;
     private FrameLayout content;
     private LayoutInflater inflater;
@@ -60,6 +73,12 @@ public class CallNoteServiceNew extends Service {
     private byte[] noteString;
     private Context mContext;
     private  HollaNowSharedPref mSharePref;
+=======
+    private RelativeLayout chatheadView;
+    private FrameLayout content;
+    private LayoutInflater inflater;
+    private boolean isHollaNowUser = false;
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -67,12 +86,18 @@ public class CallNoteServiceNew extends Service {
         return null;
     }
 
+<<<<<<< HEAD
     String callerId, callerUserName, callerEmail, callerName,callerName1, callerNumber, callerPhoto, callNote, phoneNumber;
     private ImageView mCallerPhoto;
     private static TextView mCallerName;
     private static EmojiconTextView mCallNote;
     private static TextView mCallerTag;
 
+=======
+    String callerId, callerUserName, callerEmail, callerName, callerNumber, callerPhoto, callNote, phoneNumber;
+    private ImageView mCallerPhoto;
+    private TextView mCallerName, mCallNote;
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
 
 //    @Override
 //    public int onStartCommand(Intent intent, int flags, int startId) {
@@ -94,6 +119,7 @@ public class CallNoteServiceNew extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+<<<<<<< HEAD
         i = 0;
         Log.e(TAG, "Problem 1: "+phoneNumber);
         windowManager = (WindowManager)getSystemService(Service.WINDOW_SERVICE);
@@ -101,15 +127,26 @@ public class CallNoteServiceNew extends Service {
         inflater = LayoutInflater.from(getApplicationContext());
         mDbHelper = new HollaNowDbHelper(getApplicationContext());
         mSharePref = new HollaNowSharedPref(getApplicationContext());
+=======
+
+        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+//        inflater = (LayoutInflater)getSystemService(LAYOUT_INFLATER_SERVICE);
+        inflater = LayoutInflater.from(getApplicationContext());
+        mDbHelper = new HollaNowDbHelper(getApplicationContext());
+
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+<<<<<<< HEAD
         Log.e(TAG, "Problem 2: "+phoneNumber);
         i++;
         if(i >= 2)
             windowManager.removeView(chatheadView);
 
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
         WindowManager.LayoutParams params = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT,
@@ -124,6 +161,7 @@ public class CallNoteServiceNew extends Service {
 
         if (intent != null) {
             phoneNumber = intent.getStringExtra(Parse_Contact.PHONE_NUMBER);
+<<<<<<< HEAD
           //  if(phoneNumber == null)
              //   phoneNumber =  CallReceiver.nos;            //CallReceiver.nos;
             Log.e(TAG, "Proble 3: "+phoneNumber);
@@ -139,6 +177,8 @@ public class CallNoteServiceNew extends Service {
             }
         }catch (NullPointerException cc){
             Log.e(TAG, "NullPointerException Started here : "+cc.getMessage());
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
         }
         Log.e(TAG, "Service started: "+phoneNumber);
 
@@ -147,6 +187,7 @@ public class CallNoteServiceNew extends Service {
 
         mCallerPhoto = (ImageView)chatheadView.findViewById(R.id.caller_photo);
         mCallerName = (TextView) chatheadView.findViewById(R.id.caller_name);
+<<<<<<< HEAD
         mCallNote = (EmojiconTextView) chatheadView.findViewById(R.id.call_note);
         mCallerTag = (TextView) chatheadView.findViewById(R.id.textView2);
 
@@ -196,6 +237,28 @@ try {
             public void onClick(View v) {
                 windowManager.removeView(chatheadView);
                 CallReceiver.number_of_calls = 0;
+=======
+        mCallNote = (TextView) chatheadView.findViewById(R.id.call_note);
+
+
+        if (mDbHelper.getContactByPhone(phoneNumber)!=null) {
+            Parse_Contact contact = mDbHelper.getContactByPhone(phoneNumber);
+            callerName = contact.getDisplayName();
+            callerPhoto = contact.getThumbnailUrl();
+        } else {
+            callerName = phoneNumber;
+        }
+        isHollaNowUser = isCallNote();
+//        updateUI();
+
+        content=(FrameLayout)chatheadView.findViewById(R.id.content);
+        content.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                windowManager.removeView(chatheadView);
+
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
 //                if (isHollaNowUser) {
 //                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
 //                    intent.putExtra(ProfileActivity.USER_ID, callerId);
@@ -206,6 +269,7 @@ try {
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                    startActivity(intent);
 //                } else {
+<<<<<<< HEAD
                 //////////////////////////////
                     Intent intent = new Intent(getApplicationContext(), ContactDetailActivity.class);
                    intent.putExtra(BetaCaller.CONTACT_PHONE, phoneNumber);
@@ -214,6 +278,14 @@ try {
                 ///////////////////////////////////
 //                }
                 stopService(new Intent(getApplicationContext(), CallNoteServiceNew.class)); // open here
+=======
+                    Intent intent = new Intent(getApplicationContext(), ContactDetailActivity.class);
+                    intent.putExtra(BetaCaller.CONTACT_PHONE, phoneNumber);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+//                }
+                stopService(new Intent(getApplicationContext(), CallNoteServiceNew.class));
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
             }
         });
         close.setOnClickListener(new View.OnClickListener() {
@@ -221,6 +293,7 @@ try {
             public void onClick(View v) {
                 windowManager.removeView(chatheadView);
                 stopService(new Intent(getApplicationContext(), CallNoteServiceNew.class));
+<<<<<<< HEAD
                 CallReceiver.number_of_calls = 0;
             }
         });
@@ -230,6 +303,12 @@ try {
 
         windowManager.addView(chatheadView, params);
         windowManager.updateViewLayout(chatheadView,params );
+=======
+            }
+        });
+
+        windowManager.addView(chatheadView, params);
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -249,6 +328,7 @@ try {
     private boolean isCallNote() {
 
         final boolean[] isCallNote = {false};
+<<<<<<< HEAD
         try {
         String phone = mSharePref.getPhoneEmoji();
         String p = "";
@@ -322,11 +402,39 @@ try {
                     String emoji = new String(Character.toChars(unicode));
                   //  callNote = note != null ? getNote1 :  getString(R.string.default_callnote)+"  "+emoji; //note.getNote();
                     callNote = note != null ? model.getCallNote().get(0).getNote() :  getString(R.string.default_callnote)+"  "+emoji; //note.getNote();
+=======
+
+        HollaNowSharedPref mSharedPref = new HollaNowSharedPref(this);
+        HollaNowApiInterface hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
+        if (MyToolBox.isNetworkAvailable(getApplicationContext())) {
+
+            Call<CallNote> call = hollaNowApiInterface.getCallNoteByPhone(phoneNumber, mSharedPref.getToken());
+            call.enqueue(new Callback<CallNote>() {
+                @Override
+                public void onResponse(Call<CallNote> call, Response<CallNote> response) {
+                    CallNote note = null;
+                    if (response.body() != null) {
+                        note = response.body();
+                    } else {
+                        Log.e(TAG, "empty note");
+                    }
+
+//                    callerUserName = note != null ? note.getUsername() : " ";
+                    callerUserName = note != null ? note.getUsername() : " ";
+//                    callerEmail = note != null ? note.getEmail() : " ";
+                    callerName = note != null ? note.getName() : phoneNumber;
+                    callerPhoto = note != null ? note.getPhoto() : null;
+                    callNote = note != null ? note.getNote() : getString(R.string.default_callnote);
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
                     updateUI();
                 }
 
                 @Override
+<<<<<<< HEAD
                 public void onFailure(Call<JsonElement> call, Throwable t) {
+=======
+                public void onFailure(Call<CallNote> call, Throwable t) {
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
 //                    Log.e(TAG, t.getMessage());
                     updateUI();
                 }
@@ -357,6 +465,7 @@ try {
         mCallerName.setText(callerName+"");
 
         if (callNote == null) {
+<<<<<<< HEAD
             int unicode = 0x1f60e;
             String emoji = new String(Character.toChars(unicode));
             String text1 = "Let's talk ";
@@ -390,6 +499,12 @@ try {
             }
            // Log.e(TAG, "IndexOutofBound Exception   " +  + " ");
             mCallNote.setText(new String(bs));
+=======
+            mCallNote.setText(R.string.default_callnote);
+        }
+        else {
+            mCallNote.setText(callNote);
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
         }
 
 

@@ -1,20 +1,32 @@
 {
   "project_info": {
+<<<<<<< HEAD
     "project_number": "20878391527",
     "firebase_url": "https://betacaller-4ea18.firebaseio.com",
     "project_id": "betacaller-4ea18",
     "storage_bucket": "betacaller-4ea18.appspot.com"
+=======
+    "project_number": "576496944779",
+    "firebase_url": "https://test-22ae2.firebaseio.com",
+    "project_id": "test-22ae2",
+    "storage_bucket": "test-22ae2.appspot.com"
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
   },
   "client": [
     {
       "client_info": {
+<<<<<<< HEAD
         "mobilesdk_app_id": "1:20878391527:android:7b65dbd1927a6858",
+=======
+        "mobilesdk_app_id": "1:576496944779:android:7b65dbd1927a6858",
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
         "android_client_info": {
           "package_name": "com.doxa360.android.betacaller"
         }
       },
       "oauth_client": [
         {
+<<<<<<< HEAD
           "client_id": "20878391527-b4c12u240bpfmhb9u7vl78isnm7skrf5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -24,12 +36,27 @@
         },
         {
           "client_id": "20878391527-hbefhselvi9insiba517iepckvosrd6j.apps.googleusercontent.com",
+=======
+          "client_id": "576496944779-k2j4ug0cif8lk8v1ss9dm6ak0lg6nrbi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.doxa360.android.betacaller",
+            "certificate_hash": "293458FCFC09551A94BE1D3F4D3744296AC0BED2"
+          }
+        },
+        {
+          "client_id": "576496944779-b1fhfb1tisohlvtfirm2d1knhdn9e5sn.apps.googleusercontent.com",
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
           "client_type": 3
         }
       ],
       "api_key": [
         {
+<<<<<<< HEAD
           "current_key": "AIzaSyCrWrg08904jRDgO-h04jwdQMiY5EOUiuE"
+=======
+          "current_key": "AIzaSyCbM360ZWNNjtrVk1YV5sIXAUsn87Bvi1M"
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
         }
       ],
       "services": {
@@ -40,7 +67,11 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
+<<<<<<< HEAD
               "client_id": "20878391527-hbefhselvi9insiba517iepckvosrd6j.apps.googleusercontent.com",
+=======
+              "client_id": "576496944779-b1fhfb1tisohlvtfirm2d1knhdn9e5sn.apps.googleusercontent.com",
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
               "client_type": 3
             }
           ]

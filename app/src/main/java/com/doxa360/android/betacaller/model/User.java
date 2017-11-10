@@ -54,12 +54,15 @@ public class User implements Parcelable {
     private float mDistance;
     @SerializedName("token")
     private String mToken;
+<<<<<<< HEAD
     @SerializedName("photo2")
     private String mProfilePhoto2;
     @SerializedName("textphoto2")
     private String mPhotoText;
     @SerializedName("color")
     private String mTextColor;
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
 
 
     public User() {
@@ -208,6 +211,7 @@ public class User implements Parcelable {
     public String getProfilePhoto() {
         return mProfilePhoto;
     }
+<<<<<<< HEAD
     public String getProfilePhoto2(){
         return mProfilePhoto2;
     }
@@ -227,15 +231,20 @@ public class User implements Parcelable {
     public void setTextPhoto(String photoText){
         mPhotoText = photoText;
     }
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
 
     public void setProfilePhoto(String profilePhoto) {
         mProfilePhoto = profilePhoto;
     }
 
+<<<<<<< HEAD
     public void setmProfilePhoto2(String profilePhoto){
         mProfilePhoto2 = profilePhoto;
     }
 
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
     public String getDeviceId() {
         return mDeviceId;
     }
@@ -289,7 +298,10 @@ public class User implements Parcelable {
         mName = in.readString();
         mPhone = in.readString();
         mProfilePhoto = in.readString();
+<<<<<<< HEAD
         mProfilePhoto2 = in.readString();
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
         mAddress = in.readString();
         mAbout = in.readString();
         mOccupation = in.readString();
@@ -325,7 +337,10 @@ public class User implements Parcelable {
         parcel.writeString(mName);
         parcel.writeString(mPhone);
         parcel.writeString(mProfilePhoto);
+<<<<<<< HEAD
         parcel.writeString(mProfilePhoto2);
+=======
+>>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
         parcel.writeString(mAddress);
         parcel.writeString(mAbout);
         parcel.writeString(mOccupation);
