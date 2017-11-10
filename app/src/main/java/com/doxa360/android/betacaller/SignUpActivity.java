@@ -1,6 +1,7 @@
 package com.doxa360.android.betacaller;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -10,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +25,8 @@ import com.digits.sdk.android.DigitsSession;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
 import com.doxa360.android.betacaller.model.User;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -30,16 +34,22 @@ import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 
+import android.support.v4.app.FragmentManager;
+
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -50,15 +60,29 @@ public class SignUpActivity extends AppCompatActivity {
     private TextInputLayout mUsernameLayout;
     private TextInputLayout mPasswordLayout;
     private TextInputLayout mNameLayout;
+    private TextInputLayout mEmailLayout;
     private ProgressDialog mProgressDialog;
     private Button mSignUp;
     private EditText mUserName;
-//    private TextInputLayout mEmailLayout, mPhoneLayout;
+    private EditText mEmail;
+    //    private TextInputLayout mEmailLayout, mPhoneLayout;
     private String email;
-    private String phone;
+
+    private static String token1;
 
     private HollaNowApiInterface hollaNowApiInterface;
-    private User mResponse;
+    private static User mResponse;
+    private static int presentActivity;
+    private String phone;
+    private HollaNowSharedPref share;
+    private  Runnable runnable;
+    private DigitsSession mSession;
+    private boolean flag_updateUser, flag_getUserdetails, flag_phone, flag_createuser;
+    private HollaNowSharedPref sharedPref;
+    private static int check_activity;
+    private Context mContext;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,46 +90,60 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mContext = getApplicationContext();
+        phone = null;
+        mResponse = null;
+        sharedPref = new HollaNowSharedPref(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        sharedPref.setFlagPhoneAuth(true);
         Intent intent = getIntent();
         if (intent!=null) email = intent.getStringExtra("EMAIL");
-
+        Log.e(TAG, "onCreate is here");
         hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
+
+
+
+
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Signing up ...");
 //        mPhone = (EditText)  findViewById(R.id.phone);
 //        mEmail = (EditText)  findViewById(R.id.email_address);
+        mEmail = (EditText)  findViewById(R.id.email_signup);
         mUserName = (EditText)  findViewById(R.id.user_name);
         mName = (EditText)  findViewById(R.id.full_name);
         mPassword = (EditText)  findViewById(R.id.password);
 //        mEmailLayout = (TextInputLayout) findViewById(R.id.layout_email_address);
 //        mPhoneLayout = (TextInputLayout) findViewById(R.id.layout_phone);
+        mEmailLayout = (TextInputLayout) findViewById(R.id.layout_email_signup);
         mUsernameLayout = (TextInputLayout) findViewById(R.id.layout_username);
         mPasswordLayout = (TextInputLayout) findViewById(R.id.layout_password);
         mNameLayout = (TextInputLayout) findViewById(R.id.layout_full_name);
         mSignUp = (Button)  findViewById(R.id.sign_up_button);
-        mSignUp.setText("Sign up as " + email);
+        if(email != null) {
+            mSignUp.setText("Sign up as " + email);
+            mEmail.setText(email);
+        }
 
         mSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (MyToolBox.isNetworkAvailable(SignUpActivity.this)) {
-                    mProgressDialog.show();
-//                    if (!MyToolBox.isMinimumCharacters(mEmail.getText().toString().trim(), 2)) {
-//                        mEmailLayout.setError("Your email address");
-//                        mProgressDialog.dismiss();
-//                    }
-//                    else if (!MyToolBox.isEmailValid(mEmail.getText().toString().trim())) {
-//                        mEmailLayout.setError("Invalid email address");
-//                        mProgressDialog.dismiss();
-//                    } else if (!MyToolBox.isMinimumCharacters(mPhone.getText().toString().trim(), 2)) {
+                   // mProgressDialog.show();
+                    if (!MyToolBox.isMinimumCharacters(mEmail.getText().toString().trim(), 2)) {
+                        mEmailLayout.setError("Your email address");
+                       mProgressDialog.dismiss();
+                    }
+                    else if (!MyToolBox.isEmailValid(mEmail.getText().toString().trim())) {
+                        mEmailLayout.setError("Invalid email address");
+                        mProgressDialog.dismiss();
+                    }
+//                      else if (!MyToolBox.isMinimumCharacters(mPhone.getText().toString().trim(), 2)) {
 //                        mPhoneLayout.setError("Your phone number");
 //                        mProgressDialog.dismiss();
 //                    }
-                    if (!MyToolBox.isMinimumCharacters(mPassword.getText().toString().trim(), 5)) {
+                    else if (!MyToolBox.isMinimumCharacters(mPassword.getText().toString().trim(), 5)) {
                         mPasswordLayout.setError("Your password should have at least 6 characters");
                         mProgressDialog.dismiss();
                     }
@@ -117,16 +155,48 @@ public class SignUpActivity extends AppCompatActivity {
                         mName.setError("Your full name should have more characters");
                         mProgressDialog.dismiss();
                     }
+
+                   // else if(!MyToolBox.isNameWithLetters(mName.getText().toString().trim())){
+                    //    mName.setError("Name may only require letters");
+                    //    mProgressDialog.dismiss();
+                    //    Toast.makeText(SignUpActivity.this, "Error at Name field", Toast.LENGTH_LONG).show();
+                   // }
+                   // else if(!MyToolBox.isNameSpace1(mName.getText().toString().trim())){
+                   //     mName.setError("Not more than one is required");
+                   //     mProgressDialog.dismiss();
+                   //     Toast.makeText(SignUpActivity.this, "Error at Name field", Toast.LENGTH_LONG).show();
+                   // }
                     else {
                         mUsernameLayout.setErrorEnabled(false);
                         mPasswordLayout.setErrorEnabled(false);
                         mNameLayout.setErrorEnabled(false);
                         mSignUp.setEnabled(false);
+                       // phoneVerify("+2348154965498");
+
+                       // getSupportFragmentManager().beginTransaction()
+                       //         .add(R.id.fragment_phone_verify,new PhoneInputFragment())
+                          //    .commit();
+                       // Intent intent = new Intent(mContext, PhoneVerificationActivity.class);
+                       // startActivity(intent);
+
 //                        mEmailLayout.setErrorEnabled(false);
 //                        mPhoneLayout.setErrorEnabled(false);
 //                        verifyPhoneNumber(phone);
-                        createUser(email, mPassword.getText().toString(),
-                                mUserName.getText().toString(), mName.getText().toString());
+                      //  if(phone != null) {
+                        FirebaseAuth.getInstance().signOut();
+                            createUser(mEmail.getText().toString(), mPassword.getText().toString(),
+                                    mUserName.getText().toString(), mName.getText().toString());
+                     //   PhoneInputFragment callNoteBottomSheet = new PhoneInputFragment();
+                       // FragmentManager fm = getSupportFragmentManager();
+                     //   Bundle args = new Bundle();
+                      //  args.putString("EMAIL", mEmail.getText().toString());
+                       // args.putString("PASSWORD", mPassword.getText().toString());
+                       // args.putString("USERNAME", mUserName.getText().toString());
+                       // args.putString("NAME", mName.getText().toString());
+                      //  callNoteBottomSheet.setArguments(args);
+                       // callNoteBottomSheet.show(fm,"REFS");
+
+
                     }
                 } else {
                     Toast.makeText(SignUpActivity.this, "Network Error. Check your connection", Toast.LENGTH_LONG).show();
@@ -135,18 +205,54 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
-
+            ++check_activity;
+        Log.e(TAG, "onCreate is here "+check_activity);
 
     }
 
-    private void verifyPhoneNumber(String phone, final String token) {
+   /** private void verifyPhoneNumber(String phone1, String token1) {
+            sharedPref.setPhone(" ");
+
+       // Log.e(TAG, "Response 10000012 "+mResponse.getToken());
         AuthConfig.Builder authConfigBuilder = new AuthConfig.Builder()
                 .withAuthCallBack(new AuthCallback() {
+
                     @Override
                     public void success(DigitsSession session, String phoneNumber) {
                         //TODO: check phone availablity?
-                        mProgressDialog.show();
-                        getUserDetails(token, phoneNumber);
+                        Log.e(TAG, "Response 10000013 ");
+                        phone = phoneNumber;
+                        mSession = session;
+                        sharedPref.setPhoneEmoji(phoneNumber);
+                        presentActivity = 1;
+                        sharedPref.setPhone(phoneNumber);
+                        flag_phone = true;
+                       // share = new HollaNowSharedPref(getApplicationContext());
+                       // share.setPhone(phoneNumber);
+                       // mProgressDialog.show();
+                       // token1 = mResponse.getToken();
+                      //  Log.e(TAG, "Response 1006 "+token);
+                       // if(token != null) {
+                            Log.e(TAG, "Response 10000014 ");
+                        //   getUserDetails(token, phoneNumber);
+
+                         //   updateUser(mResponse, phoneNumber, token);
+                         //   saveCurrentUser(mResponse, token);
+                            Log.e(TAG, "Response 1007 ");
+                        //    goToActivity(HomeActivity.class);
+                    //    }
+                        if(phoneNumber != null  && mResponse != null) {
+                          //  getUserDetails(mResponse.getToken(), phone);
+
+                         //   updateUser(mResponse, phone, mResponse.getToken());
+                            saveCurrentUser(mResponse, mResponse.getToken());
+                            Log.e(TAG, "Response 1000000007646");
+                            goToActivity(HomeActivity.class);
+                        }
+                     //   else if(token == null){
+                    //        Toast.makeText(SignUpActivity.this, "Successful!", Toast.LENGTH_SHORT).show();
+                      //      goToActivity(HomeActivity.class);
+                      //  }
                     }
 
                     @Override
@@ -159,66 +265,15 @@ public class SignUpActivity extends AppCompatActivity {
 
         Digits.authenticate(authConfigBuilder.build());
 
-    }
-
-    private void updateUser(User user, String phoneNumber, String token) {
-        user.setPhone(phoneNumber);
-        Log.e(TAG, "user update: " + user.getName() + " - " + phoneNumber);
-        saveCurrentUser(user, token);
-        Call<User> call = hollaNowApiInterface.editUserPhone(user, token);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                Log.e(TAG, response.body().getPhone());
-                Toast.makeText(SignUpActivity.this, "Welcome " + mResponse.getName() , Toast.LENGTH_SHORT).show();
-                mProgressDialog.dismiss();
-                goToActivity(HomeActivity.class);
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(SignUpActivity.this, "Your phone was not successfully verified", Toast.LENGTH_LONG).show();
-                mProgressDialog.dismiss();
-                goToActivity(HomeActivity.class);
-            }
-        });
-
-    }
+    } **/
 
 
-    private class urlToBytes extends AsyncTask<Uri, String, byte[]> {
 
-        byte[] fileBytes;
-        Uri uri;
-        public urlToBytes(Uri uri) {
-            this.uri = uri;
-        }
 
-        @Override
-        protected byte[] doInBackground(Uri... uris) {
-            try {
-                URL aURL = new URL(uri.toString());
-                URLConnection conn = aURL.openConnection();
-                conn.connect();
-                InputStream inStream = conn.getInputStream();
-                fileBytes = IOUtils.toByteArray(inStream);
-
-            } catch (IOException e) {
-                Log.e("IMAGE", "Error getting bitmap", e);
-            }
-
-            return fileBytes;
-        }
-
-        @Override
-        protected void onPostExecute(byte[] bytes) {
-            super.onPostExecute(bytes);
-//            createUser(bytes);
-        }
-    }
-
-    private void createUser(String email, String password, String username, String name) {
+    private void createUser(final String email, final String password, final String username, final String name) {
         Log.e(TAG, ""+email+password+username+name);
+        mResponse = null;
+        // phone = null;
         User user = new User(email, password, username, name);
         Call<User> call = hollaNowApiInterface.signUpUser(user);
         Log.e(TAG, "signing up");
@@ -226,16 +281,32 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.code() == 200) {
+                    //  phone = null;
                     Log.e(TAG, "response: " + response.body().getToken() + " code: " + response.code());
                     mResponse = response.body(); // containing token
+                    mResponse.setName(name);
+                    //  flag_createuser = true;
+                    Log.e(TAG, "Response 1001");
                     mProgressDialog.dismiss();
-                    verifyPhoneNumber(phone, response.body().getToken());
+                    saveCurrentUser(mResponse, mResponse.getToken());
+
+
+                     PhoneInputFragment callNoteBottomSheet = new PhoneInputFragment();
+                     FragmentManager fm = getSupportFragmentManager();
+                     callNoteBottomSheet.show(fm,"REFS");
+
+
 //                    Toast.makeText(SignUpActivity.this, response.body().getToken()+"", Toast.LENGTH_LONG).show();
 //                    getUserDetails(response.body().getToken());
 //                        saveCurrentUser(response.body());
-//                    goToActivity(HomeActivity.class);
+                    Log.e(TAG, "Response 1000043");
+
+                    // if(phone != null) {
+
+                    // }
                 } else {
 //                    Log.e(TAG, "response: " + response.body() + " code: " + response.code());
+                    Log.e(TAG, "Response 1002");
                     Toast.makeText(SignUpActivity.this, "User with email/username exists - "+ response.body(), Toast.LENGTH_LONG).show();
                     mProgressDialog.dismiss();
                 }
@@ -243,8 +314,19 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
-                Toast.makeText(SignUpActivity.this, "The email is already taken ", Toast.LENGTH_LONG).show();
-                mProgressDialog.dismiss();
+                if(t instanceof IOException){
+                    Log.e(TAG, "Response 1002 "+t.getMessage());
+                    Toast.makeText(SignUpActivity.this, "Oops Network Error ", Toast.LENGTH_LONG).show();
+                    mProgressDialog.dismiss();
+                }
+                else if(t instanceof SocketTimeoutException){
+                    Log.e(TAG, "Response 1003 "+t.getMessage() );
+                    Toast.makeText(SignUpActivity.this, "Timeout!!", Toast.LENGTH_LONG).show();
+                    mProgressDialog.dismiss();
+                }
+                else{ Toast.makeText(SignUpActivity.this, "Oops Network Error ", Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Response 1004 "+t.getMessage());
+                    mProgressDialog.dismiss();}
             }
         });
 
@@ -278,36 +360,21 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void getUserDetails(final String token, final String phone) {
-        Call<User> call = hollaNowApiInterface.getUserDetails(token);
-        call.enqueue(new Callback<User>() {
-            @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-                if (response.code() == 200) {
-//                    Log.e(TAG, "response: " + response.body().getToken() + " code: " + response.code());
-//                    Toast.makeText(SignUpActivity.this, "Welcome" + response.body().getName(), Toast.LENGTH_SHORT).show();
-                    User user = response.body();
-                    user.setToken(token);
-                    saveCurrentUser(user, token); //shared pref
-                    updateUser(user, phone, token);
-                } else {
-                    Toast.makeText(SignUpActivity.this, "Oops! Could not log in. Try again", Toast.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-//                Log.e(TAG, "user details failed: " + t.getMessage());
-                Toast.makeText(SignUpActivity.this, "Wrong Username/Password", Toast.LENGTH_LONG).show();
-//                mProgressDialog.dismiss();
-            }
-        });
-    }
+
+
+
+
+
 
     private void saveCurrentUser(User user, String token) {
         HollaNowSharedPref sharedPref = new HollaNowSharedPref(this);
         sharedPref.setCurrentUser(user.toString());
         sharedPref.setToken(token);
+        sharedPref.setPhone(phone);
+        sharedPref.setPhoneEmoji(user.getPhone());
+        sharedPref.setFlagContacts("BackUp");
+        Log.e(TAG, "Response 1009 ");
     }
 
 
@@ -318,5 +385,73 @@ public class SignUpActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        Log.e(TAG, "Onresume here ");
+     /**   if(mResponse != null && phone != null) {
+            mProgressDialog.show();
+            Log.e(TAG, "Onresume here at phone an mresponse == null ");
+           // check_activity = 0;
+            if (flag_updateUser)
+                updateUser(mResponse, phone, mResponse.getToken());
+            else if (flag_getUserdetails) {
+                getUserDetails(mResponse.getToken(), phone);
+                saveCurrentUser(mResponse, mResponse.getToken());
+                Toast.makeText(SignUpActivity.this, "Welcome " + mResponse.getName(), Toast.LENGTH_SHORT).show();
+                mProgressDialog.dismiss();
+                goToActivity(HomeActivity.class);
+            }
+        }else if(sharedPref.getPhone().equals(" ") && flag_phone) {
+            flag_phone = false;
+            Log.e(TAG, "Onresume here flag_phone");
+            check_activity = 0;
+            verifyPhoneNumber(phone, "");
+        }
+        else if(mResponse == null && flag_createuser){
+            flag_createuser = false;
+           // check_activity = 0;
+           // sharedPref = new HollaNowSharedPref(this);
+            mResponse = sharedPref.getCurrentUser();
+            Log.e(TAG, "Respone is null");
+            mProgressDialog.dismiss();
+        if(phone == null) {
+            phone = sharedPref.getPhone();
+            getUserDetails(mResponse.getToken(), phone);
+            updateUser(mResponse, phone, mResponse.getToken());
+        }
+            saveCurrentUser(mResponse, mResponse.getToken());
+          //  goToActivity(HomeActivity.class);
+        }else if(check_activity > 1){
+            check_activity = 0;
+            Log.e(TAG, "check_activity "+check_activity);
+          //  goToActivity(HomeActivity.class);
+        }
+        ++check_activity; **/
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        Log.e(TAG, "OnDestroy here ");
+
+       // mResponse = null;
+    }
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.e(TAG, "On Stop here");
+      //  if(mResponse != null && phone == null) {
+       //     verifyPhoneNumber(phone, mResponse.getToken());
+       // }
+       // mResponse = null;
+    }
+
+    @Override
+    public void onPause(){
+        super.onPause();
+        Log.e(TAG, "OnPause here");
     }
 }

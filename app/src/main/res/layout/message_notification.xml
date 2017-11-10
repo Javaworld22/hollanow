@@ -1,7 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="2dp"
+    android:layout_margin="2dp">
 
-</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="1dp">
+
+        <com.google.android.gms.ads.NativeExpressAdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView4"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            ads:adUnitId="ca-app-pub-4194808928301689/9987324135"
+            ads:adSize="280x150"></com.google.android.gms.ads.NativeExpressAdView>
+
+
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="20dp">
+
+        <ImageView android:layout_width="@dimen/com_facebook_profilepictureview_preset_size_small"
+                   android:layout_height="@dimen/com_facebook_profilepictureview_preset_size_small"
+                   android:id="@+id/notification_icon"
+                   android:layout_alignParentStart="true"
+                   android:src="@drawable/ic_notification_state"
+                   android:tint="@android:color/darker_gray"/>
+
+
+        <TextView android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/message_head"
+                  android:paddingStart="20dp"
+                  android:textStyle="bold"
+                  tools:text="Message Head"
+                  android:layout_alignParentTop="true"
+                  android:layout_toEndOf="@+id/notification_icon"/>
+
+
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/message_body"
+                  android:layout_marginStart="8dp"
+                  android:layout_toEndOf="@+id/notification_icon"
+                  android:layout_below="@+id/message_head"/>
+
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/notification_date"
+                  android:layout_marginStart="8dp"
+                  android:layout_below="@+id/message_body"
+                  android:layout_alignParentEnd="true"/>
+
+
+
+
+    </RelativeLayout>
+
+        <ImageView android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:id="@+id/notification_closebutton"
+                   android:paddingLeft="40dp"
+                   android:paddingBottom="20dp"
+                   android:src="@drawable/ic_close_black_24dp"
+                   android:layout_alignParentTop="true"
+                   android:layout_alignParentEnd="true"/>
+
+
+
+
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

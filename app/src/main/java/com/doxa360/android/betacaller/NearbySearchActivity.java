@@ -18,6 +18,8 @@ import com.doxa360.android.betacaller.adapter.NearbyUserAdapter;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
 import com.doxa360.android.betacaller.model.User;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -46,6 +48,9 @@ public class NearbySearchActivity extends AppCompatActivity {
     private boolean locationOn = false;
     private TextView mEmpty;
     private HollaNowApiInterface hollaNowApiInterface;
+
+    private NativeExpressAdView adView;
+
 
     int mDistKm = 1;
 

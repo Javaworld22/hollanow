@@ -9,17 +9,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.doxa360.android.betacaller.BetaCaller;
+import com.doxa360.android.betacaller.HollaNowApiClient;
+import com.doxa360.android.betacaller.HollaNowApiInterface;
+import com.doxa360.android.betacaller.ListSalesMarket;
 import com.doxa360.android.betacaller.NearbySearchActivity;
 import com.doxa360.android.betacaller.ProfileActivity;
 import com.doxa360.android.betacaller.R;
+import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
+import com.doxa360.android.betacaller.model.SalesMarket;
 import com.doxa360.android.betacaller.model.User;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.parse.ParseGeoPoint;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import com.google.android.gms.ads.NativeExpressAdView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Apple on 09/01/16.
@@ -33,14 +50,42 @@ public class NearbyUserAdapter extends RecyclerView.Adapter<NearbyUserAdapter.Co
     private float mLat;
     private float mLng;
     boolean fullWidth;
+    List <String>mLastPicture;
+    final String TAG = "NearbyUserAdapter";
+    HollaNowSharedPref mSharedPref;
+    String market;
+    static  int counter = 0;
+    int color;
+   // NativeExpressAdView mAdView ;
 
-    public NearbyUserAdapter(List<User> users, float lat, float lng, Context context) {
+
+    public NearbyUserAdapter(List<User> users, float lat, float lng, Context context) {//List <String>lastPicture
         mUsers = users;
         mContext = context;
         mLat = lat;
         mLng = lng;
         fullWidth = false;
         mLayoutInflater = LayoutInflater.from(context);
+       // mLastPicture = lastPicture;
+        mSharedPref = new HollaNowSharedPref(mContext);
+       // market = new ArrayList<String>();
+      //  for(int i = 0; i < mLastPicture.size();i++){
+        //    retrieveSalesPictures(mLastPicture.get(i), i);
+        //    Log.e(TAG, "Iteration :  "+ mLastPicture.get(i)+" "+market+"  "+i);
+      //  }
+
+        for(int i= 0; i < users.size()-1;i++){
+
+                Log.e(TAG, "From NearbyUserAdapter " + i);
+                Log.e(TAG, "From NearbyUserAdapter " + users.get(i).getProfilePhoto());
+                Log.e(TAG, "From NearbyUserAdapter " + users.get(i).getProfilePhoto2());
+                Log.e(TAG, "From NearbyUserAdapter " + users.get(i).getTextPhoto());
+                Log.e(TAG, "From NearbyUserAdapter " + users.get(i).getUsername());
+            Log.e(TAG, "From NearbyUserAdapter " + users.get(i).getOccupation());
+
+        }
+
+
     }
 
     public NearbyUserAdapter(List<User> users, float lat, float lng, NearbySearchActivity nearbySearchActivity, boolean fullWidth) {
@@ -55,19 +100,32 @@ public class NearbyUserAdapter extends RecyclerView.Adapter<NearbyUserAdapter.Co
     public class ContactViewHolder extends RecyclerView.ViewHolder {
 
         TextView mDisplayName;
-        TextView mPhoneNumber;
-        TextView mLastSeen;
+        //TextView mPhoneNumber;
+       // TextView mLastSeen;
         TextView mDistanceAwayKm;
         ImageView mPhoto;
+        TextView mOccupation;
+        TextView mTextPhotot;
+       // NativeExpressAdView adView ;
+
 
         public ContactViewHolder(View itemView) {
             super(itemView);
 
             mDisplayName = (TextView) itemView.findViewById(R.id.displayname);
-            mPhoneNumber = (TextView) itemView.findViewById(R.id.phone);
+           // mPhoneNumber = (TextView) itemView.findViewById(R.id.phone);
             mPhoto = (ImageView) itemView.findViewById(R.id.photo);
-            mLastSeen = (TextView) itemView.findViewById(R.id.address);
+           // mLastSeen = (TextView) itemView.findViewById(R.id.address);
             mDistanceAwayKm = (TextView) itemView.findViewById(R.id.distance_away);
+            mOccupation = (TextView) itemView.findViewById(R.id.occupation);
+            mTextPhotot = (TextView) itemView.findViewById(R.id.text_image_search);
+
+            //adView = (NativeExpressAdView) itemView.findViewById(R.id.adView2);
+           // adView.setAdUnitId("ca-app-pub-3940256099942544/2793859312");
+           // adView.setAdSize(new AdSize(300,300));
+          //  mAdView = adView;
+
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -75,7 +133,7 @@ public class NearbyUserAdapter extends RecyclerView.Adapter<NearbyUserAdapter.Co
                     User user = mUsers.get(getPosition());
                     if (user!=null) {
                         Intent intent = new Intent(mContext, ProfileActivity.class);
-                        intent.putExtra(BetaCaller.USER_PROFILE, user);
+                        intent.putExtra(BetaCaller.USER_PROFILE, user);  //////////////////////////
                         Log.e("Nearby adapter", user.getName()+user.getEmail()+"");
                         mContext.startActivity(intent);
                     } else {
@@ -101,32 +159,62 @@ public class NearbyUserAdapter extends RecyclerView.Adapter<NearbyUserAdapter.Co
         return new ContactViewHolder(view);
     }
 
+
+
     @Override
     public void onBindViewHolder(ContactViewHolder holder, int position) {
         User user = mUsers.get(position);
+        String textPhoto = "";
         mHolder = holder;
+        //textPhoto = retrieveSalesPictures(user.getUsername(),position);
+       // if(textPhoto == null)
+        //    textPhoto = "";
 
         if (user!=null) {
+
             holder.mDisplayName.setText(user.getName());
-            holder.mPhoneNumber.setText(user.getPhone());
+            holder.mTextPhotot.setText(user.getTextPhoto());
+            try {
+                 color = Integer.parseInt(user.getColor());
+            }catch(NumberFormatException ex){
+                Log.e(TAG, "NumberFormat Exception in getColor "+ ex.getMessage());
+            }
+            holder.mTextPhotot.setTextColor(color);
+           // holder.mPhoneNumber.setText(user.getPhone());
+            holder.mOccupation.setText(user.getOccupation());
             String lastSeen = user.getLastSeen();
             if (lastSeen!=null) {
                 lastSeen = lastSeen.replace("null,", "");
-                holder.mLastSeen.setText(lastSeen);
+                //holder.mLastSeen.setText(lastSeen);
             }
 
             if (user.getLat()!=0 & user.getLng() != 0) {
-//                String kmAway = String.format(Locale.getDefault(), "%.2f", user.getDistance()) + " km away";
+               // String kmAway = String.format(Locale.getDefault(), "%.2f", user.getDistance()) + " km away";
                 holder.mDistanceAwayKm.setText(user.getDistance());
             }
 
 
-            if (user.getProfilePhoto() != null) {
+            if(user.getProfilePhoto2() != null) {
+                Picasso.with(mContext)
+                        .load(BetaCaller.SALES_URL+user.getProfilePhoto2())
+                        .placeholder(R.drawable.wil_profile)
+                        .error(R.drawable.wil_profile)
+                        .into(holder.mPhoto);
+               // Log.e(TAG, "From NearbyUserAdapter "+ position);
+               // Log.e(TAG, "From NearbyUserAdapter "+ user.getTextPhoto());
+               // Log.e(TAG, "From NearbyUserAdapter "+ user.getProfilePhoto2());
+                //textPhoto = "";
+            }
+
+            else if(user.getProfilePhoto() != null) {
                 Picasso.with(mContext)
                         .load(BetaCaller.PHOTO_URL+user.getProfilePhoto())
                         .placeholder(R.drawable.wil_profile)
                         .error(R.drawable.wil_profile)
                         .into(holder.mPhoto);
+              //  Log.e(TAG, "From NearbyUserAdapter "+ position);
+              //  Log.e(TAG, "From NearbyUserAdapter "+ user.getTextPhoto());
+              //  Log.e(TAG, "From NearbyUserAdapter "+ user.getProfilePhoto());
             } else {
                 Picasso.with(mContext)
                         .load(R.drawable.wil_profile)
@@ -135,15 +223,22 @@ public class NearbyUserAdapter extends RecyclerView.Adapter<NearbyUserAdapter.Co
                         .into(holder.mPhoto);
             }
         } else {
-            holder.mDisplayName.setText("Search for people and \n businesses near you");
-            holder.mPhoneNumber.setText("");
-            holder.mLastSeen.setText("");
-            holder.mDistanceAwayKm.setText("");
+            holder.mDisplayName.setText("Search for people and \n businesses near you. \n Its strictly for those who" +
+                    " filled occupation or industry. ");
+           // holder.mPhoneNumber.setText("");
+             // holder.mLastSeen.setText("");
+            holder.mTextPhotot.setText("");
+          /**  holder.mDistanceAwayKm.setText("");
             Picasso.with(mContext)
                     .load(R.drawable.wil_profile)
                     .placeholder(R.drawable.wil_profile)
                     .error(R.drawable.wil_profile)
-                    .into(holder.mPhoto);
+                    .into(holder.mPhoto); **/
+
+
+          //  AdRequest request = new AdRequest.Builder().build();
+          //  holder.adView.loadAd(request);
+
 
         }
 
@@ -156,6 +251,57 @@ public class NearbyUserAdapter extends RecyclerView.Adapter<NearbyUserAdapter.Co
         else
             return 0;
     }
+
+
+    public String retrieveSalesPictures(String username, final int count){
+      //  Log.e("EDITED_USER=> ", currentUser.toString());
+        HollaNowApiInterface hollaNowApiInterface = HollaNowApiClient.getClient().create(HollaNowApiInterface.class);
+        Call<JsonElement> call = hollaNowApiInterface.receiveSalesPictures(username);
+        call.enqueue(new Callback<JsonElement>() {
+            @Override
+            public void onResponse(Call<JsonElement> call, Response<JsonElement> response) {
+                if (response.code() == 200) {
+                    Log.e(TAG, "success "+ response.body().toString());
+                  //  Log.e(TAG, "success "+ response.body().toString());
+                  //  Log.e(TAG, "success "+ response.body().toString());
+                    // Log.e(TAG, "success "+ response.body().toString()+" "+response.body().getAsString());
+                    ListSalesMarket sales =  new GsonBuilder().create().fromJson(response.body().toString(),ListSalesMarket.class);
+                    int number_of_pictures = sales.getSalesMarket().size();
+                    int lastIndex = number_of_pictures - 1;
+                    // market.add(sales.getSalesMarket().get(lastIndex).getPhoto());
+                    if(lastIndex != -1)
+                     market = sales.getSalesMarket().get(lastIndex).getPhoto();
+                    counter = count;
+                    mUsers.get(count).setmProfilePhoto2(market);
+                    Log.e(TAG, "success "+ market);
+                   // Log.e(TAG, "success "+ market);
+                    //return market;
+//                    onBackPressed();
+                } else {
+                    Log.e(TAG, "error: " + response.code() + response.message());
+                    Log.e(TAG, "success "+ response.body().toString());
+                    Log.e(TAG, "success "+ response.body().toString());
+                    Log.e(TAG, "success "+ response.body().toString());
+                    Toast.makeText(mContext, "Error updating Sales", Toast.LENGTH_SHORT).show();
+                    market = "";
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonElement> call, Throwable t) {
+                Log.e(TAG, "failed: "+t.getMessage());
+                Log.e(TAG, "failed: "+t.getMessage());
+                Log.e(TAG, "failed: "+t.getMessage());
+                Log.e(TAG, "failed: "+t.getMessage());
+                Toast.makeText(mContext, "Network error. Try again", Toast.LENGTH_LONG).show();
+                market = "";
+            }
+        });
+            return market;
+    }
+
+
 
 
 

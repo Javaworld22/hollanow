@@ -8,4 +8,9 @@
     <dimen name="toolbar_image_height">256dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="app_bar_height_256">256dp</dimen>
+
+
+
+        <dimen name="google_1x">8dp</dimen>
+
 </resources>

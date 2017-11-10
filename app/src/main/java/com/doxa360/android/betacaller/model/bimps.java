@@ -1,42 +1,62 @@
 package com.doxa360.android.betacaller.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 /**
  * Created by user on 7/28/2017.
  */
 
-public class NotificationModel {
+public class bimps implements Parcelable {
 
     @SerializedName("id")
     private int mId;
-    @SerializedName("title")
+    @SerializedName("head")
     private String mHead_notification;
-    @SerializedName("message")
+    @SerializedName("body")
     private String mNotification;
-    @SerializedName("create_at")
-    private String mDate;
+    @SerializedName("counter")
+    private int mCounter;
+    @SerializedName("created_at")
+    private  String mDate1;
 
-    public NotificationModel() {
+
+
+    public bimps() {
 
     }
 
-    public  NotificationModel(String head_notification, String notification, String date){
+    public bimps(String head_notification, String notification, int counter,String date){
         mHead_notification = head_notification;
         mNotification = notification;
-        mDate = date;
+        mDate1 = date;
+        mCounter = counter;
     }
 
-    public void setHeadNotification(String mHead_notification) {
-        mHead_notification = mHead_notification;
+   // public List<String> getNotification_(){
+   //     return mDate1;
+   // }
+
+
+    public void setHeadNotification(String Head_notification) {
+        mHead_notification = Head_notification;
     }
 
-    public void setNotification(String mNotification) {
-        mNotification = mNotification;
+    public void setNotification(String Notification) {
+        mNotification = Notification;
     }
 
-    public void setDate(String date) {
-        mDate = date;
+    public void setCounter(int counter) {
+        mCounter = counter;
+    }
+
+    public void setCreatedDate(String date1) {
+        mDate1 = date1;
     }
 
     public String getHeadNotification(){
@@ -47,7 +67,51 @@ public class NotificationModel {
         return mNotification;
     }
 
-    public String getDate(){
-        return mDate;
+    public int getCounter(){
+        return mCounter;
+    }
+
+    public String getCreatedDate(){
+        return mDate1;
+    }
+
+    @Override
+    public String toString() {
+        return "id = "+mId+" Head= "+mHead_notification+" Body = "+mNotification;
+    }
+
+    public static final Creator<bimps> CREATOR = new Creator<bimps>() {
+        @Override
+        public bimps createFromParcel(Parcel in) {
+            return new bimps(in);
+        }
+
+        @Override
+        public bimps[] newArray(int size) {
+            return new bimps[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    protected bimps(Parcel in) {
+        mId = in.readInt();
+        mHead_notification = in.readString();
+        mNotification = in.readString();
+        mCounter = in.readInt();
+
+
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeString(mHead_notification);
+        parcel.writeString(mNotification);
+        parcel.writeInt(mCounter);
+
     }
 }

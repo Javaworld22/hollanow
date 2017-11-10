@@ -15,8 +15,8 @@ import io.fabric.sdk.android.Fabric;
 /**
  * Created by Apple on 12/04/16.
  */
-public class BetaCaller extends Application {
-
+public class BetaCaller extends android.support.multidex.MultiDexApplication { //Application
+//project Id hollanow1022
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "qD7VMOEhMBMrUz7uT2wnMm78J";
     private static final String TWITTER_SECRET = "aCcLnHZwQqbBv5ljQZ7UB55IcBNmHteZAGDb3lJ4AHNTw6vIZN";
@@ -28,7 +28,7 @@ public class BetaCaller extends Application {
     public static final String SIGN_IN_USER_API = "doxa360/api/v1/user/authenticate_username"; //method = post; params = username,password
     public static final String GET_USER_DETAILS_API = "doxa360/api/v1/user/authenticate"; //method = get; params = token
     public static final String EDIT_PROFILE_API = "doxa360/api/v1/user/edit_profile";
-    public static final String EDIT_PHONE_API = "doxa360/api/v1/user/edit_profile";
+    public static final String EDIT_PHONE_API = "doxa360/api/v1/user/edit_profile"; //edit_profile
 
     public static final String SEARCH_PHONE_API = "doxa360/api/v1/user/search_phone";
     public static final String SEARCH_API = "doxa360/api/v1/user/search";
@@ -50,6 +50,8 @@ public class BetaCaller extends Application {
     public static final int LOCATION_DISTANCE_MEDIUM = 2;
     public static final int LOCATION_DISTANCE_FARTHER = 4;
     public static final String PHOTO_URL = "http://hollanow.com/assets/photos/users/";
+    public static final String FILEURL = "http://hollanow.com/assets/photos/contact/";
+    public static final String SALES_URL = "http://hollanow.com/assets/photos/marketingpix/";
     public static final String USER_PROFILE = "USER_PROFILE";
     public static final String GET_USER_BY_INDUSTRY_API = "doxa360/api/v1/user/industry";
     public static final String INDUSTRY = "industry";
@@ -61,9 +63,15 @@ public class BetaCaller extends Application {
     public static final String USERS_BY_CONTACTS = "doxa360/api/v1/user/contacts";
     public static final String CONTACT_LIST = "contacts";
     public static final String PHONE = "phone";
+    public static final String NOTIFICATION_NUMBER = "notify_number";
     public static final String PASSWORD_RESET = "http://hollanow.com/password/reset";
     public static final String SAVE_CALLNOTE = "doxa360/api/v1/user/callnote/create";
-
+    public static final String NOTIFICATION ="doxa360/api/v1/user/notificationpage/sent";
+    public static final String CONTACT_MANAGEMENT ="doxa360/api/v1/user/sent";
+    public static final String CALLNOTE ="doxa360/api/v1/user/callnote/create";
+    public static final String RETRIEVE_CONTACT = "doxa360/api/v1/user/get_stored_contacts";
+    public static final String SALES_PICTURES = "doxa360/api/v1/user/store_marketing";
+    public static final String RETRIEVE_SALES_PICTURES = "doxa360/api/v1/user/get_stored_pictures";
 
     @Override
     public void onCreate() {

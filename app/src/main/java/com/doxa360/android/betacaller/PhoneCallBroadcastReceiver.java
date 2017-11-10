@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -37,6 +38,7 @@ public class PhoneCallBroadcastReceiver extends BroadcastReceiver {
                         state = TelephonyManager.CALL_STATE_OFFHOOK;
                     } else if (stateStr.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
                         state = TelephonyManager.CALL_STATE_RINGING;
+                        //Toast.makeText(context,"INCOMING CALL STATE", Toast.LENGTH_SHORT).show();
                     }
                 }
 

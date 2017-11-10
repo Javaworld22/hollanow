@@ -16,19 +16,19 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+  private static final String TAG = MainActivity.class.getSimpleName();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
 
 //        FacebookSdk.sdkInitialize(getApplicationContext());
 //        AppEventsLogger.activateApp(this);
 
-        IntentFilter intentFilter = new IntentFilter(PhoneCallBroadcastReceiver.INCOMING_CALL);
-        IntentFilter endIntentFilter = new IntentFilter(PhoneCallBroadcastReceiver.INCOMING_CALL_ENDED);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mPhoneReceiver, intentFilter);
+    IntentFilter intentFilter = new IntentFilter(PhoneCallBroadcastReceiver.INCOMING_CALL);
+    IntentFilter endIntentFilter = new IntentFilter(PhoneCallBroadcastReceiver.INCOMING_CALL_ENDED);
+    LocalBroadcastManager.getInstance(this).registerReceiver(mPhoneReceiver, intentFilter);
 //        LocalBroadcastManager.getInstance(this).registerReceiver(mEndPhoneReceiver, endIntentFilter);
 
 //        HollaNowDbHelper dbHelper = new HollaNowDbHelper(this);
@@ -49,31 +49,31 @@ public class MainActivity extends AppCompatActivity {
 //
 //        handler.postDelayed(runnable, 1000);
 
-        HollaNowSharedPref sharedPref = new HollaNowSharedPref(this);
-        if (sharedPref.getCurrentUser() != null) {
-            goToActivity(HomeActivity.class);
-        }else{
-            goToActivity(SlideIntro.class);
-        }
-
-
+    HollaNowSharedPref sharedPref = new HollaNowSharedPref(this);
+    if (sharedPref.getCurrentUser() != null) {
+      goToActivity(HomeActivity.class);
+    }else{
+      goToActivity(SlideIntro.class);
     }
 
-    private void goToActivity(Class<?> activityClass) {
-        Intent intent = new Intent(this, activityClass);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
 
-    String phoneNumber;
-    private BroadcastReceiver mPhoneReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            phoneNumber = intent.getStringExtra(Parse_Contact.PHONE_NUMBER);
-            getCallNote(phoneNumber);
-        }
-    };
+  }
+
+  private void goToActivity(Class<?> activityClass) {
+    Intent intent = new Intent(this, activityClass);
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    startActivity(intent);
+  }
+
+  String phoneNumber;
+  private BroadcastReceiver mPhoneReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+      phoneNumber = intent.getStringExtra(Parse_Contact.PHONE_NUMBER);
+      getCallNote(phoneNumber);
+    }
+  };
 //    private BroadcastReceiver mEndPhoneReceiver = new BroadcastReceiver() {
 //        @Override
 //        public void onReceive(Context context, Intent intent) {
@@ -83,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //    };
 
-    private void getCallNote(final String phoneNumber) {
-        final Intent intent = new Intent(getApplicationContext(), CallNoteService.class);
-        intent.putExtra(oldCallNote.CALLER_NUMBER, phoneNumber);
-        Log.e(TAG, "mainactivity call note: " + phoneNumber);
-        startService(intent);
+  private void getCallNote(final String phoneNumber) {
+    final Intent intent = new Intent(getApplicationContext(), CallNoteService.class);
+    intent.putExtra(oldCallNote.CALLER_NUMBER, phoneNumber);
+    Log.e(TAG, "mainactivity call note: " + phoneNumber);
+    startService(intent);
 //        if (MyToolBox.isNetworkAvailable(MainActivity.this)) {
 //            ParseQuery<CallNote> query = CallNote.getQuery();
 //            query.whereEqualTo("callerNumber", phoneNumber);
@@ -130,5 +130,5 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 
-    }
+  }
 }

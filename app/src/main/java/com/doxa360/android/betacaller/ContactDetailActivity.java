@@ -18,19 +18,33 @@ import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.content.Context;
 
 import com.doxa360.android.betacaller.adapter.PhoneCallLogAdapter;
 import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
+import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.model.Parse_Contact;
 import com.doxa360.android.betacaller.model.PhoneCallLog;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
+
+
+import com.rockerhieu.emojicon.EmojiconEditText;
+import com.rockerhieu.emojicon.EmojiconGridFragment;
+import com.rockerhieu.emojicon.EmojiconTextView;
+import com.rockerhieu.emojicon.EmojiconsFragment;
+import com.rockerhieu.emojicon.emoji.Emojicon;
+
 
 import java.util.List;
 
@@ -49,6 +63,12 @@ public class ContactDetailActivity extends AppCompatActivity {
     String contactThumbnail;
     HollaNowDbHelper mDbHelper;
     private PhoneCallLogAdapter mAdapter;
+    private EditText noteEditText;
+    String mCurrentUser,mCurrentUser1;
+    private NativeExpressAdView mAdView ;
+
+
+    //CallNoteBottomSheet callNoteBottomSheet1;
 
 
     @Override
@@ -59,17 +79,26 @@ public class ContactDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+       // noteEditText = CallNoteBottomSheet.noteEditText;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //do call note here...
-                CallNoteBottomSheet callNoteBottomSheet = new CallNoteBottomSheet();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                Bundle args = new Bundle();
-                args.putString(Parse_Contact.PHONE_NUMBER, contactPhone);
-                callNoteBottomSheet.setArguments(args);
-                callNoteBottomSheet.show(fragmentManager,"CALL_NOTE");
-//                placeCall(contactPhone);
+
+                    CallNoteBottomSheet callNoteBottomSheet = new CallNoteBottomSheet();
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    Bundle args = new Bundle();
+               // callNoteBottomSheet1 = callNoteBottomSheet;
+                    args.putString("PHONE_NUMBER", contactPhone);
+                Log.e(TAG,"aT FAB check contact phone" +contactPhone);
+                    callNoteBottomSheet.setArguments(args);
+                    callNoteBottomSheet.show(fragmentManager, "CALL_NOTE");
+                //Context context = getApplicationContext();
+              // Intent i = new Intent(ContactDetailActivity.this,CallNoteBottomSheet.class);
+              //  startActivity(i);
+
+
+//                placeCall(contactPhone);// not among
             }
         });
 
@@ -98,6 +127,8 @@ public class ContactDetailActivity extends AppCompatActivity {
         layoutManager.setAutoMeasureEnabled(true);
         mCallHistoryRecyclerView.setLayoutManager(layoutManager);
 
+        final HollaNowSharedPref pref = new HollaNowSharedPref(this);
+
 
         toolbar.setTitle(contactName);
         getSupportActionBar().setTitle(contactName);
@@ -112,9 +143,22 @@ public class ContactDetailActivity extends AppCompatActivity {
         mHollanowInvite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendSMSIntent(contactPhone, "Hello friends, I now use the HollaNow app. So whenever you want to talk to me, just holla @"+ParseUser.getCurrentUser().getUsername()+ ". It\'s cooler.");
+               // ParseQuery<ParseUser> query = ParseUser.getQuery();
+
+
+
+                // Log.e(TAG, "ParseUser: "+ParseUser.getCurrentUser().getUsername().toString());
+                sendSMSIntent(contactPhone, "Hello friends, I now use the HollaNow app. So whenever you want to talk to me, just holla @"+/**ParseUser.getCurrentUser().getUsername()**/ pref.getUsername().toString().trim()+ ". It\'s cooler. link  "+"http://bit.ly/2rDEq84");
             }
         });
+
+        mAdView = (NativeExpressAdView) findViewById(R.id.adView6) ;
+
+        AdRequest request = new AdRequest.Builder()
+                   //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)  //  bbb0eb0fce7bf3a8
+                 //  .addTestDevice("E0A7012BF382436CB461659B1F229E03")    // "E0A7012BF382436CB461659B1F229E03"
+                .build();
+        mAdView .loadAd(request);
 
     }
 
@@ -143,8 +187,9 @@ public class ContactDetailActivity extends AppCompatActivity {
         } else {
             Picasso.with(this).load(R.drawable.wil_profile).into(mContactPhoto);
         }
-
-        if (!getHollanowDetails(contactPhone)) {
+        boolean hollaDet = getHollanowDetails(contactPhone);
+        Log.e(TAG, "getHollanowDetails "+hollaDet+" "+mCurrentUser+" "+mCurrentUser1);
+        if (!hollaDet) {
             mHollanowInvite.setVisibility(View.VISIBLE);
             mHollanowInvite.setEnabled(true);
         } else {
@@ -189,15 +234,20 @@ public class ContactDetailActivity extends AppCompatActivity {
     }
 
     private boolean getHollanowDetails(String contactPhone) {
-        Log.e(TAG, PhoneNumberUtils.stripSeparators(contactPhone));
+        Log.e(TAG, "PhoneNumberUtils "+PhoneNumberUtils.stripSeparators(contactPhone));
         final boolean[] hasDetails = {false};
         ParseQuery<ParseUser> query = ParseUser.getQuery();
+        //query.fromLocalDatastore();
+       // query.getI.getI
         query.whereContains("phoneNumber", PhoneNumberUtils.stripSeparators(contactPhone));
         query.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> objects, ParseException e) {
-                if (e == null) {
+         //   @Override
+           public void done(List<ParseUser> objects, ParseException e) {
+               if (e == null) {
+                    Log.e(TAG, "ParseException1 "+e.toString());
                     if (objects.size() > 0) {
+                        mCurrentUser = objects.get(0).getUsername();
+                        mCurrentUser1 = ParseUser.getCurrentUser().getUsername();
                         mHollanowUsername.setText("@"+ objects.get(0).getUsername() + " (" + objects.get(0).getString("name") + ")");
                         if (objects.get(0).getString("bio")!=null) {
                             mHollanowBio.setText("About: " + objects.get(0).getString("bio"));
@@ -230,7 +280,8 @@ public class ContactDetailActivity extends AppCompatActivity {
                         mHollanowInvite.setVisibility(View.VISIBLE);
                         hasDetails[0] = false;
                     }
-                }
+                }else
+                    Log.e(TAG, "ParseException2 "+e.toString());
             }
         });
         return hasDetails[0];
@@ -263,6 +314,12 @@ public class ContactDetailActivity extends AppCompatActivity {
         }
         startActivity(callIntent);
 
+        }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mDbHelper.close();
     }
 
 }

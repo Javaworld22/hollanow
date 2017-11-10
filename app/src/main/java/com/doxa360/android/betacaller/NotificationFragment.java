@@ -3,7 +3,6 @@ package com.doxa360.android.betacaller;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,41 +13,59 @@ import android.view.ViewGroup;
 import android.content.Context;
 
 import com.doxa360.android.betacaller.adapter.NotificationAdapter;
-import com.doxa360.android.betacaller.model.NotificationModel;
-import com.doxa360.android.betacaller.model.Parse_Contact;
+import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
+import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
+import com.doxa360.android.betacaller.model.bimps;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by user on 7/28/2017.
  */
 
-public class NotificationActivity extends Fragment {
+public class NotificationFragment extends Fragment {
 
     private static final String TAG = "NotificationActivity";
-    List<NotificationModel> note;
+    List<bimps> note;
     private RecyclerView mCallLogRecyclerview;
     private NotificationAdapter mAdapter;
-    NotificationModel model2;
+    //private  List<bimps> bipList;
+    bimps model2;
+    List<bimps> model1;
     private Context mContext;
+    private HollaNowDbHelper helper;
+    private HollaNowSharedPref mSharedPref;
 
-    public NotificationActivity(){
+
+
+    public NotificationFragment(){
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = (View) inflater.inflate(R.layout.activity_notification, container, false);
-        note = new ArrayList<NotificationModel>();
+        mContext = getContext();
+        note = new ArrayList<bimps>();
+        helper = new HollaNowDbHelper(mContext);
+        mSharedPref = new HollaNowSharedPref(mContext);
         mCallLogRecyclerview = (RecyclerView) rootView.findViewById(R.id.notification_recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         mCallLogRecyclerview.setHasFixedSize(true);
         mCallLogRecyclerview.setLayoutManager(layoutManager);
-        mAdapter = new NotificationAdapter(model2,getContext());
+        note = helper.allNotification();
+        if(note.isEmpty())
+            mSharedPref.setNotificationCounter(0);
+       // mAdapter = new NotificationAdapter(model2,getContext());
+        mAdapter = new NotificationAdapter(note,mContext);
         mCallLogRecyclerview.setAdapter(mAdapter);
+
         return rootView;
     }
 
@@ -70,12 +87,15 @@ public class NotificationActivity extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        model2 = new NotificationModel("Header for me","Every good message deserves to be read",null);
+        mAdapter.notifyDataSetChanged();
+        //model1 = NotificationService.model.getNotification();
+       // model2 = model1.get(0);
         //model2.setHeadNotification("Header for me");
        // model2.setNotification("Every good message deserves to be read");
         //model2.getDate(new Date(ne))model2 = NotificationService.model;
-        mAdapter = new NotificationAdapter(model2,mContext);
-        mCallLogRecyclerview.setAdapter(mAdapter);
+       // mAdapter = new NotificationAdapter(model2,mContext);
+       // mAdapter = new NotificationAdapter(NotificationService.bip,mContext);
+       // mCallLogRecyclerview.setAdapter(mAdapter);
     }
 
     @Override

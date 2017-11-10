@@ -23,50 +23,50 @@ import com.doxa360.android.betacaller.helpers.MyToolBox;
 public class ChangeNumberFragment extends DialogFragment {
 
 
-    private Context mContext;
-    EditText phoneEditText;
+  private Context mContext;
+  EditText phoneEditText;
 
-    public ChangeNumberFragment() {
-        // Required empty public constructor
-    }
+  public ChangeNumberFragment() {
+    // Required empty public constructor
+  }
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View rootView = (View) inflater.inflate(R.layout.fragment_change_number, container, false);
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+    // Inflate the layout for this fragment
+    View rootView = (View) inflater.inflate(R.layout.fragment_change_number, container, false);
 
-        String phoneNumber = getArguments().getString(ProfileActivity.PHONE);
+    String phoneNumber = getArguments().getString(ProfileActivity.PHONE);
 
-        phoneEditText = (EditText) rootView.findViewById(R.id.phone);
-        phoneEditText.setText(phoneNumber);
+    phoneEditText = (EditText) rootView.findViewById(R.id.phone);
+    phoneEditText.setText(phoneNumber);
 
-        Button changeButton = (Button) rootView.findViewById(R.id.change_button);
+    Button changeButton = (Button) rootView.findViewById(R.id.change_button);
 
-        changeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (MyToolBox.isNetworkAvailable(mContext)) {
-                    if (MyToolBox.isValidMobile(phoneEditText.getText().toString().trim())) {
-                        //TODO: verify phone number here
+    changeButton.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (MyToolBox.isNetworkAvailable(mContext)) {
+          if (MyToolBox.isValidMobile(phoneEditText.getText().toString().trim())) {
+            //TODO: verify phone number here
 //                        Intent intent = new Intent(mContext, VerifyPhoneNumber)
-                    } else {
-                        Toast.makeText(mContext, "Invalid Phone Number", Toast.LENGTH_LONG).show();
-                        phoneEditText.setError("Invalid Phone Number");
-                    }
-                } else {
-                    Toast.makeText(mContext, "Network error. Please check your connection and try again", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+          } else {
+            Toast.makeText(mContext, "Invalid Phone Number", Toast.LENGTH_LONG).show();
+            phoneEditText.setError("Invalid Phone Number");
+          }
+        } else {
+          Toast.makeText(mContext, "Network error. Please check your connection and try again", Toast.LENGTH_LONG).show();
+        }
+      }
+    });
 
-        return rootView;
-    }
+    return rootView;
+  }
 
-    @Override
-    public void onAttach(Activity activity) {
-        mContext = activity;
-        super.onAttach(activity);
-    }
+  @Override
+  public void onAttach(Activity activity) {
+    mContext = activity;
+    super.onAttach(activity);
+  }
 }

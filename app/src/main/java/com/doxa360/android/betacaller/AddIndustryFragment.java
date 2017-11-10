@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.helpers.MyToolBox;
-import com.doxa360.android.betacaller.model.Industry;
+//import com.doxa360.android.betacaller.model.Industry;
 import com.doxa360.android.betacaller.model.User;
 import com.thinkincode.utils.views.HorizontalFlowLayout;
 
@@ -60,7 +60,7 @@ public class AddIndustryFragment extends DialogFragment {
         mCategoryLayout = (HorizontalFlowLayout) rootView.findViewById(R.id.industry_layout);
 
         if (MyToolBox.isNetworkAvailable(mActivity)) {
-            getIndustries();
+            //getIndustries();
         } else {
             MyToolBox.AlertMessage(mActivity, "Network error. Please check your connection");
         }
@@ -69,7 +69,7 @@ public class AddIndustryFragment extends DialogFragment {
         return rootView;
     }
 
-    private void getIndustries() {
+   /** private void getIndustries() {
         Call<List<Industry>> call = hollaNowApiInterface.
                 getIndustry((currentUser.getToken()!="")?currentUser.getToken():mSharedPref.getToken());
         call.enqueue(new Callback<List<Industry>>() {
@@ -89,10 +89,10 @@ public class AddIndustryFragment extends DialogFragment {
                 MyToolBox.AlertMessage(mActivity, "Network error. Please check your connection");
             }
         });
-    }
+    } **/
 
 
-    private void displayIndustries(List<Industry> industries) {
+   /** private void displayIndustries(List<Industry> industries) {
         TextView industryChips;
         if (industries!=null) {
             for (Industry industry : industries) {
@@ -108,7 +108,7 @@ public class AddIndustryFragment extends DialogFragment {
             }
             mProgressBar.setVisibility(View.INVISIBLE);
         }
-    }
+    } **/
 
     private View.OnClickListener industryClickListener(final String industry) {
         return new View.OnClickListener() {

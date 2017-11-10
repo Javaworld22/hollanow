@@ -46,6 +46,7 @@ import com.squareup.picasso.Picasso;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -122,7 +123,7 @@ public class EditProfileActivity extends AppCompatActivity {
                             else{
                                 captureImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
                                 startActivityForResult(captureImageIntent, TAKE_PHOTO_REQUEST);
-                            }
+                             }
                             break;
                         case 1:
                             //Choose Image
@@ -214,7 +215,7 @@ public class EditProfileActivity extends AppCompatActivity {
         mAbout = (EditText) findViewById(R.id.about);
         mOccupation = (EditText) findViewById(R.id.occupation);
         mAddress = (EditText) findViewById(R.id.address);
-        mIndustry = (EditText) findViewById(R.id.industry);
+       // mIndustry = (EditText) findViewById(R.id.industry);
 //        mEdit = (Button) findViewById(R.id.edit);
         mChangePhoto = (ImageView) findViewById(R.id.change_photo);
         mPhoto = (ImageView) findViewById(R.id.photo);
@@ -240,7 +241,7 @@ public class EditProfileActivity extends AppCompatActivity {
         mAbout.setText((currentUser.getAbout() != null)?currentUser.getAbout():"-");
         mAddress.setText((currentUser.getAddress() != null)?currentUser.getAddress():"-");
         mOccupation.setText((currentUser.getOccupation() != null)?currentUser.getOccupation():"-");
-        mIndustry.setText((currentUser.getIndustry() != null)?currentUser.getIndustry():"-");
+       // mIndustry.setText((currentUser.getIndustry() != null)?currentUser.getIndustry():"-");//needs to uncomment
 
 
         if (currentUser.getProfilePhoto() != null) {
@@ -252,14 +253,14 @@ public class EditProfileActivity extends AppCompatActivity {
 //        mEdit.setOnClickListener(editPhoto);
         mPhoto.setOnClickListener(editPhoto);
 //        mIndustry should not accept user keyboard
-        mIndustry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fm = getSupportFragmentManager();
-                AddIndustryFragment fragment = new AddIndustryFragment();
-                fragment.show(fm, "INDUSTRY");
-            }
-        });
+      //  mIndustry.setOnClickListener(new View.OnClickListener() {  //needs to uncomment/////////////////////
+       //     @Override
+       //     public void onClick(View view) {
+       //        FragmentManager fm = getSupportFragmentManager();
+        //        AddIndustryFragment fragment = new AddIndustryFragment();
+      //          fragment.show(fm, "INDUSTRY");
+      //      }
+     //   });
 
 
     }
@@ -293,9 +294,9 @@ public class EditProfileActivity extends AppCompatActivity {
         if (!mOccupation.getText().toString().trim().isEmpty()) {
             currentUser.setOccupation(mOccupation.getText().toString());
         }
-        if (!mIndustry.getText().toString().trim().isEmpty()) {
-            currentUser.setIndustry(mIndustry.getText().toString());
-        }
+       // if (!mIndustry.getText().toString().trim().isEmpty()) {
+        //    currentUser.setIndustry(mIndustry.getText().toString());  //needs to uncomment
+       // }
 
 
         mSharedPref.setCurrentUser(currentUser.toString());
@@ -307,9 +308,17 @@ public class EditProfileActivity extends AppCompatActivity {
                 if (response.code() == 200) {
                     Log.e(TAG, "success "+ response.body().toString());
                     Toast.makeText(EditProfileActivity.this, "Profile successfully updated", Toast.LENGTH_SHORT).show();
+                    FaceBookAdvertFragment faceBookAdvertFragment = new FaceBookAdvertFragment();
+                    //returnHome();
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    Bundle args = new Bundle();
+                    faceBookAdvertFragment.setArguments(args);
+                   // finishActivity(12345);
+                    faceBookAdvertFragment.show(fragmentManager, "FACEBOOK_NOTE");
+                    finishActivity(12345);
+                    returnHome();
 //                    finish();
 //                    onBackPressed();
-                    finishActivity(12345);
                 } else {
                     Log.e(TAG, "error: " + response.code() + response.message());
                     Toast.makeText(EditProfileActivity.this, "Error updating profile", Toast.LENGTH_SHORT).show();
@@ -601,6 +610,13 @@ public class EditProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void returnHome(){
+        Intent intent = new Intent();
+        intent.putExtra("VIEW_PAGER", 3);
+        setResult(RESULT_OK, intent);
+        finishActivity(2017);
+    }
+
     public void updateIndustry(String selectedIndustry) {
         mIndustry.setText(selectedIndustry);
     }
@@ -660,12 +676,16 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     private void uploadFile(File photo) {
+        MultipartBody.Part body = null;
+        try {
+    RequestBody requestFile =
+            RequestBody.create(MediaType.parse("multipart/form-data"), photo);
 
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), photo);
-
-        MultipartBody.Part body =
-                MultipartBody.Part.createFormData("photo", photo.getName(), requestFile);
+     body =
+            MultipartBody.Part.createFormData("photo", photo.getName(), requestFile);
+}catch (NullPointerException e){
+            Log.e(TAG, "Error Occured Here: "+e.getMessage());
+}
 
         final String fileName = photo.getName();
         RequestBody fileNameBody =

@@ -71,3 +71,11 @@
 </RelativeLayout>
 
     </android.support.v7.widget.CardView>
+
+<!--com.google.android.gms.ads.NativeExpressAdView
+xmlns:ads="http://schemas.android.com/apk/res-auto"
+android:id="@+id/adView1"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+ads:adUnitId="ca-app-pub-3940256099942544/2793859312"
+ads:adSize="320x150"></com.google.android.gms.ads.NativeExpressAdView-->

@@ -20,6 +20,9 @@
                android:src="@drawable/backdrop"
                android:scaleType="centerCrop"/>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
@@ -36,6 +39,22 @@
                        android:src="@drawable/bclogo"
                        android:padding="16dp"
                        android:layout_marginBottom="32dp"/>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_email_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email" >
+
+                <EditText
+                    android:id="@+id/email_signup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#80FFFFFF"
+                    android:padding="16dp"/>
+
+            </android.support.design.widget.TextInputLayout>
 
 
             <android.support.design.widget.TextInputLayout
@@ -105,5 +124,6 @@
                 android:layout_marginTop="8dp"/>
 
         </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

@@ -9,141 +9,162 @@
     tools:context="com.doxa360.android.betacaller.ContactDetailActivity"
     tools:showIn="@layout/activity_contact_detail">
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_margin="@dimen/text_margin"-->
-        <!--android:text="@string/large_text"/>-->
+  <!--<TextView-->
+  <!--android:layout_width="wrap_content"-->
+  <!--android:layout_height="wrap_content"-->
+  <!--android:layout_margin="@dimen/text_margin"-->
+  <!--android:text="@string/large_text"/>-->
 
-    <RelativeLayout android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="16dp">
+  <RelativeLayout android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:padding="16dp">
 
-        <android.support.v7.widget.CardView
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/contact_primary_detail"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="4dp">
+
+      <LinearLayout android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="16dp">
+        <!-- 192.168.57.101:5555 -->
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/contact_name"
+            tools:text="Yemi Gabriel"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/contact_phone"
+            tools:text="08037046543"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_marginBottom="16dp"/>
+
+
+      </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+      <android.support.v7.widget.CardView
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/ads_contacts_card"
+          app:cardCornerRadius="4dp"
+          app:cardUseCompatPadding="true"
+          app:cardElevation="4dp"
+          android:layout_below="@+id/contact_primary_detail">
+
+         <com.google.android.gms.ads.NativeExpressAdView
+              xmlns:ads="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/adView6"
+              android:layout_width="300dp"
+              android:layout_height="200dp"
+              ads:adUnitId="ca-app-pub-4194808928301689/9136512554"
+              ads:adSize="290x150"></com.google.android.gms.ads.NativeExpressAdView>
+
+      </android.support.v7.widget.CardView>
+
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/contact_call_history"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="4dp"
+        android:layout_below="@+id/ads_contacts_card">
+
+      <LinearLayout android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical"
+          android:padding="16dp">
+
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/call_history_label"
+            android:text="Call History"
+            android:textStyle="bold"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/empty_text"
+            android:text="No recent calls to or from this contact"
+            style="?android:attr/textAppearanceMedium"/>
+
+        <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/contact_primary_detail"
-            app:cardCornerRadius="4dp"
-            app:cardUseCompatPadding="true"
-            app:cardElevation="4dp">
+            android:id="@+id/call_history_recyclerview"/>
 
-            <LinearLayout android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                          android:orientation="vertical"
-                            android:padding="16dp">
-                <!-- 192.168.57.101:5555 -->
+      </LinearLayout>
 
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/contact_name"
-                          tools:text="Yemi Gabriel"
-                          style="?android:attr/textAppearanceMedium"
-                          android:layout_marginBottom="16dp"/>
+    </android.support.v7.widget.CardView>
 
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/contact_phone"
-                          tools:text="08037046543"
-                          style="?android:attr/textAppearanceMedium"
-                          android:layout_marginBottom="16dp"/>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/contact_secondary_detail"
+        app:cardCornerRadius="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="4dp"
+        android:layout_below="@+id/contact_call_history">
 
+      <Button android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/hollanow_invite"
+          android:text="Invite To HollaNow"
+          android:layout_margin="16dp"
+          android:visibility="invisible" android:background="@color/accent" />
 
-            </LinearLayout>
+      <LinearLayout android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/hollanow_layout"
+          android:orientation="vertical"
+          android:padding="16dp">
 
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
+        <TextView android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/contact_call_history"
-            app:cardCornerRadius="4dp"
-            app:cardUseCompatPadding="true"
-            app:cardElevation="4dp"
-            android:layout_below="@+id/contact_primary_detail">
+            android:id="@+id/hollanow_username"
+            tools:text="yemigabriel"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_marginBottom="8dp"/>
 
-            <LinearLayout android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:orientation="vertical"
-                          android:padding="16dp">
-
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/call_history_label"
-                          android:text="Call History"
-                          android:textStyle="bold"
-                          style="?android:attr/textAppearanceMedium"
-                          android:layout_marginBottom="16dp"/>
-
-                <TextView android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/empty_text"
-                          android:text="No recent calls to or from this contact"
-                          style="?android:attr/textAppearanceMedium"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/call_history_recyclerview"/>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
+        <TextView android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/contact_secondary_detail"
-            app:cardCornerRadius="4dp"
-            app:cardUseCompatPadding="true"
-            app:cardElevation="4dp"
-            android:layout_below="@+id/contact_call_history">
+            android:id="@+id/hollanow_occupation"
+            tools:text="yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel  yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel "
+            android:layout_marginBottom="8dp"/>
 
-            <Button android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/hollanow_invite"
-                    android:text="Invite To HollaNow"
-                    android:layout_margin="16dp"
-                    android:visibility="invisible" android:background="@color/accent" />
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/hollanow_bio"
+            tools:text="Tags: plumber, trader"
+            android:layout_marginBottom="8dp"/>
 
-            <LinearLayout android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/hollanow_layout"
-                          android:orientation="vertical"
-                          android:padding="16dp">
-
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/hollanow_username"
-                          tools:text="yemigabriel"
-                          style="?android:attr/textAppearanceMedium"
-                          android:layout_marginBottom="8dp"/>
-
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/hollanow_occupation"
-                          tools:text="yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel  yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel yemigabriel "
-                          android:layout_marginBottom="8dp"/>
-
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/hollanow_bio"
-                          tools:text="Tags: plumber, trader"
-                          android:layout_marginBottom="8dp"/>
-
-                <TextView android:layout_width="match_parent"
-                          android:layout_height="wrap_content"
-                          android:id="@+id/hollanow_address"
-                          tools:text="Tags: plumber, trader"
-                          android:layout_marginBottom="8dp"/>
+        <TextView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/hollanow_address"
+            tools:text="Tags: plumber, trader"
+            android:layout_marginBottom="8dp"/>
 
 
 
-            </LinearLayout>
+      </LinearLayout>
 
-        </android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>
 
 
-    </RelativeLayout>
+  </RelativeLayout>
 
 
 </android.support.v4.widget.NestedScrollView>

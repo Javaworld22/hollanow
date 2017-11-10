@@ -33,6 +33,7 @@ import com.doxa360.android.betacaller.helpers.HollaNowDbHelper;
 import com.doxa360.android.betacaller.helpers.HollaNowSharedPref;
 import com.doxa360.android.betacaller.model.PhoneCallLog;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -50,7 +51,7 @@ public class CallDiaryFragment extends Fragment {
     private Context mContext;
     private Cursor callCursor;
     private List<PhoneCallLog> allCallLogs;
-//    private String logNumber;
+    //    private String logNumber;
 //    private String logName;
 //    private String logDuration;
 //    private int logType;
@@ -176,7 +177,8 @@ public class CallDiaryFragment extends Fragment {
 
             dbHelper.clearCallLogs();
             while(c.moveToNext()) {
-                if (c.getPosition() < 200) {
+               // if (c.getPosition() < 200) {
+              //  Log.e(TAG, "Number of Contacts "+c.getPosition());
 //                String logId = c.getString(c.getColumnIndex(CallLog.Calls.CACHED_PHOTO_ID));// for  id
                     String logNumber = c.getString(logNumberIndex).replace(" ","");// for  number
                     if (logNumber.startsWith("0")) {
@@ -189,11 +191,11 @@ public class CallDiaryFragment extends Fragment {
                     int logType = Integer.parseInt(c.getString(logTypeIndex));// for call type, Incoming or out going.
                     long logId = getContactIDFromNumber(logNumber, mContext);
 
-//                Log.e(TAG, null + " - " + logNumber + logName + logDuration + logType);
+               // Log.e(TAG, null + " - " + logNumber +" "+ logName +" "+ logDuration +" "+ logType+" "+ logDate+" "+logId);
 //                Toast.makeText(mContext, logNumber+logName+logDuration+logType, Toast.LENGTH_SHORT).show();
                     PhoneCallLog phoneCallLog = new PhoneCallLog(null, logName, openPhoto(logId), logNumber, logDuration, logDate, logType);
                     dbHelper.cachePhoneLog(phoneCallLog);
-                }
+               // }
 
             }
             c.close();
@@ -207,15 +209,25 @@ public class CallDiaryFragment extends Fragment {
         }
         String UriContactNumber = Uri.encode(contactNumber);
         long phoneContactID = new Random().nextInt();
-        Cursor contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, UriContactNumber),
-                new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID}, null, null, null);
+        Cursor contactLookupCursor = null;
+        try {
+             contactLookupCursor = context.getContentResolver().query(Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, UriContactNumber),
+                    new String[]{ContactsContract.PhoneLookup.DISPLAY_NAME, ContactsContract.PhoneLookup._ID}, null, null, null);
+        }catch(IllegalArgumentException aa){
+            Log.e(TAG, "Error occured : "+aa.getMessage());
+        }catch (SecurityException ss){
+            Log.e(TAG, "Error occured : "+ss.getMessage());
+        }
+        catch (RuntimeException ee){
+            Log.e(TAG, "Error occured : "+ee.getMessage());
+        }
         if (contactLookupCursor != null) {
-                while (contactLookupCursor.moveToNext() && contactLookupCursor.getCount()<10) {
+            while (contactLookupCursor.moveToNext() && contactLookupCursor.getCount()<10) {
 //                    for (int i=0;i<10;i++) {
 //                    Log.e(TAG, contactLookupCursor.getCount()+ " - count");
-                    phoneContactID = contactLookupCursor.getLong(contactLookupCursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
+                phoneContactID = contactLookupCursor.getLong(contactLookupCursor.getColumnIndexOrThrow(ContactsContract.PhoneLookup._ID));
 //                    }
-                }
+            }
         }
         if (contactLookupCursor != null) {
             contactLookupCursor.close();
@@ -260,7 +272,7 @@ public class CallDiaryFragment extends Fragment {
             cursor = mContext.getContentResolver().query(photoUri,
                     new String[]{ContactsContract.Contacts.Photo.PHOTO_THUMBNAIL_URI}, null, null, null);
         } catch (IllegalArgumentException e) {
-            Log.e(TAG, e.getMessage());
+          //  Log.e(TAG, e.getMessage());
         }
 
         if (cursor == null) {
@@ -295,7 +307,7 @@ public class CallDiaryFragment extends Fragment {
         try {
             allCallLogs = dbHelper.allPhoneLogs();
         } catch (SQLiteDatabaseLockedException e) {
-            Log.e(TAG, e.getMessage());
+          //  Log.e(TAG, e.getMessage());
         }
         mProgressBar.setVisibility(View.INVISIBLE);
         mAdapter = new PhoneCallLogAdapter(allCallLogs, mContext);
@@ -308,6 +320,16 @@ public class CallDiaryFragment extends Fragment {
 
 
         new syncDb("sync call logs").execute("yes");
+    }
+
+    @Override
+    public void onStop(){
+        try {
+            super.onStop();
+            dbHelper.close();
+        }catch (NullPointerException e){
+            Log.e(TAG, "AN Error Occured here:  "+e.getMessage());
+        }
     }
 
     @Override

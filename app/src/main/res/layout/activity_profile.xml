@@ -90,8 +90,6 @@
 
     <!--</android.support.design.widget.AppBarLayout>-->
 
-    <include layout="@layout/content_profile"/>
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -100,5 +98,7 @@
         app:layout_anchor="@id/appbar"
         app:layout_anchorGravity="bottom|end"
         android:src="@drawable/ic_edit_white_24dp"/>
+
+    <include layout="@layout/content_profile"/>
 
 </android.support.design.widget.CoordinatorLayout>

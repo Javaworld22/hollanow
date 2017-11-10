@@ -23,11 +23,14 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <!-- Fixed note issue -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
-    <uses-feature android:name="android.hardware.location.gps" />
+    <uses-feature android:name="android.hardware.location.gps"
+        android:required= "false"/>
+
+
 
     <application
         android:name=".BetaCaller"
@@ -45,9 +48,23 @@
             android:authorities="com.facebook.app.FacebookContentProvider1726216680966670"
             android:exported="true"/>
 
-        <meta-data
+        <!--meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+            android:value="@string/facebook_app_id"/-->
+
+        <meta-data
+            android:name="com.facebook.sdk.Application"
+            android:value="1695593120473978"/>
+
+        <meta-data
+            android:name="com.parse.APPLICATION_ID"
+            android:value="APPKEY"/>
+        <meta-data
+            android:name="com.parse.CLIENT_KEY"
+            android:value="CLIENTKEY" />
+       <!-- <meta-data
+            android:name="com.parse.SERVER_URL"
+            android:value="http://www.hollanow.com/doxa360/api/v1/user/authenticate"/> -->
         <!--
          KTRY/PwJVRqUvh0/TTdEKWrAvtI= , +HiUq7wgVYXAKuRNLUjBVZaDqNk=
          keytool -exportcert -alias YOUR_RELEASE_KEY_ALIAS -keystore YOUR_RELEASE_KEY_PATH | openssl sha1 -binary | openssl base64
@@ -98,6 +115,16 @@
                 android:value="com.doxa360.android.betacaller.LoginActivity"/>
         </activity>
         <activity
+            android:name=".PhoneVerificationActivity"
+            android:label="@string/title_phone_verification"
+            android:parentActivityName=".LoginActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.doxa360.android.betacaller.LoginActivity"/>
+        </activity>
+        <activity
             android:name=".HomeActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
@@ -128,9 +155,10 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable"/>
 
-            <meta-data
+
+           <!-- <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.doxa360.android.betacaller.HomeActivity"/>
+                android:value="com.doxa360.android.betacaller.HomeActivity"/> -->
         </activity>
         <activity
             android:name=".Main2Activity"
@@ -184,18 +212,20 @@
                 android:value="com.doxa360.android.betacaller.HomeActivity"/>
         </activity>
 
-        <service
-            android:name=".FirebaseInstanceIdService">
+        <service android:name=".FirebaseInstanceIdService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
 
-        <!--<service android:name=".CallNoteServiceNew">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED"/>-->
-            <!--</intent-filter>-->
-        <!--</service>-->
+        <service android:name=".CallNoteServiceNew">
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter> -->
+        </service>
+
+        <service android:name=".NotificationService"
+                android:enabled="true"/>
 
         <!--<receiver android:name=".BootCompleteReceiver">-->
             <!--<intent-filter>-->
@@ -212,6 +242,23 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_ANSWER"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".NotificationBroadcast">
+            <intent-filter>
+                <action android:name="android.intent.action.USER_UNLOCKED"/>
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.intent.action.SCREEN_ON"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".SmsListener">
+            <intent-filter android:priority="1000">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
 
@@ -248,6 +295,72 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.doxa360.android.betacaller.HomeActivity"/>
         </activity>
+        <activity
+        android:name=".EmojiActivity"
+        android:label="Edit Text"
+        android:parentActivityName=".HomeActivity"
+        android:theme="@style/AppTheme"
+        android:screenOrientation="portrait">
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.doxa360.android.betacaller.HomeActivity"/>
+    </activity>
+
+        <activity
+            android:name=".NotificationActivity"
+            android:label="Notification"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.doxa360.android.betacaller.HomeActivity"/>
+        </activity>
+
+        <activity
+            android:name=".UploadPictureActivity"
+            android:label="Upload"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.doxa360.android.betacaller.HomeActivity"/>
+        </activity>
+
+        <activity
+            android:name=".UploadActivity"
+            android:label="Upload"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.doxa360.android.betacaller.HomeActivity"/>
+        </activity>
+
+        <activity
+            android:name=".PaystackActivity"
+            android:label="Upload"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.doxa360.android.betacaller.HomeActivity"/>
+        </activity>
+
+        <activity
+            android:name=".SalesMarketActivity"
+            android:label="Upload"
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.doxa360.android.betacaller.HomeActivity"/>
+        </activity>
+
     </application>
 
 </manifest>

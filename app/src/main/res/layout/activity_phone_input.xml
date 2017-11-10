@@ -1,7 +1,84 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:background="#e5e5e5"
+    android:padding="8dp"
+    android:id="@+id/fragment_phone_input"
+    tools:context="com.doxa360.android.betacaller.PhoneInputFragment" >
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter Phone number"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/layout_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+            <com.doxa360.android.betacaller.helpers.CountryCodePicker
+                android:id="@+id/ccp_loadFullNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:ccp_countryPreference="us,in"
+                />
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/layout_number_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone" >
+
+            <EditText
+                android:id="@+id/editText_loadCarrierNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:inputType="phone|number"
+                android:singleLine="true"
+                android:textColor = "@color/primary"/>
+
+            </android.support.design.widget.TextInputLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=" We will send you a one time sms message "
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/button_next"
+        style="@style/Theme.AppCompat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        android:text="Verify Number >"/>
+
+   <!-- Widget.AppCompat.Button.Colored-->
 
 </LinearLayout>
+
+
+</RelativeLayout>
+
+<!-- style="@style/pointText"-->

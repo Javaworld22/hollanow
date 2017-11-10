@@ -1,7 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+    >
 
-</LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/notificationButton"
+        android:layout_width="26dip"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="26dp"
+        android:background="@drawable/ic_notification_state"
+        android:clickable="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:id="@+id/notificationTextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFF"
+        android:textStyle="bold"
+        android:textSize="7dp"
+        android:paddingTop="1dp"
+        android:paddingBottom="1dp"
+        android:paddingLeft="1dp"
+        android:paddingEnd="4dp"
+        android:paddingRight="1dp"
+        android:paddingStart="3dp"
+        android:visibility="invisible"
+        android:layout_alignTop="@id/notificationButton"
+        android:background="@drawable/notification_circle"
+        android:layout_alignEnd="@+id/notificationButton"/>
+
+</RelativeLayout>

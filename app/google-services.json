@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "20878391527",
+    "firebase_url": "https://betacaller-4ea18.firebaseio.com",
+    "project_id": "betacaller-4ea18",
+    "storage_bucket": "betacaller-4ea18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:20878391527:android:7b65dbd1927a6858",
+        "android_client_info": {
+          "package_name": "com.doxa360.android.betacaller"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "20878391527-b4c12u240bpfmhb9u7vl78isnm7skrf5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.doxa360.android.betacaller",
+            "certificate_hash": "402113B6A30B64F3DD7B7343C007D7BF8A5D8AA7"
+          }
+        },
+        {
+          "client_id": "20878391527-hbefhselvi9insiba517iepckvosrd6j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrWrg08904jRDgO-h04jwdQMiY5EOUiuE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "20878391527-hbefhselvi9insiba517iepckvosrd6j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

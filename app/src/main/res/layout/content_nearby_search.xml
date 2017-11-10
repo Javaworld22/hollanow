@@ -13,68 +13,69 @@
     tools:context="com.doxa360.android.betacaller.NearbySearchActivity"
     tools:showIn="@layout/activity_nearby_search">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
+  <android.support.v7.widget.CardView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/search_card"
+      app:cardCornerRadius="4dp"
+      app:cardUseCompatPadding="true"
+      app:cardElevation="4dp"
+      android:background="@drawable/search_background"
+      android:padding="8dp"
+      android:layout_alignParentTop="true">
+
+    <RelativeLayout android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/search_card"
-        app:cardCornerRadius="4dp"
-        app:cardUseCompatPadding="true"
-        app:cardElevation="4dp"
-        android:background="@drawable/search_background"
-        android:padding="8dp"
-        android:layout_alignParentTop="true">
+        android:padding="8dp">
 
-        <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp">
+      <TextView android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/closer_label"
+          android:layout_alignParentStart="true"
+          android:textStyle="bold"
+          android:textAllCaps="true"
+          android:textColor="@color/accent"
+          android:text="Closer"/>
 
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:id="@+id/closer_label"
-                      android:layout_alignParentStart="true"
-                      android:textStyle="bold"
-                      android:textAllCaps="true"
-                      android:textColor="@color/accent"
-                      android:text="Closer"/>
+      <SeekBar
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/nearby_seekbar"
+          android:layout_toEndOf="@+id/closer_label"
+          android:layout_toStartOf="@+id/farther_label"
+          android:thumb="@drawable/ic_location_on_black_18dp" />
 
-            <SeekBar
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/nearby_seekbar"
-                android:layout_toEndOf="@+id/closer_label"
-                android:layout_toStartOf="@+id/farther_label"
-                android:thumb="@drawable/ic_location_on_black_18dp" />
+      <TextView android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:id="@+id/farther_label"
+          android:layout_alignParentEnd="true"
+          android:textStyle="bold"
+          android:textAllCaps="true"
+          android:textColor="@color/accent"
+          android:text="Farther"/>
 
-            <TextView android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:id="@+id/farther_label"
-                      android:layout_alignParentEnd="true"
-                      android:textStyle="bold"
-                      android:textAllCaps="true"
-                      android:textColor="@color/accent"
-                      android:text="Farther"/>
-
-        </RelativeLayout>
+    </RelativeLayout>
 
 
-    </android.support.v7.widget.CardView>
+  </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/nearby_contacts_recyclerview"
-        android:layout_below="@+id/search_card"
-        android:layout_marginTop="16dp"/>
 
-    <ProgressBar android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:id="@+id/progress_bar"
-                 android:layout_centerInParent="true"/>
+  <android.support.v7.widget.RecyclerView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:id="@+id/nearby_contacts_recyclerview"
+      android:layout_below="@+id/search_card"
+      android:layout_marginTop="16dp"/>
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:id="@+id/empty_text"
-              android:layout_centerInParent="true"
-              android:gravity="center"/>
+  <ProgressBar android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/progress_bar"
+      android:layout_centerInParent="true"/>
+
+  <TextView android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/empty_text"
+      android:layout_centerInParent="true"
+      android:gravity="center"/>
 
 </RelativeLayout>

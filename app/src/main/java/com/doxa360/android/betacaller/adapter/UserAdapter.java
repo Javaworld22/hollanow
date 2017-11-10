@@ -22,83 +22,83 @@ import java.util.List;
  */
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.ContactViewHolder> {
 
-    private List<User> mUserList;
-    ContactViewHolder mHolder;
-    private Context mContext;
-    private LayoutInflater mLayoutInflater;
+  private List<User> mUserList;
+  ContactViewHolder mHolder;
+  private Context mContext;
+  private LayoutInflater mLayoutInflater;
 
-    public UserAdapter(List<User> userList, Context context) {
-        mUserList = userList;
-        mContext = context;
-        mLayoutInflater = LayoutInflater.from(context);
-    }
+  public UserAdapter(List<User> userList, Context context) {
+    mUserList = userList;
+    mContext = context;
+    mLayoutInflater = LayoutInflater.from(context);
+  }
 
-    public class ContactViewHolder extends RecyclerView.ViewHolder {
+  public class ContactViewHolder extends RecyclerView.ViewHolder {
 
-        TextView mDisplayName;
-        TextView mUsername;
-        TextView mPhoneNumber;
-        ImageView mPhoto;
-        TextView mOccupation;
+    TextView mDisplayName;
+    TextView mUsername;
+    TextView mPhoneNumber;
+    ImageView mPhoto;
+    TextView mOccupation;
 
-        public ContactViewHolder(View itemView) {
-            super(itemView);
+    public ContactViewHolder(View itemView) {
+      super(itemView);
 
-            mDisplayName = (TextView) itemView.findViewById(R.id.displayname);
+      mDisplayName = (TextView) itemView.findViewById(R.id.displayname);
 //            mUsername = (TextView) itemView.findViewById(R.id.username);
-            mPhoneNumber = (TextView) itemView.findViewById(R.id.phone);
-            mPhoto = (ImageView) itemView.findViewById(R.id.photo);
+      mPhoneNumber = (TextView) itemView.findViewById(R.id.phone);
+      mPhoto = (ImageView) itemView.findViewById(R.id.photo);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(mContext, ProfileActivity.class);
-                    User user = mUserList.get(getPosition());
-                    intent.putExtra(BetaCaller.USER_PROFILE, user);
-                    mContext.startActivity(intent);
-                }
-            });
-
-
+      itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          Intent intent = new Intent(mContext, ProfileActivity.class);
+          User user = mUserList.get(getPosition());
+          intent.putExtra(BetaCaller.USER_PROFILE, user);
+          mContext.startActivity(intent);
         }
-    }
+      });
 
-    @Override
-    public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.user_layout, parent, false);
-        return new ContactViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(ContactViewHolder holder, int position) {
-        User user = mUserList.get(position);
-        mHolder = holder;
-
-        holder.mDisplayName.setText(user.getName());
-        holder.mPhoneNumber.setText(user.getPhone());
-        if (user.getProfilePhoto()!=null) {
-            Picasso.with(mContext)
-                    .load(BetaCaller.PHOTO_URL + user.getProfilePhoto())
-                    .placeholder(R.drawable.wil_profile)
-                    .error(R.drawable.wil_profile)
-                    .into(holder.mPhoto);
-        } else {
-            Picasso.with(mContext)
-                    .load(R.drawable.wil_profile)
-                    .placeholder(R.drawable.wil_profile)
-                    .error(R.drawable.wil_profile)
-                    .into(holder.mPhoto);
-        }
 
     }
+  }
 
-    @Override
-    public int getItemCount() {
-        if (mUserList != null)
-            return mUserList.size();
-        else
-            return 0;
+  @Override
+  public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    View view = mLayoutInflater.inflate(R.layout.user_layout, parent, false);
+    return new ContactViewHolder(view);
+  }
+
+  @Override
+  public void onBindViewHolder(ContactViewHolder holder, int position) {
+    User user = mUserList.get(position);
+    mHolder = holder;
+
+    holder.mDisplayName.setText(user.getName());
+    holder.mPhoneNumber.setText(user.getPhone());
+    if (user.getProfilePhoto()!=null) {
+      Picasso.with(mContext)
+              .load(BetaCaller.PHOTO_URL + user.getProfilePhoto())
+              .placeholder(R.drawable.wil_profile)
+              .error(R.drawable.wil_profile)
+              .into(holder.mPhoto);
+    } else {
+      Picasso.with(mContext)
+              .load(R.drawable.wil_profile)
+              .placeholder(R.drawable.wil_profile)
+              .error(R.drawable.wil_profile)
+              .into(holder.mPhoto);
     }
+
+  }
+
+  @Override
+  public int getItemCount() {
+    if (mUserList != null)
+      return mUserList.size();
+    else
+      return 0;
+  }
 
 
 
