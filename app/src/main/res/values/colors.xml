@@ -40,9 +40,14 @@
     <color name="divider">#B6B6B6</color>
     <color name="holla_white">#FFFFFF</color>
     <color name="hollabackground">#FF737373</color>
+    <!--color name="textcolorholla">#cacaca</color-->
 
-    <color name="defaultContentColor">@android:color/black</color>
+    <color name="defaultContentColor">#000000</color>
     <color name="defaultBorderFlagColor">@android:color/transparent</color>
+
+    <color name="text_green">#FF88D687</color>
+    <color name="like_color">#ff1212</color>
+    <color name="shout_out">#f7efdc</color>
 
 
 
@@ -56,7 +61,14 @@
     <color name="materialcolorpicker__dribbledark">#c32361</color>
     <color name="materialcolorpicker__black">#000000</color>
     <color name="materialcolorpicker__dialogcolor">#009688</color>
+    <color name="hint_foreground_material">#b3b3b3</color>
     <color name="hint_foreground_material_light">#b3b3b3</color>
 
+    <color name="background_color_black">#000000</color>
+    <color name="outside_color_gray">#66444444</color>
+
+    <color name="primaryTransparent">#00FF9800</color>
+    <color name="primary_dark_transparent">#00F57C00</color>
+    <color name="accent_transparent">#00FF9800</color>
 
 </resources>

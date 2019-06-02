@@ -5,29 +5,122 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:id="@+id/cardview_hollacontacts"
     app:cardCornerRadius="4dp"
     android:layout_margin="4dp">
 
-  <RelativeLayout android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:padding="8dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:layout_margin="4dp">
+
 
     <com.doxa360.android.betacaller.helpers.MLRoundedImageView
         android:layout_width="@dimen/com_facebook_profilepictureview_preset_size_small"
         android:layout_height="@dimen/com_facebook_profilepictureview_preset_size_small"
         android:id="@+id/contact_photo"
+        android:background="@drawable/circle"
         android:src="@drawable/wil_profile"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:layout_marginRight="16dp"
 
-    <TextView android:layout_width="match_parent"
+      />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+        <TextView android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/contact_name"
         android:padding="8dp"
         android:textStyle="bold"
         tools:text="Yemi Gabriel"
+        android:ellipsize="marquee"
+                  android:scrollHorizontally="true"
+                  android:minLines="1"
+                  android:singleLine="true"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/contact_photo"/>
+        />
+
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:id="@+id/location_beep1"
+                       android:src="@drawable/ic_location_on_black_18dp"
+                       android:tint="@android:color/holo_green_light"
+                       android:layout_alignParentEnd="true"
+                       android:layout_marginEnd="1sp"/>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/occup"
+                          tools:text="Yemi"
+                          android:paddingTop="5dp"
+                          android:ellipsize="marquee"
+                          android:scrollHorizontally="true"
+                          android:minLines="1"
+                          android:singleLine="true"
+                          android:textSize="12dp"
+                          android:layout_below="@+id/location_beep1"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/layout_call"
+                    android:layout_below="@+id/occup"
+                    android:orientation="horizontal">
+
+                    <!--ImageView android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/call_type"
+                        tools:src="@drawable/ic_call_made_white_18dp"
+                        tools:tint="@android:color/holo_green_light"
+                        android:layout_below="@+id/contact_name"
+                        android:layout_toEndOf="@+id/call_icon"/-->
+
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:id="@+id/call_icon"
+                               android:src="@drawable/ic_call_white_18dp"
+                               android:tint="@android:color/darker_gray"
+                               android:paddingRight="20dp"
+                               android:layout_below="@+id/contact_name"
+                               android:layout_alignStart="@+id/contact_name"/>
+
+                    <TextView android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              android:id="@+id/call_duration"
+                              android:text=""
+                              android:layout_toEndOf="@+id/layout_call"
+                              android:layout_below="@+id/contact_name"/>
+
+
+                </LinearLayout>
+
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:id="@+id/seen_last"
+                          android:text=""
+                          android:layout_alignParentEnd="true"
+                          android:layout_below="@+id/layout_call"/>
+
+
+            </RelativeLayout>
 
     <!--<TextView android:layout_width="match_parent"-->
     <!--android:layout_height="wrap_content"-->
@@ -37,38 +130,18 @@
     <!--android:layout_below="@+id/contact_name"-->
     <!--android:layout_toEndOf="@+id/contact_photo"/>-->
 
-    <ImageView android:layout_width="wrap_content"
+    <!--ImageView android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/call_icon"
         android:src="@drawable/ic_call_white_18dp"
         android:tint="@android:color/darker_gray"
         android:layout_below="@+id/contact_name"
-        android:layout_alignStart="@+id/contact_name"/>
+        android:layout_alignStart="@+id/contact_name"/-->
+            </LinearLayout>
 
-    <ImageView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/call_type"
-        tools:src="@drawable/ic_call_made_white_18dp"
-        tools:tint="@android:color/holo_green_light"
-        android:layout_below="@+id/contact_name"
-        android:layout_toEndOf="@+id/call_icon"/>
 
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/call_duration"
-        android:text="80s"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@+id/call_type"
-        android:layout_below="@+id/contact_name"/>
+    </LinearLayout>
 
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/call_date"
-        android:text="2 days ago"
-        android:layout_marginStart="8dp"
-        android:layout_below="@+id/contact_name"
-        android:layout_alignParentEnd="true"/>
+</LinearLayout>
 
-  </RelativeLayout>
-
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView>

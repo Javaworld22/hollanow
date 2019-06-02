@@ -146,7 +146,6 @@
         </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/layout_webView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/layout_token_response"

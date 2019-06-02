@@ -16,7 +16,6 @@
       android:theme="@style/AppTheme.AppBarOverlay">
 
     <android.support.design.widget.CollapsingToolbarLayout
-        android:id="@+id/toolbar_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
@@ -33,7 +32,6 @@
           tools:src="@drawable/slide2"/>
 
       <ImageView
-          android:id="@+id/photo_tint"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:scaleType="centerCrop"

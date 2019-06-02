@@ -9,7 +9,6 @@
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:paddingBottom="10dp"
                 android:orientation="vertical"
-                android:id="@+id/fragment_verify_phone1"
                 android:scrollbarAlwaysDrawVerticalTrack="true"
                 tools:context="com.doxa360.android.betacaller.PhoneInputFragment">
 

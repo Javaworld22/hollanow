@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"Navigeren naar startpositie"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"Omhoog navigeren"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"Meer opties"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"Gereed"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"Alles weergeven"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"Een app selecteren"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"UIT"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"AAN"</string>
+    <string msgid="1302280443949172191" name="abc_menu_alt_shortcut_label">"Alt +"</string>
+    <string msgid="1324831542140195728" name="abc_menu_ctrl_shortcut_label">"Ctrl +"</string>
+    <string msgid="8362206064229013510" name="abc_menu_delete_shortcut_label">"verwijderen"</string>
+    <string msgid="8341180395196749340" name="abc_menu_enter_shortcut_label">"enter"</string>
+    <string msgid="4792426091847145555" name="abc_menu_function_shortcut_label">"Functie +"</string>
+    <string msgid="7643535737296831317" name="abc_menu_meta_shortcut_label">"Meta +"</string>
+    <string msgid="8126296154200614004" name="abc_menu_shift_shortcut_label">"Shift +"</string>
+    <string msgid="2378550843553983978" name="abc_menu_space_shortcut_label">"spatie"</string>
+    <string msgid="9002602288060866689" name="abc_menu_sym_shortcut_label">"Sym +"</string>
+    <string msgid="1351762916121158029" name="abc_prepend_shortcut_label">"Menu +"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"Zoeken…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"Zoekopdracht wissen"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"Zoekopdracht"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"Zoeken"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"Zoekopdracht verzenden"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"Gesproken zoekopdracht"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"Delen met"</string>
+    <string msgid="3300176832234831527" name="abc_shareactionprovider_share_with_application">"Delen met <ns1:g id="APPLICATION_NAME">%s</ns1:g>"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"Samenvouwen"</string>
+    <string name="com_facebook_image_download_unknown_error">Onverwachte fout tijdens het downloaden van een afbeelding.</string>
+    <string name="com_facebook_internet_permission_error_message">Voor aanmelding via webweergave is de toestemming INTERNET vereist</string>
+    <string name="com_facebook_internet_permission_error_title">AndroidManifest Error</string>
+    <string name="com_facebook_like_button_liked">Vind ik leuk</string>
+    <string name="com_facebook_like_button_not_liked">Vind ik leuk</string>
+    <string name="com_facebook_loading">Laden…</string>
+    <string name="com_facebook_loginview_cancel_action">Annuleren</string>
+    <string name="com_facebook_loginview_log_in_button">Aanmelden</string>
+    <string name="com_facebook_loginview_log_in_button_long">Aanmelden met Facebook</string>
+    <string name="com_facebook_loginview_log_out_action">Afmelden</string>
+    <string name="com_facebook_loginview_log_out_button">Afmelden</string>
+    <string name="com_facebook_loginview_logged_in_as">Aangemeld als: %1$s</string>
+    <string name="com_facebook_loginview_logged_in_using_facebook">Aangemeld via Facebook</string>
+    <string name="com_facebook_send_button_text">Verzenden</string>
+    <string name="com_facebook_share_button_text">Delen</string>
+    <string name="com_facebook_tooltip_default">Nieuw! Jij hebt de controle. Kies welke informatie je met apps wilt delen.</string>
+    <string msgid="8585111718777012708" name="common_google_play_services_enable_button">"Inschakelen"</string>
+    <string msgid="7045129128108380659" name="common_google_play_services_enable_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> werkt niet, tenzij je Google Play-services inschakelt."</string>
+    <string msgid="3147157405986503375" name="common_google_play_services_enable_title">"Google Play-services inschakelen"</string>
+    <string msgid="9115728400623041681" name="common_google_play_services_install_button">"Installeren"</string>
+    <string msgid="8179894293032530091" name="common_google_play_services_install_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> kan niet worden uitgevoerd zonder Google Play-services, die je nog niet op je apparaat hebt."</string>
+    <string msgid="7442193194585196676" name="common_google_play_services_install_title">"Google Play-services ophalen"</string>
+    <string msgid="4293541511340436975" name="common_google_play_services_notification_channel_name">"Beschikbaarheid van Google Play-services"</string>
+    <string msgid="180394615667698242" name="common_google_play_services_notification_ticker">"Fout met Google Play-services"</string>
+    <string msgid="2518680582564677258" name="common_google_play_services_unknown_issue">"<ns1:g id="APP_NAME">%1$s</ns1:g> ondervindt problemen met Google Play-services. Probeer het opnieuw."</string>
+    <string msgid="5501187292256987189" name="common_google_play_services_unsupported_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> kan niet worden uitgevoerd zonder Google Play-services, die niet worden ondersteund op je apparaat."</string>
+    <string msgid="8172070149091615356" name="common_google_play_services_update_button">"Updaten"</string>
+    <string msgid="7773943415006962566" name="common_google_play_services_update_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> kan niet worden uitgevoerd, tenzij je Google Play-services updatet."</string>
+    <string msgid="8706675115216073244" name="common_google_play_services_update_title">"Google Play-services updaten"</string>
+    <string msgid="7894275749778928941" name="common_google_play_services_updating_text">"<ns1:g id="APP_NAME">%1$s</ns1:g> kan niet worden uitgevoerd zonder Google Play-services, die momenteel worden geüpdatet."</string>
+    <string msgid="2804989272736383918" name="common_google_play_services_wear_update_text">"Er is een nieuwe versie van Google Play-services vereist. De update wordt binnenkort automatisch uitgevoerd."</string>
+    <string msgid="5201977337835724196" name="common_open_on_phone">"Openen op telefoon"</string>
+    <string msgid="3441753203274453993" name="common_signin_button_text">"Inloggen"</string>
+    <string msgid="669893613918351210" name="common_signin_button_text_long">"Inloggen met Google"</string>
+    <string name="dgts__call_me">Bel me</string>
+    <string name="dgts__calling">Bellen…</string>
+    <string name="dgts__confirmation_code">Bevestigingscode</string>
+    <string name="dgts__confirmation_edit_hint">Vul de 6-cijferige code in die we je hebben gestuurd</string>
+    <string name="dgts__confirmation_error">We konden je telefoonnummer niet bevestigen.</string>
+    <string name="dgts__confirmation_error_alternative">Sorry, we kunnen je geen bevestigingscode sturen.</string>
+    <string name="dgts__continue">Verder</string>
+    <string name="dgts__create_account">Account maken</string>
+    <string name="dgts__digits_logo_desc">pictogram van Digits-logo</string>
+    <string name="dgts__digits_logo_name_desc">naam van Digits-logo</string>
+    <string name="dgts__dismiss">Verbergen</string>
+    <string name="dgts__done">Klaar</string>
+    <string name="dgts__email_request_edit_hint">E-mailadres</string>
+    <string name="dgts__email_request_title">E-mailadres invoeren</string>
+    <string name="dgts__find_your_friends">Je vrienden zoeken</string>
+    <string name="dgts__image_header_description">Afbeeldingskoptekst voor inloggen</string>
+    <string name="dgts__invalid_email">Ongeldig e-mailadres. Probeer het opnieuw.</string>
+    <string name="dgts__invite_no_session_warning">Waarschuwing van Digits: geen actieve sessie gevonden. Er is een actieve sessie vereist om  overeenkomsten met contacten op te halen en om invitedPhoneNumbers op te slaan/op te halen. Log de gebruiker in voor de volledige ervaring.</string>
+    <string name="dgts__invite_post">Uitgenodigd</string>
+    <string name="dgts__invite_pre">Uitnodigen</string>
+    <string name="dgts__invite_sms">Hallo %1$s. Ik gebruik %2$s - Meld je ook aan!</string>
+    <string name="dgts__invite_to_appname">Uitnodigen voor %1$s</string>
+    <string name="dgts__login_digits_text">Mijn telefoonnummer gebruiken</string>
+    <string name="dgts__network_error">Controleer je internetverbinding en probeer het opnieuw.</string>
+    <string name="dgts__not_now">Nu niet</string>
+    <string name="dgts__okay">Oké</string>
+    <string name="dgts__phone_number_edit_hint">Je telefoonnummer</string>
+    <string name="dgts__phone_number_text">Vul je telefoonnummer in</string>
+    <string name="dgts__pin_code_verification_title">Voer de code voor 2-staps verificatie in</string>
+    <string name="dgts__resend_confirmation_button_code">Code sturen</string>
+    <string name="dgts__send_confirmation_code">Bevestigingscode versturen</string>
+    <string name="dgts__sending">Verzenden…</string>
+    <string name="dgts__success_desc">Gelukt-pictogram</string>
+    <string name="dgts__terms_email_request">Als je hierboven op %1$sVerder%1$s klikt, voeg je dit e-mail adres toe aan je Digits account. Je geeft hiermee toestemming dat deze app en %7$salle andere apps in je Digits-account%5$s toegang krijgen tot dit e-mailadres en dat de gebruikers van deze apps je kunnen vinden via je e-mailadres.</string>
+    <string name="dgts__terms_text">Als je hierboven op %1$sBevestigingscode verzenden%1$s tikt, stuurt %6$sDigits by Twitter%5$s je een sms om je telefoonnummer te bevestigen. Op het volgende scherm kun je kiezen voor \'\'Opnieuw sturen\'\' om een nieuwe sms te ontvangen, of voor \'\'Bel me\'\' om een spraakoproep te ontvangen om je telefoonnummer te bevestigen. Standaardkosten voor berichten, gegevens en bellen kunnen van toepassing zijn.</string>
+    <string name="dgts__terms_text_call_me">Als je hierboven op %1$sBel me%1$s tikt, stuurt %6$sDigits by Twitter%5$s je een spraakoproep om je telefoonnummer te bevestigen. Standaardkosten voor bellen en dataverbruik van toepassing.</string>
+    <string name="dgts__terms_text_create">Als je hierboven op %1$sAccount maken%1$s tikt, ga je akkoord met de %8$salgemene voorwaarden%5$s, het %9$sprivacybeleid%5$s en het %10$scookiebeleid%5$s van %6$sDigits by Twitter%5$s. Je deelt hiermee je telefoonnummer met %4$s en andere gebruikers van %4$s kunnen je vinden via je telefoonnummer.</string>
+    <string name="dgts__terms_text_sign_in">Als je hierboven op %1$sVerder%1$s tikt, wordt je %7$stelefoonnummer en/of e-mailadres van Digits%5$s gedeeld met %4$s. Andere gebruikers van %4$s kunnen je vinden via je telefoonnummer en/of e-mailadres.</string>
+    <string name="dgts__terms_text_updated">Als je hierboven op %1$sVerder%1$s tikt, ga je akkoord met de %8$salgemene voorwaarden%5$s, het %9$sprivacybeleid%5$s en het %10$scookiebeleid%5$s van %6$sDigits by Twitter%5$s. Je deelt hiermee je %7$stelefoonnummer en/of e-mailadres van Digits%5$s met %4$s. Andere gebruikers van %4$s kunnen je vinden via je telefoonnummer en/of e-mailadres.</string>
+    <string name="dgts__try_again">Probeer het opnieuw</string>
+    <string name="dgts__try_again_confirmation">Controleer je code en probeer het opnieuw.</string>
+    <string name="dgts__try_again_email">Controleer je e-mail en probeer het opnieuw</string>
+    <string name="dgts__try_again_phone_number">Controleer je telefoonnummer en probeer het opnieuw.</string>
+    <string name="dgts__try_another_phone">Probeer een ander telefoonnummer</string>
+    <string name="dgts__unsupported_operator_error">Het is niet mogelijk om dit nummer een sms-bericht te sturen.</string>
+    <string name="dgts__upload_contacts">We gebruiken Digits by Twitter om vrienden te zoeken die deze app gebruiken. Als je op OK tikt, wordt je adresboek naar Digits by Twitter geüpload om bekenden die %1$s gebruiken te vinden en andere mensen die %1$s gebruiken, te helpen jou te vinden.</string>
+    <string name="dgts__verification_code">Verificatiecode</string>
+    <string name="dgts_pin_code_terms">Je hebt eerder een code voor 2-staps verificatie ingesteld op digits.com</string>
+    <string msgid="4133737464567140336" name="fcm_fallback_notification_channel_label">"Overige"</string>
+    <string name="messenger_send_button_text">Verzenden</string>
+    <string msgid="1685185767093348095" name="mr_button_content_description">"Cast-icoon"</string>
+    <string msgid="1350095112462806159" name="mr_cast_button_connected">"Cast-icoon. Verbonden"</string>
+    <string msgid="8959304318293841992" name="mr_cast_button_connecting">"Cast-icoon. Verbinding maken"</string>
+    <string msgid="5501231066847739632" name="mr_cast_button_disconnected">"Cast-icoon. Verbinding verbroken"</string>
+    <string msgid="5504553798429329689" name="mr_chooser_searching">"Apparaten zoeken"</string>
+    <string msgid="7548226170787476564" name="mr_chooser_title">"Casten naar"</string>
+    <string msgid="5813284753012893250" name="mr_controller_album_art">"Albumhoes"</string>
+    <string msgid="5286734709674025661" name="mr_controller_casting_screen">"Scherm casten"</string>
+    <string msgid="5468775621814500662" name="mr_controller_close_description">"Sluiten"</string>
+    <string msgid="5518911192681928413" name="mr_controller_collapse_group">"Samenvouwen"</string>
+    <string msgid="1370654436555555647" name="mr_controller_disconnect">"Verbinding verbreken"</string>
+    <string msgid="2422682304043876468" name="mr_controller_expand_group">"Uitvouwen"</string>
+    <string msgid="7299368841849988218" name="mr_controller_no_info_available">"Geen informatie beschikbaar"</string>
+    <string msgid="4342878516155861006" name="mr_controller_no_media_selected">"Geen media geselecteerd"</string>
+    <string msgid="4701315813294065305" name="mr_controller_pause">"Pauzeren"</string>
+    <string msgid="4443315438268112801" name="mr_controller_play">"Afspelen"</string>
+    <string msgid="5106056093749454009" name="mr_controller_stop">"Stoppen"</string>
+    <string msgid="7617024847862349259" name="mr_controller_stop_casting">"Casten stoppen"</string>
+    <string msgid="691656961160498512" name="mr_controller_volume_slider">"Volumeschuifregelaar"</string>
+    <string msgid="3117964881088969586" name="mr_system_route_name">"Systeem"</string>
+    <string msgid="8236416097133080726" name="mr_user_route_category_name">"Apparaten"</string>
+    <string msgid="368094699078615544" name="s1">"Afbeelding opslaan"</string>
+    <string msgid="4550830452390689489" name="s2">"Advertentie toestaan om afbeelding op te slaan in fotogalerij?"</string>
+    <string msgid="2435407834265420668" name="s3">"Accepteren"</string>
+    <string msgid="9167523597401839819" name="s4">"Weigeren"</string>
+    <string msgid="1566682516266724847" name="s5">"Agenda-afspraak maken"</string>
+    <string msgid="5996672174517137271" name="s6">"Advertentie toestaan om een agenda-afspraak te maken?"</string>
+    <string msgid="7163549807207034258" name="s7">"Testadvertentie"</string>
+    <string msgid="146198913615257606" name="search_menu_title">"Zoeken"</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="tw__allow_btn_txt">Toestaan</string>
+    <string name="tw__login_btn_txt">Inloggen met Twitter</string>
+    <string name="tw__not_now_btn_txt">Niet nu</string>
+    <string name="tw__share_email_desc">Geef %1$s toegang tot het e-mailadres van je Twitter-account \@%2$s zodat %1$s er gebruik van kan maken volgens het privacy beleid. %1$s kan je bijvoorbeeld updates en andere informatie te sturen op dat adres.</string>
+    <string name="tw__share_email_title">E-mailadres delen</string>
+</resources>

@@ -6,7 +6,8 @@
 
             <corners android:radius="2dp"/>
 
-            <solid android:color="@color/accent"/>
+            <!--solid android:color="@color/accent"/-->
+            <solid android:color="#ffffff"/>
 
             <size
                 android:height="32dp"
@@ -19,11 +20,9 @@
 
             <corners android:radius="2dp"/>
 
-<<<<<<< HEAD
-            <solid android:color="@color/accent"/>
-=======
-            <solid android:color="#FF737373"/>
->>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
+            <!--solid android:color="@color/accent"/-->
+            <!--solid android:color="#FF737373"/-->
+            <solid android:color="#ffffff"/>
 
             <size
                 android:height="32dp"
@@ -31,9 +30,7 @@
         </shape>
     </item>
 
-<<<<<<< HEAD
 </selector>
 <!--<solid android:color="#FF737373"/>-->
-=======
-</selector>
->>>>>>> a337ce9e29afa160fbc1237e2310a887c985a37a
+
+

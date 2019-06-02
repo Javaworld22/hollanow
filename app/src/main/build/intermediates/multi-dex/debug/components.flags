@@ -1,0 +1,159 @@
+-injars 'C:\Users\user\AppData\Local\Android\sdk\build-tools\28.0.0\renderscript\lib\renderscript-v8.jar'(**.class)
+-injars 'C:\AndroidProject\betacaller\app\libs\adcolony.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\digits-2.0.4.aar\4d975d45da4bbf824b429a611a152a17\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\crashlytics-2.6.5.aar\2624a38b93819f6044989801f3b57c40\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\crashlytics-core-2.3.14.aar\83b5da9198a8268bc683435d1a5c1fbb\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\answers-1.3.10.aar\f56206c16dcb63dd16ff5a235bd9ded6\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\design-28.0.0.aar\25c0b513514158acdb5992c110928332\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\mediarouter-v7-28.0.0.aar\c90e8328616597d9d29146336ac507ee\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\appintro-3.4.0.aar\ff19bb918a5250d55ae18e1f7474a10d\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\target-tooltip-library-1.3.15.aar\d47fcafb4fda8f4a9d0c48b105fd55a7\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\fastscroll-0.2.5.aar\f49cf578f8c341cddb1b759e0f232431\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\library-1.0.2.aar\c15bb07c0d758fb29cf2b15476114868\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\hyperlog-0.0.9.aar\17c2a081f3f06b856cd500c509e1f9e4\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\appcompat-v7-28.0.0.aar\b29f308d964562dfdd28073e799d7241\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\facebook-android-sdk-4.7.0.aar\0d3c0553aaac4c7580b30f9108b529d0\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\library-1.3.3.aar\1b4dd6c4f973f5c8a9b16c54b408fde9\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\pagerslidingtabstrip-1.0.1.aar\d4629d7031cf24d4e0d3aeebb8c482ca\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\android-iconify-fontawesome-2.1.1.aar\7f4a62c260900087edbe06c0c6a35cb9\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\android-iconify-2.1.1.aar\88eae63ffe8ba8e74bcffd8915ed1c3f\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-location-16.0.0.aar\caa3a476ef04892837522cfd1d93e394\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-auth-16.0.0.aar\b941a146b114b1b57f3d4e29b22e9dd5\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-auth-11.8.0.aar\0f063485957162be2f3cc2758df6efba\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-messaging-11.8.0.aar\d4be322d59d8aa5f2f4ec6cd5e205367\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-appindexing-11.8.0.aar\03d93fdda00f74659699507fbae3f0f1\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-crash-11.8.0.aar\c199d789518644e7421b8d0a84be55b6\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-places-placereport-16.0.0.aar\f19ea12f9a861f64f2c00bcf9e8789e3\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-auth-api-phone-15.0.1.aar\e46f937bfdbbff36fbcbb5f101b34a63\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-auth-base-15.1.0.aar\a4ca96ab6aa760d868a3d5181bf09a64\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-core-16.0.0.aar\d17f646be7e5ee9b01b95142579fa105\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-measurement-connector-impl-16.0.0.aar\7bc372b424877e2f13a4477dbeabc1e1\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-measurement-connector-16.0.0.aar\53497119fc1c9ea27b69a405da3b1f25\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-analytics-16.0.0.aar\635264e936e999b070d730cce5f2e6b8\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-analytics-impl-16.0.0.aar\e22dde8f0951550d510b858cc0ec9710\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-iid-16.0.0.aar\1f7bd7218fd6568ac32691a6c0748454\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-iid-interop-16.0.0.aar\b79d3b1c197b55276eac7bf82a3d54ed\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-base-16.0.1.aar\6f076424d57e7adc7a480d8da3037569\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-common-16.0.0.aar\d825f74e0f96f20c2d25785e5b6a4391\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-tasks-16.0.1.aar\ea6c11565e5ad8ff49e60f6ada921969\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\audience-network-sdk-4.7.0.aar\f5f2324a655dcd2aea7fbc8e1d1908ee\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-ads-16.0.0.aar\0310196eeb976f471d0c680cd4c48f51\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-ads-lite-16.0.0.aar\e691a7f01680871abc3dd35a97f1d664\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-gass-16.0.0.aar\f72bd5638fa2f54f11765e60801d395d\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-ads-identifier-16.0.0.aar\c5d65bf20febb4306c1104b8f029d3f5\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-basement-16.0.1.aar\3f64d612b7e5e8b947a60dd92a6c2c6a\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\support-v4-28.0.0.aar\04efac4136b7a99a4f849c16b28170ee\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\cardview-v7-28.0.0.aar\7550cfe71d4699abeca79e5e12092c72\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\recyclerview-v7-28.0.0.aar\f5bff8314cac8c82f73e0f8b399caad4\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\palette-v7-28.0.0.aar\0a5e05a167530157daa077b05d2241fa\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\constraint-layout-1.1.3.aar\1c84803aea801bcea80196ee0d7c5936\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\support-media-compat-28.0.0.aar\8e42e3b4fedfd30ee09752faf3f7a81c\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\animated-vector-drawable-28.0.0.aar\18ee46c32c1c51ce04edbab32af8de7f\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\work-runtime-1.0.1.aar\94e5652443fe46df74911810fb04d491\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\extensions-1.1.0.aar\a58a0cb47fffe490b7731ecbbe94ff6e\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\support-fragment-28.0.0.aar\76cf096a6d33ee3341f0f34ddf8d3e7c\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\support-core-ui-28.0.0.aar\b3c5f8b507023c54c2c8ada8dc4f5976\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\transition-28.0.0.aar\17414ad50d654ab34b49973af038f35f\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\viewpager-28.0.0.aar\97f73061fd6aa53527641faba61b700d\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\coordinatorlayout-28.0.0.aar\559c340d3d782300537e9246efb5ee44\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\drawerlayout-28.0.0.aar\b9f1b2c1a06651f485b4d2f1d1ad6ff4\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\slidingpanelayout-28.0.0.aar\361968a5996f7d25c290ad5858f0b96c\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\customview-28.0.0.aar\6cd1bb8baec43c5764b5166f0b29b6c4\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\swiperefreshlayout-28.0.0.aar\444d694a8526901a96c7fad701357bcb\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\asynclayoutinflater-28.0.0.aar\efedb5a6b5ba681a2bd2bb93e3e56d5f\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\customtabs-26.1.0.aar\a24137e7a79d39dd9347103961eb58e1\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\support-vector-drawable-28.0.0.aar\95434dc384f9511e73358a2f91aa213f\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\bde78b87892818c89d9ec49eaad923a4\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\support-core-utils-28.0.0.aar\2bbef06d78edd595cff022afb900c02b\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\loader-28.0.0.aar\cb95af9a4fed3de8b513324e739e82fd\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\support-compat-28.0.0.aar\208b68f7577bae66174638899d67f5f4\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\versionedparcelable-28.0.0.aar\216649057813063e0b6a099c9cda5922\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.android.support\collections\28.0.0\c1bcdade4d3cc2836130424a3f3e4182c666a745\collections-28.0.0.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\interpolator-28.0.0.aar\9270c0eb77e78943253779f332fd4b37\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\cursoradapter-28.0.0.aar\a13f56cd48ef992fd81ce6b0c250ef7d\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\android.arch.persistence.room\common\1.1.1\8094cc50760b9ac665a8ea76b51888f70042e2b5\common-1.1.1.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\db-framework-1.1.1.aar\82c9ca7c0569d71751476023da8c0842\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\db-1.1.1.aar\5fc26c230e206362e9d0f00f7c8b875e\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\parse-android-1.15.7.aar\cc783741695459f5909e4497afbece33\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\6837131166d64d12839e0460d57552ae\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\viewmodel-1.1.1.aar\46d19e868e51c904543be80e46050e6a\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\livedata-1.1.1.aar\0f4a6125470edcc5802fab2de229b11c\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.1.aar\45a7fbdb4aeaf06969c5da13c3753f38\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\4fda2a4710e23a27498342da1a5921f2\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\documentfile-28.0.0.aar\a42f1cb70b41710df6c1b7c52f1ad8bd\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\localbroadcastmanager-28.0.0.aar\c4a6edff9fcde00aec72360f3a018e70\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\print-28.0.0.aar\68c480256fc947c854bffa37c337f867\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\android.arch.lifecycle\common\1.1.1\207a6efae6a3555e326de41f76bdadd9a239cbce\common-1.1.1.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\android.arch.core\common\1.1.1\e55b70d1f5620db124b3e85a7f4bdc7bd48d9f95\common-1.1.1.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.android.support\support-annotations\28.0.0\ed73f5337a002d1fd24339d5fb08c2c9d9ca60d8\support-annotations-28.0.0.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.squareup.picasso\picasso\2.5.2\7446d06ec8d4f7ffcc53f1da37c95f200dcb9387\picasso-2.5.2.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\twitter-core-2.3.0.aar\c9e412551e35e854fbe98ab31d958755\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\converter-gson\2.0.2\f8d87f15b94b8d74e7ccf61d7eedb558811cdb30\converter-gson-2.0.2.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\retrofit-mock\2.0.2\befed42cb4fb8e85ef205b3facfd5b4e43fc1c8f\retrofit-mock-2.0.2.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit2\retrofit\2.1.0\2de7cd8b95b7021b1d597f049bcb422055119f2c\retrofit-2.1.0.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.8.0\c4ba5371a29ac9b2ad6129b1d39ea38750043eff\gson-2.8.0.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\commons-io\commons-io\1.3.2\b6dde38349ba9bb5e6ea6320531eae969985dae5\commons-io-1.3.2.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\Android-0.0.3.aar\4eff0d058101fddb0cfd830c91a25816\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\MaterialShowcaseView-1.1.0.aar\fac84497b2707c721759e95451aaf305\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\view-pager-transforms-1.2.32.aar\9dd3f01ae29a6466cd377f22d1e9be3d\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.googlecode.libphonenumber\libphonenumber\8.5.2\4a5b5caed312654f6aa2171d2f24e44785621d3d\libphonenumber-8.5.2.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\multidex-1.0.2.aar\69b14376ac7766f6cddf0b8dee575fbc\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\android-permissions-0.1.7.aar\be6903fa6d90c378ee71a2070c20e023\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\beta-1.2.2.aar\a9467ef2847d6556385fad6f6a450d74\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\fabric-1.3.14.aar\ea041c030f4de56c8775ff1590872781\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\answers-shim-0.0.4.aar\a8c07aeccf00182a1e6fd726aedd5ffa\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.android.support.constraint\constraint-layout-solver\1.1.3\bde0667d7414c16ed62d3cfe993cff7f9d732373\constraint-layout-solver-1.1.3.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-ads-base-16.0.0.aar\43e3658f34b7189d22915eb59047e31b\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.squareup.okhttp3\okhttp\3.6.0\69edde9fc4b01c9fd51d25b83428837478c27254\okhttp-3.6.0.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-auth-license-11.8.0.aar\f9e089e51ca3026e7bf3270f4c70a37b\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-messaging-license-11.8.0.aar\fe2c398729da0ab9bb361b30994b884f\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-appindexing-license-11.8.0.aar\2314e2c2d5d87ee71c8a687e0925f25c\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\firebase-crash-license-11.8.0.aar\cf4eaafc231e78be18717dd02881bf73\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.google.guava\listenablefuture\1.0\c949a840a6acbc5268d088e47b04177bf90b3cad\listenablefuture-1.0.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\volley-1.0.0.aar\eacdf92b427bd7dd0787908559466e3c\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.parse.bolts\bolts-tasks\1.4.0\d85884acf6810a3bbbecb587f239005cbc846dc4\bolts-tasks-1.4.0.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-measurement-base-15.0.4.aar\4696400432c8821d5b336ec609be3e19\jars\classes.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\modules-2\files-2.1\com.squareup.okio\okio\1.11.0\840897fcd7223a8143f1d9b6f69714e7be34fd50\okio-1.11.0.jar'(**.class)
+-injars 'C:\Users\user\.gradle\caches\transforms-1\files-1.1\play-services-stats-15.0.1.aar\0b75944423fc69d839f141e6bd3e9464\jars\classes.jar'(**.class)
+-injars 'C:\AndroidProject\betacaller\app\build\intermediates\classes\debug'(**.class)
+-outjars 'C:\AndroidProject\betacaller\app\build\intermediates\multi-dex\debug\componentClasses.jar'
+
+-libraryjars 'C:\Users\user\AppData\Local\Android\Sdk\build-tools\28.0.0\lib\shrinkedAndroid.jar'
+
+-forceprocessing
+-dontoptimize
+-dontobfuscate
+-dontusemixedcaseclassnames
+-dontpreverify
+-dontnote **
+-dontwarn **
+-printconfiguration 'C:\AndroidProject\betacaller\app\build\intermediates\multi-dex\debug\components.flags'
+
+
+# Referenced at C:\AndroidProject\betacaller\app\build\intermediates\manifests\full\debug\AndroidManifest.xml:52
+-keep class com.doxa360.android.betacaller.BetaCaller {
+    <init>(...);
+}
+
+-keep public class * extends android.app.Instrumentation {
+    <init>();
+}
+
+-keep public class * extends android.app.Application {
+    <init>();
+    void attachBaseContext(android.content.Context);
+}
+
+-keep public class * extends android.app.backup.BackupAgent {
+    <init>();
+}
+
+-keep public class * extends java.lang.annotation.Annotation {
+    <fields>;
+    <methods>;
+}
+
+-keep class com.android.tools.ir.** {
+    <fields>;
+    <methods>;
+}

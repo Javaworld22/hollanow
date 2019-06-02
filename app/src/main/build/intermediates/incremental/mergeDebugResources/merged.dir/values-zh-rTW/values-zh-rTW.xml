@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2">
+    <string msgid="4600421777120114993" name="abc_action_bar_home_description">"瀏覽首頁"</string>
+    <string msgid="1594238315039666878" name="abc_action_bar_up_description">"向上瀏覽"</string>
+    <string msgid="3588849162933574182" name="abc_action_menu_overflow_description">"更多選項"</string>
+    <string msgid="4076576682505996667" name="abc_action_mode_done">"完成"</string>
+    <string msgid="7468859129482906941" name="abc_activity_chooser_view_see_all">"查看全部"</string>
+    <string msgid="2031811694353399454" name="abc_activitychooserview_choose_application">"選擇應用程式"</string>
+    <string msgid="121134116657445385" name="abc_capital_off">"關閉"</string>
+    <string msgid="3405795526292276155" name="abc_capital_on">"開啟"</string>
+    <string msgid="1302280443949172191" name="abc_menu_alt_shortcut_label">"Alt +"</string>
+    <string msgid="1324831542140195728" name="abc_menu_ctrl_shortcut_label">"Ctrl +"</string>
+    <string msgid="8362206064229013510" name="abc_menu_delete_shortcut_label">"Delete 鍵"</string>
+    <string msgid="8341180395196749340" name="abc_menu_enter_shortcut_label">"Enter 鍵"</string>
+    <string msgid="4792426091847145555" name="abc_menu_function_shortcut_label">"Fn +"</string>
+    <string msgid="7643535737296831317" name="abc_menu_meta_shortcut_label">"Meta +"</string>
+    <string msgid="8126296154200614004" name="abc_menu_shift_shortcut_label">"Shift +"</string>
+    <string msgid="2378550843553983978" name="abc_menu_space_shortcut_label">"空格鍵"</string>
+    <string msgid="9002602288060866689" name="abc_menu_sym_shortcut_label">"Sym +"</string>
+    <string msgid="1351762916121158029" name="abc_prepend_shortcut_label">"Menu +"</string>
+    <string msgid="7723749260725869598" name="abc_search_hint">"搜尋…"</string>
+    <string msgid="3691816814315814921" name="abc_searchview_description_clear">"清除查詢"</string>
+    <string msgid="2550479030709304392" name="abc_searchview_description_query">"搜尋查詢"</string>
+    <string msgid="8264924765203268293" name="abc_searchview_description_search">"搜尋"</string>
+    <string msgid="8928215447528550784" name="abc_searchview_description_submit">"提交查詢"</string>
+    <string msgid="893419373245838918" name="abc_searchview_description_voice">"語音搜尋"</string>
+    <string msgid="3421042268587513524" name="abc_shareactionprovider_share_with">"選擇分享對象"</string>
+    <string msgid="3300176832234831527" name="abc_shareactionprovider_share_with_application">"與「<ns1:g id="APPLICATION_NAME">%s</ns1:g>」分享"</string>
+    <string msgid="1603543279005712093" name="abc_toolbar_collapse_description">"收合"</string>
+    <string name="com_facebook_image_download_unknown_error">下載圖像時發生非預期的錯誤。</string>
+    <string name="com_facebook_internet_permission_error_message">WebView 登入需要「網際網路」授權</string>
+    <string name="com_facebook_internet_permission_error_title">AndroidManifest 錯誤</string>
+    <string name="com_facebook_like_button_liked">說讚</string>
+    <string name="com_facebook_like_button_not_liked">讚</string>
+    <string name="com_facebook_loading">正在載入…</string>
+    <string name="com_facebook_loginview_cancel_action">取消</string>
+    <string name="com_facebook_loginview_log_in_button">登入</string>
+    <string name="com_facebook_loginview_log_in_button_long">使用 Facebook 登入</string>
+    <string name="com_facebook_loginview_log_out_action">登出</string>
+    <string name="com_facebook_loginview_log_out_button">登出</string>
+    <string name="com_facebook_loginview_logged_in_as">使用下列身分登入：%1$s</string>
+    <string name="com_facebook_loginview_logged_in_using_facebook">已使用 Facebook 登入</string>
+    <string name="com_facebook_send_button_text">傳送</string>
+    <string name="com_facebook_share_button_text">分享</string>
+    <string name="com_facebook_tooltip_default">新消息！您已成功登入，請選擇要與應用程式分享的資訊。</string>
+    <string msgid="8585111718777012708" name="common_google_play_services_enable_button">"啟用"</string>
+    <string msgid="7045129128108380659" name="common_google_play_services_enable_text">"您必須啟用 Google Play 服務，才能執行「<ns1:g id="APP_NAME">%1$s</ns1:g>」。"</string>
+    <string msgid="3147157405986503375" name="common_google_play_services_enable_title">"啟用 Google Play 服務"</string>
+    <string msgid="9115728400623041681" name="common_google_play_services_install_button">"安裝"</string>
+    <string msgid="8179894293032530091" name="common_google_play_services_install_text">"您的裝置並未安裝 Google Play 服務，因此無法執行「<ns1:g id="APP_NAME">%1$s</ns1:g>」。"</string>
+    <string msgid="7442193194585196676" name="common_google_play_services_install_title">"取得 Google Play 服務"</string>
+    <string msgid="4293541511340436975" name="common_google_play_services_notification_channel_name">"Google Play 服務可用性"</string>
+    <string msgid="180394615667698242" name="common_google_play_services_notification_ticker">"Google Play 服務發生錯誤"</string>
+    <string msgid="2518680582564677258" name="common_google_play_services_unknown_issue">"「<ns1:g id="APP_NAME">%1$s</ns1:g>」無法存取 Google Play 服務，請再試一次。"</string>
+    <string msgid="5501187292256987189" name="common_google_play_services_unsupported_text">"您的裝置不支援 Google Play 服務，因此無法執行「<ns1:g id="APP_NAME">%1$s</ns1:g>」。"</string>
+    <string msgid="8172070149091615356" name="common_google_play_services_update_button">"更新"</string>
+    <string msgid="7773943415006962566" name="common_google_play_services_update_text">"您必須更新 Google Play 服務，才能執行「<ns1:g id="APP_NAME">%1$s</ns1:g>」。"</string>
+    <string msgid="8706675115216073244" name="common_google_play_services_update_title">"更新 Google Play 服務"</string>
+    <string msgid="7894275749778928941" name="common_google_play_services_updating_text">"執行「<ns1:g id="APP_NAME">%1$s</ns1:g>」所需的 Google Play 服務正在更新。"</string>
+    <string msgid="2804989272736383918" name="common_google_play_services_wear_update_text">"必須使用新版 Google Play 服務。該服務稍後就會自動更新。"</string>
+    <string msgid="5201977337835724196" name="common_open_on_phone">"在手機上開啟"</string>
+    <string msgid="3441753203274453993" name="common_signin_button_text">"登入"</string>
+    <string msgid="669893613918351210" name="common_signin_button_text_long">"使用 Google 帳戶登入"</string>
+    <string name="dgts__call_me">以電話確認</string>
+    <string name="dgts__calling">撥號中…</string>
+    <string name="dgts__confirmation_code">確認碼</string>
+    <string name="dgts__confirmation_edit_hint">請輸入我們傳送給你的 6 位數確認碼</string>
+    <string name="dgts__confirmation_error">無法確認你的電話號碼</string>
+    <string name="dgts__confirmation_error_alternative">抱歉，傳送你的確認碼時發生錯誤。</string>
+    <string name="dgts__continue">繼續</string>
+    <string name="dgts__create_account">建立帳戶</string>
+    <string name="dgts__digits_logo_desc">digits 標誌圖示</string>
+    <string name="dgts__digits_logo_name_desc">digits 標誌名稱</string>
+    <string name="dgts__dismiss">捨棄</string>
+    <string name="dgts__done">完成</string>
+    <string name="dgts__email_request_edit_hint">電子郵件地址</string>
+    <string name="dgts__email_request_title">輸入電子郵件地址</string>
+    <string name="dgts__find_your_friends">尋找你的朋友</string>
+    <string name="dgts__image_header_description">登入的影像標題</string>
+    <string name="dgts__invalid_email">電子郵件地址無效。請再試一次</string>
+    <string name="dgts__invite_no_session_warning">Digits 警告：找不到有效的工作階段。你必須有有效的工作階段，才能擷取相符的聯絡人、儲存/擷取 invitedPhoneNumbers。請將使用者登入以獲取完整的體驗。</string>
+    <string name="dgts__invite_post">已邀請</string>
+    <string name="dgts__invite_pre">邀請</string>
+    <string name="dgts__invite_sms">嗨，%1$s！我正在使用 %2$s - 一起加入吧！</string>
+    <string name="dgts__invite_to_appname">邀請使用 %1$s</string>
+    <string name="dgts__login_digits_text">使用我的電話號碼</string>
+    <string name="dgts__network_error">請檢查網路，然後再試一次。</string>
+    <string name="dgts__not_now">現在不用</string>
+    <string name="dgts__okay">確定</string>
+    <string name="dgts__phone_number_edit_hint">你的號碼</string>
+    <string name="dgts__phone_number_text">輸入你的電話號碼</string>
+    <string name="dgts__pin_code_verification_title">輸入 2 步驟認證碼</string>
+    <string name="dgts__resend_confirmation_button_code">重新傳送確認碼</string>
+    <string name="dgts__send_confirmation_code">發送確認碼</string>
+    <string name="dgts__sending">發送中…</string>
+    <string name="dgts__success_desc">成功圖示</string>
+    <string name="dgts__terms_email_request">如果點選上方的「%1$s繼續%1$s」，就會將此電子郵件加入 Digits 帳戶。你同意此應用程式和 %7$sDigits 帳戶中所列的所有應用程式%5$s都可以存取此電子郵件地址，而且其使用者可以透過電子郵件地址找到你。</string>
+    <string name="dgts__terms_text">如果點選上方的 %1$s發送確認碼%1$s，%6$sDigits by Twitter%5$s 就會發送簡訊給你，確認你的電話號碼。在下一個畫面中，你可以選擇「重新傳送確認碼」以接收新簡訊，或選擇「以電話確認」以接收確認電話號碼的語音通話。可能需要支付簡訊、通話和數據費用。</string>
+    <string name="dgts__terms_text_call_me">如果點選上方的「%1$s以電話確認%1$s」，%6$sDigits by Twitter%5$s 就會撥打語音通話給你，確認你的電話號碼。可能需支付通話和數據費用。</string>
+    <string name="dgts__terms_text_create">如果點選上方的 %1$s建立帳戶%1$s，即表示你同意 %6$sDigits by Twitter%5$s 的%8$s服務條款%5$s、%9$s隱私政策%5$s和 %10$sCookie 使用政策%5$s，同意將你的電話號碼與 %4$s 分享，並同意 %4$s 的其他使用者可以透過電話號碼找到你。</string>
+    <string name="dgts__terms_text_sign_in">如果點選上方的「%1$s繼續%1$s」，將會與 %4$s 分享你的 %7$sDigits 電話號碼和/或電子郵件地址%5$s，而且 %4$s 的其他使用者可以透過電話號碼和/或電子郵件地址找到你。</string>
+    <string name="dgts__terms_text_updated">如果點選上方的「%1$s繼續%1$s」，即表示你同意 %6$sDigits by Twitter%5$s 的%8$s服務條款%5$s、%9$s隱私政策%5$s和 %10$sCookie 使用政策%5$s，同意將你的 %7$sDigits 電話號碼和/或電子郵件地址%5$s與 %4$s 分享，並同意 %4$s 的其他使用者可以透過電話號碼和/或電子郵件地址找到你。</string>
+    <string name="dgts__try_again">再試一次</string>
+    <string name="dgts__try_again_confirmation">請檢查你的代碼，然後再試一次。</string>
+    <string name="dgts__try_again_email">請檢查你的電子郵件地址，然後再試一次</string>
+    <string name="dgts__try_again_phone_number">請檢查你的號碼，然後再試一次。</string>
+    <string name="dgts__try_another_phone">請試試不同的電話號碼</string>
+    <string name="dgts__unsupported_operator_error">無法將簡訊發送至這個電話號碼。</string>
+    <string name="dgts__upload_contacts">我們會使用 Digits by Twitter 為你尋找更多在使用此應用程式的朋友。當你點選「確定」時，我們就會將你的通訊錄上傳到 Digits by Twitter，以便協助你尋找你認識的 %1$s 的使用者，或協助其他 %1$s 的使用者找到你。</string>
+    <string name="dgts__verification_code">認證碼</string>
+    <string name="dgts_pin_code_terms">你先前已在 digits.com 上設定 2 步驟認證碼</string>
+    <string msgid="4133737464567140336" name="fcm_fallback_notification_channel_label">"其他"</string>
+    <string name="messenger_send_button_text">傳送</string>
+    <string msgid="1685185767093348095" name="mr_button_content_description">"投放按鈕"</string>
+    <string msgid="1350095112462806159" name="mr_cast_button_connected">"投放按鈕；已連線"</string>
+    <string msgid="8959304318293841992" name="mr_cast_button_connecting">"投放按鈕；連線中"</string>
+    <string msgid="5501231066847739632" name="mr_cast_button_disconnected">"投放按鈕；已中斷連線"</string>
+    <string msgid="5504553798429329689" name="mr_chooser_searching">"正在尋找裝置"</string>
+    <string msgid="7548226170787476564" name="mr_chooser_title">"投放到"</string>
+    <string msgid="5813284753012893250" name="mr_controller_album_art">"專輯封面"</string>
+    <string msgid="5286734709674025661" name="mr_controller_casting_screen">"正在投放畫面"</string>
+    <string msgid="5468775621814500662" name="mr_controller_close_description">"關閉"</string>
+    <string msgid="5518911192681928413" name="mr_controller_collapse_group">"收合"</string>
+    <string msgid="1370654436555555647" name="mr_controller_disconnect">"中斷連線"</string>
+    <string msgid="2422682304043876468" name="mr_controller_expand_group">"展開"</string>
+    <string msgid="7299368841849988218" name="mr_controller_no_info_available">"沒有可用的資訊"</string>
+    <string msgid="4342878516155861006" name="mr_controller_no_media_selected">"未選取任何媒體"</string>
+    <string msgid="4701315813294065305" name="mr_controller_pause">"暫停"</string>
+    <string msgid="4443315438268112801" name="mr_controller_play">"播放"</string>
+    <string msgid="5106056093749454009" name="mr_controller_stop">"停止"</string>
+    <string msgid="7617024847862349259" name="mr_controller_stop_casting">"停止投放"</string>
+    <string msgid="691656961160498512" name="mr_controller_volume_slider">"音量滑桿"</string>
+    <string msgid="3117964881088969586" name="mr_system_route_name">"系統"</string>
+    <string msgid="8236416097133080726" name="mr_user_route_category_name">"裝置"</string>
+    <string msgid="368094699078615544" name="s1">"儲存圖片"</string>
+    <string msgid="4550830452390689489" name="s2">"要允許廣告將圖片儲存在相片庫中嗎？"</string>
+    <string msgid="2435407834265420668" name="s3">"接受"</string>
+    <string msgid="9167523597401839819" name="s4">"拒絕"</string>
+    <string msgid="1566682516266724847" name="s5">"建立日曆活動"</string>
+    <string msgid="5996672174517137271" name="s6">"要允許廣告建立日曆活動嗎？"</string>
+    <string msgid="7163549807207034258" name="s7">"測試廣告"</string>
+    <string msgid="146198913615257606" name="search_menu_title">"搜尋"</string>
+    <string msgid="7988687684186075107" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="tw__allow_btn_txt">允許</string>
+    <string name="tw__login_btn_txt">使用 Twitter 登入</string>
+    <string name="tw__not_now_btn_txt">現在不要</string>
+    <string name="tw__share_email_desc">允許 %1$s 存取與你的 Twitter 帳戶相關的電子郵件地址 \@%2$s 如此一來，%1$s 可以根據隱私政策使用該電子郵件地址。例如，%1$s 可以將最新消息和其他資訊寄至該電子郵件地址。</string>
+    <string name="tw__share_email_title">分享你的電子郵件地址</string>
+</resources>

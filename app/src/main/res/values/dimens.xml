@@ -3,11 +3,12 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="app_bar_height">180dp</dimen>
-    <dimen name="text_margin">16dp</dimen>
-    <dimen name="toolbar_image_height">256dp</dimen>
+    <dimen name="Holla_text_view">43dp</dimen>
+    <dimen name="default_text">14dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="app_bar_height_256">256dp</dimen>
+    <dimen name="easy_dialog_default_left_margin">12dp</dimen>
+    <dimen name="easy_dialog_default_right_margin">12dp</dimen>
 
 
 

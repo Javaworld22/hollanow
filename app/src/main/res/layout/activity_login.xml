@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/linearlayout"
-    tools:context="com.doxa360.android.betacaller.LoginActivity">
+                tools:context="com.doxa360.android.betacaller.LoginActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -41,7 +40,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:gravity="center"
-        android:id="@+id/linearLayout">
+        >
 
         <ImageView android:layout_width="75dp"
             android:layout_height="75dp"

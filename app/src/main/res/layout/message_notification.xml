@@ -14,13 +14,13 @@
         android:layout_height="wrap_content"
         android:padding="1dp">
 
-        <com.google.android.gms.ads.NativeExpressAdView
+        <com.google.android.gms.ads.AdView
             xmlns:ads="http://schemas.android.com/apk/res-auto"
             android:id="@+id/adView4"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            ads:adUnitId="ca-app-pub-4194808928301689/9987324135"
-            ads:adSize="280x150"></com.google.android.gms.ads.NativeExpressAdView>
+            android:layout_width="320dp"
+            android:layout_height="50dp"
+            ads:adUnitId="ca-app-pub-4959333807739009/8657377237"
+            ads:adSize="BANNER"></com.google.android.gms.ads.AdView>
 
 
     <RelativeLayout android:layout_width="match_parent"

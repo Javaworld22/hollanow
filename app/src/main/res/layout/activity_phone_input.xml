@@ -9,7 +9,6 @@
     android:layout_marginRight="16dp"
     android:background="#e5e5e5"
     android:padding="8dp"
-    android:id="@+id/fragment_phone_input"
     tools:context="com.doxa360.android.betacaller.PhoneInputFragment" >
 
 
@@ -30,7 +29,6 @@
             android:textSize="18sp" />
 
         <LinearLayout
-            android:id="@+id/layout_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
@@ -77,6 +75,13 @@
    <!-- Widget.AppCompat.Button.Colored-->
 
 </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_verify_phone"
+        android:visibility="invisible"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 
 </RelativeLayout>

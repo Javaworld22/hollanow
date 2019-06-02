@@ -39,7 +39,7 @@
         android:id="@+id/share_note"
         style="?android:attr/textAppearanceLarge"
         android:layout_alignParentStart="true"
-        android:text="Inform your prospects"
+        android:text="@string/confirmation_message"
         android:layout_below="@+id/share_text" />
 
     <!-- <ProgressBar android:layout_width="wrap_content"
@@ -52,7 +52,7 @@
     <Button android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:id="@+id/share_label"
-              android:text="share"
+              android:text="Upload Picture"
               android:textColor="@color/primary"
             style="?android:attr/textAppearanceLarge"
               android:gravity="center_horizontal"

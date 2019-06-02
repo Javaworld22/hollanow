@@ -17,13 +17,11 @@
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
-                android:id="@+id/layout_image_post"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
             <ImageView

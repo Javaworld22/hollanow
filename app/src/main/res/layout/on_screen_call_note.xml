@@ -1,31 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_gravity="center_vertical"
+    android:layout_centerInParent="true"
+    android:layout_centerVertical="true"
+     app:layout_anchorGravity="center_vertical"
+     android:id="@+id/parent_contraint"
     android:padding="16dp"
+    android:orientation="vertical"
     android:background="#80000000">
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/parent_contraint"
+        app:layout_constraintRight_toRightOf="@+id/parent_contraint"
+        app:layout_constraintLeft_toLeftOf="@+id/parent_contraint"
+        app:layout_constraintBottom_toBottomOf="@+id/parent_contraint"
+        >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/linearlayout_callnot"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/caller_name1"
+            style="?android:attr/textAppearanceLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:textColor="@color/holla_white"
+            android:layout_gravity="bottom"
+            android:text="HollaNow"
+            tools:text="HollaNow"/>
+
+
+        <com.doxa360.android.betacaller.helpers.MLRoundedImageView
+            android:id="@+id/call_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/call_1"/>
+
+
+        <com.doxa360.android.betacaller.helpers.MLRoundedImageView
+            android:id="@+id/whatsapp_callnote"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/whatsaap_holla"/>
+
+        <com.doxa360.android.betacaller.helpers.MLRoundedImageView
+            android:id="@+id/add_contact_callnote"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/add_contact_holla"/>
+
+
+
+    </LinearLayout>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/cardview_callnote"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearlayout_callnot"
         app:cardBackgroundColor="@color/primary"
         app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        android:layout_centerInParent="true">
+        app:cardElevation="4dp">
 
         <FrameLayout
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="16dp" >
+            android:padding="16dp">
 
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
                 <com.doxa360.android.betacaller.helpers.MLRoundedImageView
                     android:id="@+id/caller_photo"
@@ -36,22 +100,34 @@
 
                 <TextView
                     android:id="@+id/caller_name"
+                    style="?android:attr/textAppearanceLarge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toEndOf="@+id/caller_photo"
                     android:padding="8dp"
-                    style="?android:attr/textAppearanceLarge"
                     tools:text="Ikenna Okonkwo"/>
 
                 <com.rockerhieu.emojicon.EmojiconTextView
-                    android:id="@+id/call_note"
-                    emojicon:emojiconAlignment="baseline"
+                android:id="@+id/call_note"
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                emojicon:emojiconAlignment="baseline"
+                android:layout_below="@id/caller_name"
+                android:layout_toEndOf="@+id/caller_photo"
+                tools:text="Hey! Just wanted to say hi. Pick up"/>
+
+                <TextView
+                    android:id="@+id/caller_date"
+                    style="?android:attr/textAppearanceSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/caller_name"
+                    android:layout_toEndOf="@+id/caller_photo"
+                    android:layout_below="@id/call_note"
+                    android:textColor="@color/cardview_dark_background"
                     android:padding="8dp"
-                    tools:text="Hey! Just wanted to say hi. Pick up/"
-                    android:layout_toEndOf="@+id/caller_photo" />
+                    tools:text="date"/>
 
 
             </RelativeLayout>
@@ -63,17 +139,43 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="end|top"
+            tools:ignore="ContentDescription"
             android:src="@drawable/com_facebook_close" />
 
-        <TextView
+        <!--TextView
             android:id="@+id/textView2"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_gravity="end|bottom"
             style="?android:attr/textAppearanceSmallInverse"
-            tools:text="Calling "/>
+            tools:text="Calling "/-->
 
     </android.support.v7.widget.CardView>
 
+    <!--TextView
+        android:id="@+id/caller_name2"
+        style="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        tools:text="Ikenna Okonkwo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardview_callnote"
+           330dp
+        android:layout_marginStart="16dp"/-->
+    <!-- ads:adUnitId="ca-app-pub-4194808928301689/9907433083"-->
 
-</RelativeLayout>
+    <com.google.android.gms.ads.AdView
+        xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView8"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardview_callnote"
+        ads:adUnitId="ca-app-pub-4959333807739009/2162474853"
+        ads:adSize="BANNER"></com.google.android.gms.ads.AdView>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
+
+

@@ -1,29 +1,63 @@
-buildscript {
-    repositories {
-        maven { url 'https://maven.fabric.io/public' }
-    }
+apply plugin: 'com.android.application'
+//apply plugin: 'crashlytics'
+apply plugin: 'maven'
+//apply plugin: 'io.fabric'
 
+buildscript {
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+         classpath 'com.android.tools.build:gradle:3.4.1'
+        //classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.google.gms:google-services:4.2.0'
+        //classpath 'io.fabric.tools:gradle:1.26.1'
+        classpath 'com.crashlytics.tools.gradle:crashlytics-gradle:1.+'
+        //classpath 'io.fabric.tools:gradle:1.+'
+        //classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:0.12.1'
+        // classpath 'io.fabric.tools:gradle:1.+'
+
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+       // classpath 'com.google.gms:google-services:3.0.0' //:3.0.0
+    }
+    repositories {
+       // apply plugin: 'maven'
+        google()
+        jcenter()
+        // mavenLocal()
+       // mavenCentral()
+       // maven { url "https://maven.google.com"}
+       // maven { url 'https://maven.fabric.io/public' }
+        maven { url "https://jitpack.io"}
+        maven { url 'http://download.crashlytics.com/maven' }
+        //maven{ url "https://adcolony.bintray.com/Adcolony" }
     }
 }
-apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
 
 
 repositories {
-    mavenCentral()
-    maven { url 'https://maven.fabric.io/public' }
+    // apply plugin: 'maven'
+    google()
+    jcenter()
+    // mavenLocal()
+    // mavenCentral()
+    // maven { url "https://maven.google.com"}
+   // maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io"}
+    maven { url 'http://download.crashlytics.com/maven' }
+    //maven{ url "https://adcolony.bintray.com/Adcolony" }
 }
+
+
+
+
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.doxa360.android.betacaller"
-        minSdkVersion 17
-        targetSdkVersion 25
-        versionCode 70
-        versionName "1.12"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 186
+        versionName "1.98"
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
         multiDexEnabled true
@@ -33,13 +67,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-
+           // useProguard false
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     dexOptions {
@@ -48,6 +82,12 @@ android {
         javaMaxHeapSize "1g"
     }
 
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+    buildToolsVersion = '28.0.3'
 }
 
 configurations {
@@ -55,68 +95,140 @@ configurations {
  }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile('com.digits.sdk.android:digits:2.0.4@aar') {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation ('com.digits.sdk.android:digits:2.0.4@aar') {
         transitive = true;
     }
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.10.1@aar') {
         transitive = true;
     }
-    compile('com.crashlytics.sdk.android:answers:1.3.10@aar') {
+    implementation('com.crashlytics.sdk.android:answers:1.4.7@aar') {
         transitive = true;
     }
 
     //configurations {
-     //   all*.exclude group: 'org.apache.commons'
-   // }
 
+    //   all*.exclude group: 'org.apache.commons'
 
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:design:25.0.0'
-    compile 'com.android.support:support-v4:25.0.0'
-    compile 'com.android.support:mediarouter-v7:25.0.0'
-    compile 'com.android.support:cardview-v7:25.0.0'
-    compile 'com.android.support:recyclerview-v7:25.0.0'
-    compile 'com.android.support:palette-v7:25.0.0'
-   // compile 'com.google.android.gms:play-services-gcm:11.2.0'//10.0.1
-   // compile 'com.google.android.gms:play-services-plus:11.2.0'
-    compile 'com.google.android.gms:play-services-location:11.2.0'
-    compile 'com.google.android.gms:play-services-auth:11.2.0'
-    compile 'com.google.android.gms:play-services-ads:11.2.0'
-    compile 'com.parse.bolts:bolts-android:1.2.1'
-    compile 'com.parse:parse-android:1.10.2'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    // }
+
+    // compile 'com.android.support:appcompat-v7:25.4.0'
+    implementation "com.android.support:appcompat-v7:28.0.0"
+    implementation "com.android.support:design:28.0.0"
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'com.android.support:mediarouter-v7:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:palette-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:2.0.0-beta1'
+
+    // compile 'com.google.android.gms:play-services-gcm:11.2.0'//10.0.1
+
+    //compile 'com.adcolony:sdk:3.3.0'
+    implementation 'com.android.support:support-annotations:28.0.0'
+
+    //compile 'com.google.ads.mediation:adcolony:3.2.1.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // compile('com.mopub:mopub-sdk-rewardedvideo:4.19.0@aar')// {
+
+    //  transitive = true
+
+    //  compile('com.mopub:mopub-sdk-native-video:4.19.0@aar')
+
+    //  compile('com.mopub:mopub-sdk-banner:4.19.0@aar')
+
+    //  compile('com.mopub:mopub-sdk-interstitial:4.19.0@aar')
+
+    // compile('com.mopub:mopub-sdk-native-static:4.19.0@aar')
+
+    //  compile('com.mopub:mopub-sdk:4.19.0@aar')
+
+    // compile ('com.google.ads.mediation:mopub:4.19.0.0')
+
+    // compile ('com.mopub.mobileads:mopub-android:+@aar')
+
+    // }
+
+    // compile 'com.google.android.gms:play-services-plus:11.2.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
+
+    // 11.2.0
+    implementation 'com.google.android.gms:play-services-ads:16.0.0'
+
+    // compile 'com.parse.bolts:bolts-android:1.2.1'
+    implementation 'com.parse:parse-android:1.10.2'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    // compile 'com.squareup.okhttp3:okhttp:3.4.1'
+
     //compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.google.code.gson:gson:2.6.2'
-    compile 'com.facebook.android:facebook-android-sdk:4.7.0'
-    compile 'com.facebook.android:audience-network-sdk:4.7.0'
-    compile 'org.apache.commons:commons-io:1.3.2'
-    compile 'commons-io:commons-io:1.3.2'
+    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation('com.facebook.android:facebook-android-sdk:4.7.0') {
+        exclude group: 'com.parse.bolts', module: 'bolts-android';
+        exclude group: 'com.parse.bolts', module: 'bolts-applinks';
+        exclude group: 'com.parse.bolts', module: 'bolts-tasks';
+    }
 
-    compile 'com.github.paolorotolo:appintro:3.4.0'
-    compile 'com.thinkincode.utils:Android:0.0.3'
-    compile 'it.sephiroth.android.library.targettooltip:target-tooltip-library:1.3.15'
-    compile 'com.github.deano2390:MaterialShowcaseView:1.1.0@aar'
-    compile 'com.rockerhieu.emojicon:library:1.3.3'
-    compile 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
-    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
-    compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.1.+'
-    compile 'com.google.firebase:firebase-auth:11.2.0' //11.2.0
-    compile 'com.google.firebase:firebase-core:11.2.0'
-    compile 'com.google.firebase:firebase-messaging:11.2.0'
-    compile 'com.google.firebase:firebase-appindexing:11.2.0'
-    compile 'com.google.firebase:firebase-crash:11.2.0'
-    compile 'com.googlecode.libphonenumber:libphonenumber:8.5.2'
-    compile 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
-    compile 'com.android.support:multidex:1.0.1'
-    compile 'com.pes.materialcolorpicker:library:1.0.2'
-    compile 'co.paystack.android:paystack:1.1.0'
-    compile 'co.paystack.android:paystack:3.0.5'
-    // compile 'com.parse:parse-android:1.15.7'
-    testCompile 'junit:junit:4.12'
+    //compilr 'com.facebook.android:facebook-login:4.7.0'
+    implementation 'com.facebook.android:audience-network-sdk:5.4.0-beta'
+    implementation 'org.apache.commons:commons-io:1.3.2'
+    implementation 'commons-io:commons-io:20030203.000550'
+    implementation 'com.github.paolorotolo:appintro:4.1.0'
+    implementation 'com.thinkincode.utils:Android:0.4.6'
+    implementation 'it.sephiroth.android.library.targettooltip:target-tooltip-library:1.3.15'
+   // compile 'com.github.deano2390:MaterialShowcaseView:1.1.0@aar'
+    implementation 'com.rockerhieu.emojicon:library:1.3.3'
+    implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
+    implementation 'com.astuetz:pagerslidingtabstrip:1.0.1'
+    implementation 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
+    implementation 'com.google.firebase:firebase-auth:11.8.0'
+
+    //11.2.0
+    implementation 'com.google.firebase:firebase-core:11.8.0'
+    implementation 'com.google.firebase:firebase-messaging:11.8.0'
+    implementation 'com.google.firebase:firebase-appindexing:11.8.0'
+    implementation 'com.google.firebase:firebase-crash:11.8.0'
+
+    // compile 'com.jaeger.statusbarutil:library:1.4.0'
+
+    //compile 'com.firebase:firebase-jobdispatcher:11.8.0'
+
+    //compile 'com.google.android.gms:play-services-ads:11.2.0'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.5.2'
+    implementation 'com.futuremind.recyclerfastscroll:fastscroll:0.2.5'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.pes.materialcolorpicker:library:1.0.2'
+    implementation 'com.ToxicBakery.viewpager.transforms:view-pager-transforms:1.2.32@aar'
+    implementation 'com.hypertrack:hyperlog:0.0.9'
+   // apply plugin: 'maven'
+    implementation 'com.intentfilter:android-permissions:0.1.7'
+    implementation 'android.arch.work:work-runtime:1.0.1'
+
+    // compile 'android.arch.work:work-runtime:1.0.0-alpha02'
+
+    // compile 'androidx.work:work-runtime:2.0.1'
+
+    // compile ('com.facebook.android:account-kit-sdk:4.+')
+
+    //        {
+
+    //            exclude group: 'com.parse.bolts', module: 'bolts-tasks'
+
+    //        }
+
+    // compile 'co.paystack.android:paystack:1.1.0'
+
+    // compile 'co.paystack.android:paystack:3.0.5'
+
+    // compile 'com.android.billingclient:billing:1.0'
+    implementation 'com.parse:parse-android:1.15.7'
+    testImplementation 'junit:junit:4.13-beta-3'
+   // androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+      //  exclude group: 'com.android.support', module: 'support-annotations'
+   // })
 }
-
 apply plugin: 'com.google.gms.google-services'

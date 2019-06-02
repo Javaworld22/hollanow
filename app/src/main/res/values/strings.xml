@@ -5,32 +5,38 @@
     <string name="title_activity_login">Get Started</string>
     <string name="title_activity_sign_up">Sign Up</string>
     <string name="title_phone_verification"> </string>
+    <!--String>Be Available To Your Customers 4 b/4
+    Put your contact details on the contact list of nearby
+        </String-->
+    <string name="slide_one_title">Easy to Save New Phone Numbers</string> <!--Keep phone numbers Forever-->
+    <string name="slide_one_description"> Everyone saves their phone number for you with their name.
+         Just add or WhatsApp instantly.
+    </string>
 
-    <string name="slide_one_title">Know Your Closeby Friends</string>
-    <string name="slide_one_description">Need a friend\'s presence? Know which of them are around to
-        call.
+    <!--Every phone number you add to your smart contact list restores when you login
+    from another phone.-->
+
+    <!-- Save time punching numbers &amp; typing funny names. Everyone has a username,
+        just search and add to your list.-->
+    <string name="slide_two_title">Smart Personal contact Manager</string>
+    <string name="slide_two_description"> Every new contact you add to your smart personal contact list follows you to any
+         phone.
     </string>
-    <string name="slide_two_title">Help Is Nearby</string>
-    <string name="slide_two_description">Every phone number you need to call for your urgent need
-        are on contact list, Just search.
+    <string name="slide_three_title">Help Is Nearby</string>
+    <string name="slide_three_description">Emergency, security &amp; service providers have also saved their hotlines
+        for you. Search and call.
     </string>
-    <string name="slide_three_title">Be Available To Your Customers</string>
-    <string name="slide_three_description">Put your contact detail on the contact list of nearby
-        people who needs to reach you for your services.
+    people who need to reach you for your services.
+    <string name="slide_four_title">Make &amp; receive smart calls</string>
+    <string name="slide_four_description">Add a short note before calling anyone to let the person know why you are calling
     </string>
-    <string name="slide_four_title">Never Lose Contacts</string>
-    <string name="slide_four_description">You never have to lose important contacts anymore when you
-        lose your mobile phone.
-    </string>
-    <string name="title_activity_home">HollaNow</string>
+    people who need to reach you for your services.
     <string name="section_format">Hello World from section: %1$d</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_logout">Logout</string>
     <string name="title_activity_edit_profile">Edit Profile</string>
     <string name="title_activity_search">Search</string>
-    <string name="action_search">Search</string>
     <string name="action_finish">Finish</string>
 
     <string-array name="camera_choices">
@@ -39,7 +45,20 @@
     </string-array>
     <string name="title_activity_main2">Main2Activity</string>
     <string name="title_activity_contact_detail">Contact Detail</string>
-    <string name="large_text">
+    <!--string name="large_text"></string-->
+
+
+        <string name="facebook_app_id">1695593120473978</string>
+        <string name="ACCOUNT_KIT_CLIENT_TOKEN">d5130510f8b8eb8711795bd8887e819b
+        </string>
+        <!--string name="accountkit_log_out_button">Log Out</string-->
+        <!--string name="error_label">Error</string-->
+        <!--string name="loading_placeholder">Loading&#8230;</string-->
+        <!--string name="na">NA</string-->
+
+
+
+
         "Material is the metaphor.\n\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
@@ -127,23 +146,19 @@
         "On the layout level, design your app layout to minimize opportunities for interference. "
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
-    </string>
+
     <string name="title_activity_profile">Profile</string>
     <string name="action_notification">Notification</string>
     <string name="action_profile">Profile</string>
     <string name="title_activity_category">Category</string>
-    <string name="note_description">Add a short note to go with this phone call. (Exclusive to HollaNow Users)</string>
+    <string name="note_description">Add a short note to go with this call or use as call-back message.
+    (Works without credit)</string>
     <string name="share_facebook">Inform your prospects</string>
     <string name="title_activity_call_note">Call Note</string>
-    <string name="search_query_hint">Search phone numbers, names, and businesses</string>
-    <string name="action_location">Search By Location</string>
-    <string name="sign_up_email">Sign up with email</string>
-    <string name="facebook_app_id">1726216680966670</string>
-    <string name="login_with_email">Login with email</string>
-    <string name="pro_share_description">Allow users reach you for the services you offer by adding
-        your occupation and work address. \n Share to use HollaNow PRO
-    </string>
-    <string name="sign_up_for_a_new_account">Sign up for a new account</string>
+    <string name="search_query_hint">Search phone numbers, names, services</string>
+    <string name="shout_out_query_hint">Post daily wishes &amp;  life lessons</string>
+    <string name="shout_out_hint">Your post disappears at the end of today</string>
+    <!--string name="facebook_app_id">1726216680966670</string-->
     <string name="default_callnote">Let\'s talk</string>
     <string name="action_invite_friends">Invite Friends</string>
     <string name="title_activity_settings">Settings</string>
@@ -151,30 +166,8 @@
     <!-- Strings related to Settings -->
 
     <!-- Example General settings -->
-    <string name="pref_header_general">General</string>
-
-    <string name="pref_title_social_recommendations">Enable social recommendations</string>
-    <string name="pref_description_social_recommendations">Recommendations for people to contact
-        based on your message history
-    </string>
-
-    <string name="pref_title_display_name">Display name</string>
-    <string name="pref_default_display_name">John Smith</string>
-
-    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
-    <string-array name="pref_example_list_titles">
-        <item>Always</item>
-        <item>When possible</item>
-        <item>Never</item>
-    </string-array>
-    <string-array name="pref_example_list_values">
-        <item>1</item>
-        <item>0</item>
-        <item>-1</item>
-    </string-array>
 
     <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
 
     <string name="pref_title_sync_frequency">Sync frequency</string>
     <string-array name="pref_sync_frequency_titles">
@@ -197,7 +190,6 @@
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
 
     <string name="pref_title_new_message_notifications">New message notifications</string>
 
@@ -205,7 +197,7 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="about">version 1.12 \n &#169; 2016-2017. HollaNow</string>
+    <string name="about">version 1.98 \n &#169; 2018-2019. HollaNow</string>
     <string name="pref_title_location">Location</string>
     <string name="pref_summary_location">Turn On/Off</string>
     <string name="pref_title_privacy">Visibile In Search</string>
@@ -216,103 +208,30 @@
     <string name="pref_privacy_key">pref_privacy</string>
     <string name="pref_backup_contacts_key">pref_backup_contacts</string>
     <string name="pref_sync_contacts_key">pref_sync_contacts</string>
-    <string name="pref_delete_contacts_key">pref_delete_account</string>
-    <string name="tooltip_two">You can find your friends contacts by searching for their usernames on HollaNow</string>
+    <string name="tooltip_shoutout">People go through a lot daily. Share daily wishes &amp; life lessons to everyone
+    who has your number on their phone.</string>
+    <string name="tooltip_add_contacts">Is this contact valuable to you? Click here to move it to your
+        smart offline personal contacts.</string>
+
+    <string name="tooltip_two">Search phone numbers of new friends &amp; organizations you want to add, holla, or WhatsApp
+    instantly</string>
     <string name="tooltip_three">HollaNow call-notes are exclusive to HollaNow users. They allow you send a short note with your phone call. Invite friends to enjoy</string>
-    <string name="tooltip_one">Invite close friends to HollaNow to know their location when you need them</string>
-    <string name="tooltip_four">Add information on your occupation to help users find you when they need your service</string>
+    <string name="tooltip_one">Add contacts of new friends to your smart contact list &amp; make smart calls with them. </string>
+    <string name="tooltip_four">Add your occupation so that users can holla @ you when they need your services</string>
 
     <string name="dgts__login_digits_text">Verify Phone</string>
-    <string name="password_reset"><a href="http://www.hollanow.com/password/reset">Forgot password?</a></string>
-    <string name="parse_app_id">ReplaceWithAppID</string>
+    <string name="password_reset"><a href="https://www.hollanow.com/password/reset">Forgot password?</a></string>
+    <string name="additional_info">When other users view your gallery, it boosts their confidences to contact you for your services.</string>
+    <string name="confirmation_message">Add 1 or 2 pictures to confirm your occupation/services. </string>
 
 
-
-
-
-
-
-
-
-
-
-
-
-        <string name="name_chat">ChatActivity</string>
-        <string name="name_auth_ui">Auth UI demo</string>
-        <string name="name_image">Storage Image Demo</string>
-
-        <string name="desc_chat">Demonstrates using a FirebaseRecyclerAdapter to load data from Firebase Database into a RecyclerView for a basic chat app.</string>
-        <string name="desc_auth_ui">Demonstrates the Firebase Auth UI flow, with customization options.</string>
-        <string name="desc_image">Demonstrates displaying an image from Cloud Storage using Glide.</string>
-
-        <!-- strings for Auth UI demo activities -->
+    <!-- strings for Auth UI demo activities -->
         <eat-comment />
-        <string name="launch_title">FirebaseUI Auth Demo</string>
-        <string name="sign_in">Start</string>
-        <string name="green_theme">Green Theme</string>
-        <string name="purple_theme">Purple Theme</string>
-        <string name="dark_theme">Dark Theme</string>
-        <string name="use_theme_header">Use theme:</string>
-        <string name="logo_header">Logo:</string>
-        <string name="firebase_logo_label">Firebase Auth</string>
-        <string name="google_logo_label">Google</string>
-        <string name="no_logo_label">None</string>
-        <string name="auth_providers_header">Use auth providers:</string>
-        <string name="email_label">Email</string>
-        <string name="phone_label">Phone</string>
-        <string name="facebook_label">Facebook</string>
-        <string name="facebook_label_missing_config">Facebook - configuration missing</string>
-        <string name="twitter_label">Twitter</string>
-        <string name="twitter_label_missing_config">Twitter - configuration missing</string>
-        <string name="google_label">Google</string>
-        <string name="google_label_missing_config">Google - configuration missing</string>
-        <string name="google_tos_label">Google TOS</string>
-        <string name="firebase_tos_label">Firebase TOS</string>
-        <string name="google_privacy_label">Google Privacy Policy</string>
-        <string name="firebase_privacy_label">Firebase Privacy Policy</string>
-        <string name="tos_header">Terms of Service URL:</string>
-        <string name="privacy_policy_header">Privacy Policy URL:</string>
-        <string name="unknown_response">Unexpected onActivityResult response code</string>
-        <string name="unknown_sign_in_response">Unknown response from AuthUI sign-in</string>
-        <string name="sign_in_cancelled">Sign in cancelled</string>
-        <string name="no_internet_connection">No internet connection</string>
-        <string name="signed_in_header">You are signed in!</string>
-        <string name="sign_out">Sign out</string>
-        <string name="delete_account_label">Delete account</string>
-        <string name="sign_out_failed">Sign out failed</string>
-        <string name="delete_account_failed">Delete account failed</string>
-        <string name="user_profile_header">User profile:</string>
-        <string name="profile_picture_content_desc">Profile picture</string>
-        <string name="default_theme">Default theme</string>
-        <string name="configuration_required">Configuration is required - see README.md</string>
-        <string name="other_options_header">Other Options:</string>
-        <string name="rational_image_perm">This sample will read an image from local storage to upload to Cloud Storage.</string>
-        <string name="anonymous_auth_failed_msg">Anonymous authentication failed, various components of the demo will not work. Make sure your device is online and that Anonymous Auth is configured in your Firebase project(https://console.firebase.google.com/project/_/authentication/providers)</string>
-        <string name="extra_google_scopes">Example extra Google scopes</string>
-        <string name="drive_file_scope">Drive File</string>
-        <string name="youtube_data_scope">Youtube data</string>
-        <string name="extra_facebook_scopes">Example extra Facebook scopes</string>
-        <string name="friends">Friends</string>
-        <string name="photos">Photos</string>
-        <string name="idp_token">IDP Token</string>
-        <string name="idp_secret">IDP Secret</string>
-        <string name="unknown_error">An unknown error occurred</string>
-        <string name="send">Send</string>
-        <string name="download">Download</string>
-        <string name="upload">Upload</string>
-        <string name="choose_image">Choose Image</string>
-        <string name="accessibility_downloaded_image">Downloaded image</string>
-        <string name="allow_new_email_acccount">Allow account creation if email does not exist.</string>
 
-        <!-- strings for database demo activities -->
-        <string name="start_chatting">No messages. Start chatting at the bottom!</string>
-        <string name="signed_in">Signed In</string>
-        <string name="enable_credential_selector">Enable Smart Lock\'s credential selector</string>
-        <string name="enable_hint_selector">Enable Smart Lock\'s hint selector</string>
+    <!-- strings for database demo activities -->
 
 
-    <string name="search_hint">Search...</string>
+    <string name="search_hint">Search&#8230;</string>
     <string name="no_result_found">Results not found</string>
     <string name="select_country">Select a county</string>
 
@@ -329,24 +248,13 @@
     <string name="btn_clear">Clear</string>
     <string name="btn_backspace">Back</string>
 
-    <string name="materialcolorpicker__hash" translatable="false">#</string>
-
-    <string name="hello_world">Hello world!</string>
     <!--string name="action_settings">Settings</string-->
     <string name="card_number">Card number</string>
     <string name="cvv">CVV</string>
     <string name="mm">MM</string>
     <string name="yyyy">YYYY</string>
-    <string name="create_token">Create token</string>
-    <string name="no_card_yet">No card yet</string>
-    <string name="no_token">No token</string>
-    <string name="token_null_message">Token was null</string>
-    <string name="token_not_gotten">Unable to get token</string>
-    <string name="sample_card">4123450131001381</string>
-    <string name="sample_cvv">883</string>
-    <string name="sample_month">01</string>
-    <string name="sample_year">2020</string>
     <string name="no_transaction_yet">No transaction yet</string>
-    <string name="amount_in_kobo">Amount in Kobo</string>
+
+    <string name="Job_service">android.permission.BIND_JOB_SERVICE</string>
 
 </resources>

@@ -1,0 +1,2 @@
+# Referenced at C:\AndroidProject\betacaller\app\build\intermediates\manifests\full\debug\AndroidManifest.xml:52
+-keep class com.doxa360.android.betacaller.BetaCaller { <init>(...); }

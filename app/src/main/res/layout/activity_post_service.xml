@@ -17,7 +17,6 @@
     <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/relative_layout1"
                     android:paddingTop="8dp"
                     android:paddingLeft="8dp"
                     android:paddingRight="8dp">
@@ -124,27 +123,40 @@
 
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
+                  android:id="@+id/text_upload_post_inbetween"
+                  android:text="@string/additional_info"
+                  style="?android:attr/textAppearanceSmall"
+                  android:textStyle="bold"
+                  android:layout_centerInParent="true"
+                  android:gravity="center"
+                  tools:textColor="@color/hollabackground"
+                  android:layout_marginTop="10dp"
+                  android:layout_below="@+id/text_upload_post1"/>
+
+        <!--TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
                   android:id="@+id/text_upload_post2"
                   android:text="Image can be changed only twice. "
                   style="?android:attr/textAppearanceSmall"
                   android:textStyle="bold"
                   android:layout_centerInParent="true"
-                  android:layout_marginTop="20dp"
+                  android:layout_marginTop="10dp"
                   android:gravity="center"
                   tools:textColor="@color/hollabackground"
-                  android:layout_below="@+id/text_upload_post1"/>
+                  android:layout_below="@+id/text_upload_post_inbetween"/-->
 
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   android:id="@+id/text_upload_post3"
-                  android:text="To change frequently GoPro "
+                  android:text="  "
                   style="?android:attr/textAppearanceSmall"
                   android:textStyle="bold"
-                  android:layout_below="@+id/text_upload_post2"
+                  android:layout_below="@+id/text_upload_post_inbetween"
                   android:gravity="center_horizontal"
                   android:textColor="@color/hollabackground"
                   android:paddingBottom="20dp"
                   android:layout_centerHorizontal="true"/>
+            <!-- Your first Gallery post is free, To build your Work Gallery, Use GoPro -->
 
         </RelativeLayout>
 

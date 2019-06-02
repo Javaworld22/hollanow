@@ -3,24 +3,30 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardview_home"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="200dp"
+    android:padding="10dp"
     app:cardCornerRadius="4dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardMaxElevation="1dp"
+    app:cardUseCompatPadding="true"
     android:layout_margin="4dp">
 
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/displayname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="1dp"
+            android:textSize="14sp"
             android:textStyle="bold"
             tools:text="Yemi Gabriel"
             />
@@ -28,16 +34,15 @@
         <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/framelayout_searchfragment"
-            android:layout_below="@+id/distance_away"
-            android:padding="16dp">
+            android:layout_below="@+id/no_of_gallery"
+            android:padding="10dp">
 
 
 
         <ImageView
             android:id="@+id/photo"
-            android:layout_width="170dp"
-            android:layout_height="170dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_alignParentStart="true"
             android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
@@ -49,7 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Empty text"
-                style="?android:attr/textAppearanceMedium"
+                style="?android:attr/textAppearanceSmall"
+                android:textSize="12dp"
                 android:textStyle="bold"
                 android:paddingBottom="10dp"
                 android:gravity="center"
@@ -67,9 +73,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/displayname"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="1dp"
+            android:textSize="12dp"
             tools:text="Tailor"
             />
 
@@ -102,13 +109,24 @@
             android:id="@+id/distance_away"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/occupation"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:paddingTop="8dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="1dp"
             android:textColor="@color/secondary_text"
             tools:text="25km away"
-            />
+            android:textSize="12sp"
+            android:layout_below="@+id/occupation"/>
+
+        <TextView
+            android:id="@+id/no_of_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="1dp"
+            tools:text="2 contents(s) on Gallery"
+            android:textSize="12sp"
+            android:layout_below="@+id/distance_away"/>
 
 
     </RelativeLayout>
